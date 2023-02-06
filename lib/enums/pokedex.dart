@@ -1,9 +1,10 @@
 // ignore_for_file: constant_identifier_names
 import '../models/stats.dart';
 import 'abilities.dart';
+import 'base.dart';
 import 'types.dart';
 
-enum Pokedex {
+enum Pokedex implements StringNamedEnum {
   sprigatito(
     string: "ニャオハ",
     types: [Types.grass],
@@ -3143,6 +3144,7 @@ enum Pokedex {
     required this.stats,
   });
 
+  @override
   final String string;
   final List<Types> types;
   final List<Abilities> abilities;

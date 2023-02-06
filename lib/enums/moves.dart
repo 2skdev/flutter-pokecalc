@@ -1,20 +1,22 @@
 // ignore_for_file: constant_identifier_names
 
+import 'base.dart';
 import 'types.dart';
 
-enum MoveCategory {
+enum MoveCategory implements StringNamedEnum {
   physical('物理'),
   special('特殊'),
   status('変化');
 
   const MoveCategory(this.string);
 
+  @override
   final String string;
 
   String get icon => 'assets/move/move-${name.replaceAll('_', '-')}.png';
 }
 
-enum Moves {
+enum Moves implements StringNamedEnum {
   absorb(
     string: "すいとる",
     type: Types.grass,
@@ -7107,6 +7109,7 @@ enum Moves {
 
   static const kAccuracyMax = 0xffffffff;
 
+  @override
   final String string;
   final Types type;
   final MoveCategory category;

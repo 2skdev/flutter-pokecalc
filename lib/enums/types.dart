@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-enum Types {
+import 'base.dart';
+
+enum Types implements StringNamedEnum {
   normal(string: 'ノーマル', color: Color(0xFFC1BCB6)),
   fire(string: 'ほのお', color: Color(0xFFE46727)),
   water(string: 'みず', color: Color(0xFF0082BE)),
@@ -23,6 +25,7 @@ enum Types {
 
   const Types({required this.string, required this.color});
 
+  @override
   final String string;
   final Color color;
 

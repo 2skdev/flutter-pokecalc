@@ -1,6 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
-enum Items {
+import 'base.dart';
+
+enum Items implements StringNamedEnum {
   abilityshield("とくせいガード"),
   absorbbulb("きゅうこん"),
   adamantorb("こんごうだま"),
@@ -180,6 +182,7 @@ enum Items {
 
   const Items(this.string);
 
+  @override
   final String string;
 
   String get icon => 'assets/item/${name.replaceAll('_', '-')}.png';

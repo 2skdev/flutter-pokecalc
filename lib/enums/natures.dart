@@ -1,6 +1,7 @@
 import '../models/stats.dart';
+import 'base.dart';
 
-enum Natures {
+enum Natures implements StringNamedEnum {
   lonely(
     string: 'さみしがり',
     buff: Stats(h: 0, a: 1, b: -1, c: 0, d: 0, s: 0),
@@ -109,6 +110,7 @@ enum Natures {
 
   const Natures({required this.string, required this.buff});
 
+  @override
   final String string;
   final Stats buff;
 }

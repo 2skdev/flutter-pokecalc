@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
-enum Weathers {
+import 'base.dart';
+
+enum Weathers implements StringNamedEnum {
   none("なし"),
   sunshine("にほんばれ"),
   rain("あめ"),
@@ -8,10 +10,11 @@ enum Weathers {
 
   const Weathers(this.string);
 
+  @override
   final String string;
 }
 
-enum Fields {
+enum Fields implements StringNamedEnum {
   none("なし"),
   electric("エレキフィールド"),
   grassy("グラスフィールド"),
@@ -20,5 +23,6 @@ enum Fields {
 
   const Fields(this.string);
 
+  @override
   final String string;
 }

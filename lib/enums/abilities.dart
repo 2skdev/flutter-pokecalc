@@ -1,6 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
-enum Abilities {
+import 'base.dart';
+
+enum Abilities implements StringNamedEnum {
   adaptability("てきおうりょく"),
   aerilate("スカイスキン"),
   aftermath("ゆうばく"),
@@ -301,5 +303,6 @@ enum Abilities {
 
   const Abilities(this.string);
 
+  @override
   final String string;
 }

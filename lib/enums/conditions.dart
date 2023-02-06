@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
-enum Ailments {
+import 'base.dart';
+
+enum Ailments implements StringNamedEnum {
   none("なし"),
   burn("やけど"),
   freeze("こおり"),
@@ -9,10 +11,11 @@ enum Ailments {
 
   const Ailments(this.string);
 
+  @override
   final String string;
 }
 
-enum Shields {
+enum Shields implements StringNamedEnum {
   none("なし"),
   light_screen("ひかりのかべ"),
   reflect("リフレクター"),
@@ -20,6 +23,7 @@ enum Shields {
 
   const Shields(this.string);
 
+  @override
   final String string;
 
   bool get isPhysical =>
