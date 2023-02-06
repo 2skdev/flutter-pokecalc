@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'theme/theme.dart';
-import 'views/pages/manage_party.dart';
 import 'views/pages/manage_theories.dart';
 import 'views/pages/setting.dart';
 
@@ -36,12 +35,6 @@ enum Navs {
     icon: ImageIcon(AssetImage('assets/icon/icon-punch.png')),
     label: 'ポケモン',
     screen: ManageTheoriesPage(),
-  ),
-
-  calc(
-    icon: ImageIcon(AssetImage('assets/icon/icon-dex.png')),
-    label: 'パーティ',
-    screen: ManagePartyPage(),
   ),
 
   setting(
