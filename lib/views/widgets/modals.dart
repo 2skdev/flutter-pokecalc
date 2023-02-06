@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // スクリーンの高さに合わせたモーダルを表示するラッパー
 Future<T?> showFullHeightModalSheet<T>({
   required BuildContext context,
-  required Widget Function(BuildContext) builder,
+  required Widget Function(BuildContext context) builder,
 }) {
   return showModalBottomSheet(
     context: context,
