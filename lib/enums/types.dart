@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 
 enum Types {
-  normal(string: 'ノーマル', color: Color(0xFF949495)),
-  fire(string: 'ほのお', color: Color(0xFFE56C3E)),
-  water(string: 'みず', color: Color(0xFF5185C5)),
-  electric(string: 'でんき', color: Color(0xFFF6D851)),
-  grass(string: 'くさ', color: Color(0xff66A945)),
-  ice(string: 'こおり', color: Color(0xFF6DC8EB)),
-  fighting(string: 'かくとう', color: Color(0xFFe09c40)),
-  poison(string: 'どく', color: Color(0xFF735198)),
-  ground(string: 'じめん', color: Color(0xFF9C7743)),
-  flying(string: 'ひこう', color: Color(0xFFa2c3e7)),
-  psychic(string: 'エスパー', color: Color(0xFFDD6B7B)),
-  bug(string: 'むし', color: Color(0xFF9fa244)),
-  rock(string: 'いわ', color: Color(0xFFBFB889)),
-  ghost(string: 'ゴースト', color: Color(0xFF684870)),
-  dragon(string: 'ドラゴン', color: Color(0xFF535ca8)),
-  dark(string: 'あく', color: Color(0xFF4c4948)),
-  steel(string: 'はがね', color: Color(0xFF69A9C7)),
-  fairy(string: 'フェアリー', color: Color(0xFFdab4d4)),
+  normal(string: 'ノーマル', color: Color(0xFFC1BCB6)),
+  fire(string: 'ほのお', color: Color(0xFFE46727)),
+  water(string: 'みず', color: Color(0xFF0082BE)),
+  electric(string: 'でんき', color: Color(0xFFF5DB00)),
+  grass(string: 'くさ', color: Color(0xFF7FD244)),
+  ice(string: 'こおり', color: Color(0xFF68C0DB)),
+  fighting(string: 'かくとう', color: Color(0xFFEEB504)),
+  poison(string: 'どく', color: Color(0xFF9A4FC0)),
+  ground(string: 'じめん', color: Color(0xFFB68744)),
+  flying(string: 'ひこう', color: Color(0xFFA8D3E7)),
+  psychic(string: 'エスパー', color: Color(0xFFD56176)),
+  bug(string: 'むし', color: Color(0xFFC6D320)),
+  rock(string: 'いわ', color: Color(0xFFC7C494)),
+  ghost(string: 'ゴースト', color: Color(0xFF755573)),
+  dragon(string: 'ドラゴン', color: Color(0xFF516BA6)),
+  dark(string: 'あく', color: Color(0xFF5C514F)),
+  steel(string: 'はがね', color: Color(0xFF8EC2D2)),
+  fairy(string: 'フェアリー', color: Color(0xFFE2AFD9)),
   ;
 
   const Types({required this.string, required this.color});
@@ -27,6 +27,7 @@ enum Types {
   final Color color;
 
   String get icon => 'assets/type/$name.png';
+  String get teraicon => 'assets/type/$name-tera.png';
 
   // タイプ相性
   double efficacy(Types defence) {
