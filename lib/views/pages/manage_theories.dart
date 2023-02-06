@@ -48,11 +48,8 @@ class ManageTheoriesPage extends HookConsumerWidget {
     final theories = ref.watch(theoriesNotifier);
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(0),
-        child: AppBar(
-          elevation: 0,
-        ),
+      appBar: AppBar(
+        title: const Text('ポケモン'),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
