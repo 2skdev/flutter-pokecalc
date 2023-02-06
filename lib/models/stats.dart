@@ -46,9 +46,18 @@ class Stats {
     return [h, a, b, c, d, s];
   }
 
+  int operator [](int index) {
+    assert(index < 6);
+    return toArray()[index];
+  }
+
   @override
   String toString() {
     return '$h-$a-$b-$c-$d-$s';
+  }
+
+  Stats copyWithIndex(int index, value) {
+    return fromArray(toArray()..[index] = value);
   }
 
   Stats copyWith({

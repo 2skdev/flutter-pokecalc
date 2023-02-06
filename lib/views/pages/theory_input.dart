@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../enums/enums.dart';
 import '../../extensions/string.dart';
-import '../../extensions/theory.dart';
 import '../../models/stats.dart';
 import '../../models/theory.dart';
 import '../widgets/modal_select.dart';
 import '../widgets/row_tile.dart';
 import '../widgets/space.dart';
-import '../widgets/text_field.dart';
+import '../widgets/stats_input_list_tile.dart';
 import '../widgets/tiles.dart';
 import '../widgets/type_chip.dart';
 
@@ -20,135 +19,7 @@ class TheoryInputPage extends StatelessWidget {
   });
 
   final Theory theory;
-  final ValueChanged<Theory>? onChanged;
-
-  List<ListTile> statsListTile() {
-    final tiles = <ListTile>[];
-
-    final statsNames = Stats.strings;
-    final individualList = theory.individual.toArray();
-    final actialList = theory.actual.toArray();
-    final effortList = theory.effort.toArray();
-    final natureBuff = theory.nature.buff.toArray();
-
-    int calcChangeStatsEffort(int index, bool increase) {
-      final odd = individualList[index] % 2 == 1;
-      var newEffort = effortList[index] + (increase ? 1 : -1);
-
-      if (odd) {
-        newEffort -= 4;
-      }
-      if (increase) {
-        newEffort = (newEffort / 8).ceil() * 8;
-      } else {
-        newEffort = (newEffort / 8).floor() * 8;
-      }
-      if (odd) {
-        newEffort += 4;
-      }
-      newEffort = newEffort.clamp(0, 252);
-
-      return newEffort;
-    }
-
-    for (var index = 0; index < 6; index++) {
-      tiles.add(
-        ListTile(
-          leading: Text(statsNames[index],
-              style: TextStyle(
-                color: natureBuff[index] > 0
-                    ? Colors.red
-                    : natureBuff[index] < 0
-                        ? Colors.blue
-                        : null,
-              )),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Flexible(
-                child: NumericHookTextFieldWidget(
-                  value: actialList[index],
-                  decoration: const InputDecoration(
-                    labelText: '実数値',
-                    filled: true,
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              Flexible(
-                child: NumericHookTextFieldWidget(
-                  value: individualList[index],
-                  min: 0,
-                  max: 31,
-                  onChanged: (value) {
-                    individualList[index] = value;
-                    onChanged?.call(
-                      theory.copyWith(
-                        individual: Stats.fromArray(individualList),
-                      ),
-                    );
-                  },
-                  decoration: const InputDecoration(
-                    labelText: '個体値',
-                    filled: true,
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              Flexible(
-                child: NumericHookTextFieldWidget(
-                  value: effortList[index],
-                  min: 0,
-                  max: 252,
-                  onChanged: (value) {
-                    effortList[index] = value;
-                    onChanged?.call(
-                      theory.copyWith(
-                        effort: Stats.fromArray(effortList),
-                      ),
-                    );
-                  },
-                  decoration: const InputDecoration(
-                    labelText: '努力値',
-                    filled: true,
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      effortList[index] = calcChangeStatsEffort(index, true);
-                      onChanged?.call(
-                        theory.copyWith(
-                          effort: Stats.fromArray(effortList),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.add_circle),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      effortList[index] = calcChangeStatsEffort(index, false);
-                      onChanged?.call(
-                        theory.copyWith(
-                          effort: Stats.fromArray(effortList),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.remove_circle),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return tiles;
-  }
+  final Function(Theory value)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +210,10 @@ class TheoryInputPage extends StatelessWidget {
               ),
             ),
           ),
-          ...statsListTile(),
+          ...StatsInputListTile.tilesFromTheory(
+            theory: theory,
+            onChanged: (value) => onChanged?.call(value),
+          ),
           for (var i = 0; i < 4; i++)
             ModalSelectWidget(
               initList: Moves.values,
