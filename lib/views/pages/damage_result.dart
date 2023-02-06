@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pokecalc/extensions/theory.dart';
+import 'package:pokecalc/views/widgets/theory_card.dart';
 
 import '../../models/theory.dart';
 import '../../providers/providers.dart';
 import '../widgets/damage_bar.dart';
-import '../widgets/type_chip.dart';
 import 'theory_view.dart';
 
 class DamageResultPage extends ConsumerWidget {
@@ -89,7 +89,9 @@ class DamageResultPage extends ConsumerWidget {
     final attackDamages = listDamages(theory, enemy);
     final defenceDamages = listDamages(enemy, theory);
 
-    return InkWell(
+    return TheoryCard(
+      key: Key(enemy.key!),
+      theory: enemy,
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
@@ -99,53 +101,14 @@ class DamageResultPage extends ConsumerWidget {
           ),
         ),
       ),
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Image.asset(enemy.pokemon.icon, width: 64),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        ...enemy.currentTypes
-                            .map(
-                              (e) => TypeChip(type: e),
-                            )
-                            .toList(),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Image.asset(
-                          enemy.item.icon,
-                          width: 20,
-                        ),
-                        Text(enemy.item.string),
-                      ],
-                    ),
-                    Text(enemy.ability.string),
-                    RichText(
-                      text: TextSpan(
-                          children: statsSpans,
-                          style: const TextStyle(fontSize: 12)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            const Divider(),
-            const Text('与ダメージ'),
-            ...attackDamages,
-            const Divider(),
-            const Text('被ダメージ'),
-            ...defenceDamages,
-          ],
-        ),
-      ),
+      children: [
+        const Divider(),
+        const Text('与ダメージ'),
+        ...attackDamages,
+        const Divider(),
+        const Text('被ダメージ'),
+        ...defenceDamages,
+      ],
     );
   }
 
