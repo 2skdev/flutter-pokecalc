@@ -33,7 +33,7 @@ class TypeChip extends StatelessWidget {
             width: 16,
           ),
           SizedBox(
-            width: 80,
+            width: 90,
             child: Center(
               child: Padding(
                 padding: EdgeInsets.only(right: padding),

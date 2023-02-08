@@ -4,6 +4,7 @@ import '../../extensions/theory.dart';
 import '../../models/stats.dart';
 import '../../models/theory.dart';
 import '../misc/colors.dart';
+import 'leading_sized_box.dart';
 import 'text_field.dart';
 
 /// ステータス関係の数値の入力を行うListTileのラッパーウィジェット
@@ -140,10 +141,12 @@ class StatsInputListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Text(
-        label,
-        style: TextStyle(
-          color: getNatureBuffColor(buff),
+      leading: LeadingSizedBox(
+        child: Text(
+          label,
+          style: TextStyle(
+            color: getNatureBuffColor(buff),
+          ),
         ),
       ),
       title: Row(

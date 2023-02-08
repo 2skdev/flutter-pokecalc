@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import 'modals.dart';
-
-class _ModalContent<T> extends HookWidget {
-  const _ModalContent({
+class SearchListScaffold<T> extends HookWidget {
+  const SearchListScaffold({
+    super.key,
     required this.initList,
     required this.itemBuilder,
     required this.onSort,
@@ -101,44 +100,6 @@ class _ModalContent<T> extends HookWidget {
             context,
             showList.value[index],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ModalSelectWidget<T> extends StatelessWidget {
-  const ModalSelectWidget({
-    super.key,
-    required this.child,
-    required this.initList,
-    required this.itemBuilder,
-    required this.onSort,
-  });
-
-  // Modal非表示時のウィジェット
-  final Widget child;
-
-  // 検索対象のリスト
-  final List<T> initList;
-
-  // 検索対象のリストのビルダー
-  final Widget Function(BuildContext context, T item) itemBuilder;
-
-  // 検索単語変化時の絞り込み関数
-  final bool Function(T target, String value) onSort;
-
-  @override
-  Widget build(BuildContext context) {
-    // InkWellでModal非表示時のウィジェットがタップされたことを検知
-    return InkWell(
-      child: child,
-      onTap: () => showFullHeightModalSheet(
-        context: context,
-        builder: (context) => _ModalContent(
-          initList: initList,
-          itemBuilder: itemBuilder,
-          onSort: onSort,
         ),
       ),
     );
