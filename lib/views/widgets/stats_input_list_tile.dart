@@ -120,6 +120,9 @@ class StatsInputListTile extends StatelessWidget {
       newEffort += 4;
     }
 
+    // 丸め後に再度リミットする
+    newEffort = newEffort.clamp(0, 252);
+
     return newEffort;
   }
 
@@ -177,7 +180,7 @@ class StatsInputListTile extends StatelessWidget {
           ),
           IconButton(
             // 努力値を減算して通知
-            onPressed: () => onChangeEffort?.call(_addEffort(1)),
+            onPressed: () => onChangeEffort?.call(_addEffort(-1)),
             icon: const Icon(Icons.remove_circle),
           ),
         ],
