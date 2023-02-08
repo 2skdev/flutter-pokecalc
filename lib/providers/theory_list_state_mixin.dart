@@ -74,7 +74,7 @@ mixin TheoryList on StateNotifier<List<Theory>> {
       add(theory);
     } else {
       // 特性が変わった時、メタを初期化する
-      if (current.ability != theory.pokemon) {
+      if (current.ability != theory.ability) {
         theory = theory.copyWith(abilityMeta: 0);
       }
       // ポケモンが変わった時、タイプを初期化する
