@@ -463,7 +463,9 @@ class _TypeSelectModal extends HookWidget {
                 }
               },
             ),
-            title: TypeChip(type: Types.values[index]),
+            title: Row(
+              children: [TypeChip(type: Types.values[index])],
+            ),
             onTap: () {
               // ListTileがタップされた時は選択・非選択を切り替える
               if (state.value.contains(Types.values[index])) {
