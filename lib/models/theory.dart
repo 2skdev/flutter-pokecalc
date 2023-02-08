@@ -27,31 +27,4 @@ abstract class Theory implements _$Theory {
     @Default('') String memo,
     @Default(0) int abilityMeta,
   }) = _Theory;
-
-  List<Types> get currentTypes {
-    // TODO: テラスタル有無の判定
-    // ignore: dead_code
-    if (false) {
-      return [teratype];
-    } else {
-      return types;
-    }
-  }
-
-  bool get isFlying {
-    // タイプ: 飛行
-    if (currentTypes.contains(Types.flying)) {
-      return true;
-    }
-    // 特性: 浮遊
-    else if (ability == Abilities.levitate) {
-      return true;
-    }
-    // 持ち物: 風船
-    else if (item == Items.airballoon) {
-      return true;
-    }
-
-    return false;
-  }
 }

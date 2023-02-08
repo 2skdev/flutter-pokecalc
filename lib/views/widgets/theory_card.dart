@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pokecalc/views/widgets/space.dart';
+import 'package:pokecalc/views/widgets/tiles.dart';
 
 import '../../models/theory.dart';
+import 'stats_text_with_buff.dart';
 
 class TheoryCard extends StatelessWidget {
   const TheoryCard({
@@ -10,15 +12,40 @@ class TheoryCard extends StatelessWidget {
     this.children,
     this.onDelete,
     this.onTap,
+    this.terastal = true,
   });
 
   final Theory theory;
   final List<Widget>? children;
   final Function()? onDelete;
   final Function()? onTap;
+  final bool terastal;
 
   @override
   Widget build(BuildContext context) {
+    Widget typeIcon;
+
+    if (terastal) {
+      typeIcon = Image.asset(
+        theory.teratype.teraicon,
+        width: 32,
+      );
+    } else {
+      typeIcon = Row(
+        children: theory.types
+            .map(
+              (e) => Padding(
+                padding: const EdgeInsets.only(right: 4.0),
+                child: Image.asset(
+                  e.icon,
+                  width: 18,
+                ),
+              ),
+            )
+            .toList(),
+      );
+    }
+
     Widget child = InkWell(
       onTap: onTap,
       child: Card(
@@ -35,10 +62,7 @@ class TheoryCard extends StatelessWidget {
                       Positioned(
                         top: 8,
                         left: 8,
-                        child: Image.asset(
-                          theory.teratype.teraicon,
-                          width: 32,
-                        ),
+                        child: typeIcon,
                       )
                     ],
                   ),
@@ -50,23 +74,12 @@ class TheoryCard extends StatelessWidget {
                         theory.pokemon.string,
                         style: const TextStyle(fontSize: 16),
                       ),
-                      Text(
-                        theory.effort.toString(),
-                        style: const TextStyle(color: Colors.grey),
+                      StatsTextWithBuff(
+                        stats: theory.effort,
+                        nature: theory.nature,
                       ),
-                      Row(
-                        children: [
-                          Text(theory.nature.string),
-                          const Space(),
-                          Text(theory.ability.string),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(theory.item.icon, width: 20),
-                          Text(theory.item.string),
-                        ],
-                      ),
+                      Text(theory.ability.string),
+                      ItemTile(item: theory.item),
                     ],
                   ),
                 ],

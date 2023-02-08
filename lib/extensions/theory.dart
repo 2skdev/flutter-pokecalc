@@ -9,7 +9,47 @@ import '../models/stats.dart';
 import '../models/theory.dart';
 import 'double.dart';
 
+/// Theoryの情報を集約する関数を拡張
+extension Info on Theory {
+  /// 現在のタイプを取得する
+  ///
+  /// テラスタルしている場合、テラスタルのタイプを返す
+  /// それ以外では、ユーザーが選択したタイプを返す
+  List<Types> get currentTypes {
+    if (terastal) {
+      return [teratype];
+    } else {
+      return types;
+    }
+  }
+
+  /// 飛んでいるかを判定する
+  ///
+  /// タイプ: 飛行、特性: 浮遊、持ち物: 風船 が該当
+  bool get isFlying {
+    // タイプ: 飛行
+    if (currentTypes.contains(Types.flying)) {
+      return true;
+    }
+    // 特性: 浮遊
+    else if (ability == Abilities.levitate) {
+      return true;
+    }
+    // 持ち物: 風船
+    else if (item == Items.airballoon) {
+      return true;
+    }
+
+    return false;
+  }
+}
+
+/// 実数値のステータスを計算する関数を拡張
 extension ActualStats on Theory {
+  /// HPの実数値を計算する
+  ///
+  /// HPとそれ以外で計算式が異なる
+  /// HP以外は[_calcStats]を使用すること
   int _calcHp({
     required int base,
     required int individual,
@@ -28,6 +68,10 @@ extension ActualStats on Theory {
     return tmp;
   }
 
+  /// 攻撃、防御、特攻、特防、素早の実数値を計算する
+  ///
+  /// HPとそれ以外で計算式が異なる
+  /// HPは[_calcHp]を使用すること
   int _calcStats({
     required int base,
     required int individual,
@@ -51,6 +95,7 @@ extension ActualStats on Theory {
     return tmp;
   }
 
+  /// 実数値のステータスを取得する
   Stats get actual {
     return Stats(
       h: _calcHp(
@@ -174,15 +219,17 @@ extension Damage on Theory {
       // スロースタート
       case Abilities.slow_start:
         // 5ターンの間、攻撃が0.5倍
-        // TODO: 効果の有無の対応
-        setCorrect(a: 0.5);
+        if (abilityMeta != 0) {
+          setCorrect(a: 0.5);
+        }
         break;
 
       // よわき
       case Abilities.defeatist:
         // HPが半分になると、攻撃が0.5倍
-        // TODO: 効果の有無の対応
-        setCorrect(a: 0.5);
+        if (abilityMeta != 0) {
+          setCorrect(a: 0.5);
+        }
         break;
 
       // クォークチャージ
@@ -227,7 +274,7 @@ extension Damage on Theory {
         }
         break;
 
-      // ハドロンエンジンz
+      // ハドロンエンジン
       case Abilities.hadron_engine:
         // エレキフィールド状態の時、特攻が1.33倍
         if (environment.field == Fields.electric) {
@@ -270,43 +317,51 @@ extension Damage on Theory {
       // しんりょく
       case Abilities.overgrow:
         // HPが1/3以下でくさタイプで攻撃する時、攻撃と特攻が1.5倍
-        // TODO: 効果の有無の対応
-        if (move.type == Types.grass) {
-          setCorrect(a: 1.5, c: 1.5);
+        if (abilityMeta != 0) {
+          if (move.type == Types.grass) {
+            setCorrect(a: 1.5, c: 1.5);
+          }
         }
         break;
 
       // もうか
       case Abilities.blaze:
         // HPが1/3以下でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
-        // TODO: 効果の有無の対応
-        if (move.type == Types.fire) {
-          setCorrect(a: 1.5, c: 1.5);
+        if (abilityMeta != 0) {
+          if (move.type == Types.fire) {
+            setCorrect(a: 1.5, c: 1.5);
+          }
         }
         break;
 
       // げきりゅう
       case Abilities.torrent:
         // HPが1/3以下でみずタイプで攻撃する時、攻撃と特攻が1.5倍
-        // TODO: HP対応
-        if (move.type == Types.water) {
-          setCorrect(a: 1.5, c: 1.5);
+        if (abilityMeta != 0) {
+          if (move.type == Types.water) {
+            setCorrect(a: 1.5, c: 1.5);
+          }
         }
         break;
 
       // むしのしらせ
       case Abilities.swarm:
         // HPが1/3以下でむしタイプで攻撃する時、攻撃と特攻が1.5倍
-        // TODO: 効果の有無の対応
-        if (move.type == Types.bug) {
-          setCorrect(a: 1.5, c: 1.5);
+        if (abilityMeta != 0) {
+          if (move.type == Types.bug) {
+            setCorrect(a: 1.5, c: 1.5);
+          }
         }
         break;
 
       // もらいび
       case Abilities.flash_fire:
         // ほのお技を受けた状態でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
-        // TODO: 効果の有無の対応
+        if (abilityMeta != 0) {
+          if (move.type == Types.fire) {
+            setCorrect(a: 1.5, c: 1.5);
+          }
+        }
         break;
 
       // サンパワー
@@ -322,7 +377,9 @@ extension Damage on Theory {
       case Abilities.plus:
       case Abilities.minus:
         // もう一方が戦闘に出ると、特攻が1.5倍
-        // TODO: 効果の有無の対応
+        if (abilityMeta != 0) {
+          setCorrect(c: 1.5);
+        }
         break;
 
       // いわはこび
@@ -387,7 +444,9 @@ extension Damage on Theory {
       // はりこみ
       case Abilities.stakeout:
         // 交代で出てきた相手に攻撃する時、攻撃と特攻が2倍
-        // TODO: 効果の有無の対応
+        if (abilityMeta != 0) {
+          setCorrect(a: 2.0, c: 2.0);
+        }
         break;
 
       // くさのけがわ
@@ -526,8 +585,13 @@ extension Damage on Theory {
     switch (ability) {
       // とうそうしん
       case Abilities.rivalry:
+        // 同じ性別の相手の時、技の威力が1.25倍
         // 違う性別の相手の時、技の威力が0.75倍
-        // TODO: 性別で判定する
+        if (abilityMeta != 0) {
+          setCorrect(1.25);
+        } else {
+          setCorrect(0.75);
+        }
         break;
 
       // オーラブレイク
@@ -538,10 +602,8 @@ extension Damage on Theory {
 
       // そうだいしょう
       case Abilities.supreme_overlord:
-        // 1体のとき1.1倍
-        // 2体のとき1.2倍
-        // 3体のとき1.3倍
-        // TODO: 効果の有無の対応
+        // 1体につき+10%
+        setCorrect(1.0 + abilityMeta * 0.1);
         break;
 
       // エレキスキン
@@ -585,7 +647,9 @@ extension Damage on Theory {
       // ちからずく
       case Abilities.sheer_force:
         // 追加効果がなくなるが、威力が1.3倍
-        // TODO: 追加効果技の対応
+        if (abilityMeta != 0) {
+          setCorrect(1.3);
+        }
         break;
 
       // すなのちから
@@ -603,7 +667,9 @@ extension Damage on Theory {
       // アナライズ
       case Abilities.analytic:
         // 一番最後に技を出すと威力が1.3倍
-        // TODO: 追加効果技の対応
+        if (abilityMeta != 0) {
+          setCorrect(1.3);
+        }
         break;
 
       case Abilities.tough_claws:
@@ -845,7 +911,9 @@ extension Damage on Theory {
         }
         break;
 
+      // こぶしのプレート
       // くろおび
+      case Items.fistplate:
       case Items.blackbelt:
         // かくとうタイプの技の威力が1.2倍
         if (move.type == Types.fighting) {
@@ -853,7 +921,9 @@ extension Damage on Theory {
         }
         break;
 
+      // がんせきプレート
       // かたいいし
+      case Items.stoneplate:
       case Items.hardstone:
         // いわタイプの技の威力が1.2倍
         if (move.type == Types.rock) {
@@ -861,7 +931,9 @@ extension Damage on Theory {
         }
         break;
 
+      // しずくプレート
       // しんぴのしずく
+      case Items.splashplate:
       case Items.mysticwater:
         // みずタイプの技の威力が1.2倍
         if (move.type == Types.water) {
@@ -869,7 +941,9 @@ extension Damage on Theory {
         }
         break;
 
+      // こわもてプレート
       // くろいメガネ
+      case Items.dreadplate:
       case Items.blackglasses:
         // あくタイプの技の威力が1.2倍
         if (move.type == Types.dark) {
@@ -877,7 +951,9 @@ extension Damage on Theory {
         }
         break;
 
+      // たまむしプレート
       // ぎんのこな
+      case Items.insectplate:
       case Items.silverpowder:
         // むしタイプの技の威力が1.2倍
         if (move.type == Types.bug) {
@@ -885,7 +961,9 @@ extension Damage on Theory {
         }
         break;
 
+      // みどりのプレート
       // きせきのタネ
+      case Items.meadowplate:
       case Items.miracleseed:
         // くさタイプの技の威力が1.2倍
         if (move.type == Types.grass) {
@@ -893,7 +971,9 @@ extension Damage on Theory {
         }
         break;
 
+      // もうどくプレート
       // どくバリ
+      case Items.toxicplate:
       case Items.poisonbarb:
         // どくタイプの技の威力が1.2倍
         if (move.type == Types.poison) {
@@ -901,7 +981,9 @@ extension Damage on Theory {
         }
         break;
 
+      // もののけプレート
       // のろいのおふだ
+      case Items.spookyplate:
       case Items.spelltag:
         // ゴーストタイプの技の威力が1.2倍
         if (move.type == Types.ghost) {
@@ -909,7 +991,9 @@ extension Damage on Theory {
         }
         break;
 
+      // ひのたまプレート
       // もくたん
+      case Items.flameplate:
       case Items.charcoal:
         // ほのおタイプの技の威力が1.2倍
         if (move.type == Types.fire) {
@@ -917,7 +1001,9 @@ extension Damage on Theory {
         }
         break;
 
+      // だいちのプレート
       // やわらかいすな
+      case Items.earthplate:
       case Items.softsand:
         // じめんタイプの技の威力が1.2倍
         if (move.type == Types.ground) {
@@ -925,7 +1011,9 @@ extension Damage on Theory {
         }
         break;
 
+      // りゅうのプレート
       // りゅうのキバ
+      case Items.dracoplate:
       case Items.dragonfang:
         // ドラゴンタイプの技の威力が1.2倍
         if (move.type == Types.dragon) {
@@ -933,6 +1021,9 @@ extension Damage on Theory {
         }
         break;
 
+      // いかずちプレート
+      // じしゃく
+      case Items.zapplate:
       case Items.magnet:
         // でんきタイプの技の威力が1.2倍
         if (move.type == Types.electric) {
@@ -940,7 +1031,9 @@ extension Damage on Theory {
         }
         break;
 
-      // じしゃく
+      // あおぞらプレート
+      // するどいくちばし
+      case Items.skyplate:
       case Items.sharpbeak:
         // ひこうタイプの技の威力が1.2倍
         if (move.type == Types.flying) {
@@ -948,7 +1041,9 @@ extension Damage on Theory {
         }
         break;
 
+      // こうてつプレート
       // メタルコート
+      case Items.ironplate:
       case Items.metalcoat:
         // はがねタイプの技の威力が1.2倍
         if (move.type == Types.steel) {
@@ -956,7 +1051,9 @@ extension Damage on Theory {
         }
         break;
 
+      // つららのプレート
       // とけないこおり
+      case Items.icicleplate:
       case Items.never_meltice:
         // こおりタイプの技の威力が1.2倍
         if (move.type == Types.ice) {
@@ -964,7 +1061,9 @@ extension Damage on Theory {
         }
         break;
 
+      // ふしぎのプレート
       // まがったスプーン
+      case Items.mindplate:
       case Items.twistedspoon:
         // エスパータイプの技の威力が1.2倍
         if (move.type == Types.psychic) {
@@ -972,7 +1071,14 @@ extension Damage on Theory {
         }
         break;
 
-      // TODO: プレート対応
+      // せいれいプレート
+      case Items.pixieplate:
+        // フェアリータイプの技の威力が1.2倍
+        if (move.type == Types.fairy) {
+          setCorrect(1.2);
+        }
+        break;
+
       default:
         break;
     }
@@ -988,7 +1094,6 @@ extension Damage on Theory {
         break;
 
       case Fields.grassy:
-        // TODO: 対応
         // グラスフィールドの時、地面にいるポケモンのくさタイプの技の威力が1.3倍
         if (isFlying == false) {
           if (move.type == Types.grass) {
@@ -1050,37 +1155,46 @@ extension Damage on Theory {
   int _damageCorrect({
     required Moves move,
     required Theory enemy,
+    required Condition condition,
+    required Condition enemyCondition,
+    required double typeEfficacy,
   }) {
     var correct = 1.0.to12bit();
+    setCorrect(double mag) =>
+        correct = (correct * mag.to12bit() / 1.0.to12bit()).round();
 
     // リフレクターの時、物理技のダメージを0.5倍
-    // TODO: 対応
+    if (enemyCondition.shield.isPhysical) {
+      setCorrect(0.5);
+    }
     // ひかりのかべの時、特殊技のダメージを0.5倍
-    // TODO: 対応
+    if (enemyCondition.shield.isSpecial) {
+      setCorrect(0.5);
+    }
 
     switch (ability) {
+      // ブレインフォース
       case Abilities.neuroforce:
         // 効果抜群の技のダメージを1.25倍
-        // if (typeEfficacy >= 2) {
-        //   correct = (correct * 1.25.to12bit() / 1.0.to12bit()).round();
-        // }
-        // TODO: 対応
+        if (typeEfficacy > 1.0) {
+          setCorrect(1.25);
+        }
         break;
 
+      // スナイパー
       case Abilities.sniper:
         // 急所に当てた時のダメージを1.5倍(計2.25倍)
-        // if (attackerEffect.critical) {
-        //   correct = (correct * 1.5.to12bit() / 1.0.to12bit()).round();
-        // }
-        // TODO: 対応
+        if (condition.critical) {
+          setCorrect(1.25);
+        }
         break;
 
+      // いろめがね
       case Abilities.tinted_lens:
         // 効果いまひとつの技のダメージを2倍
-        // if (typeEfficacy <= 0.5) {
-        //   correct = (correct * 2.0.to12bit() / 1.0.to12bit()).round();
-        // }
-        // TODO: 対応
+        if (typeEfficacy < 1.0) {
+          setCorrect(2.0);
+        }
         break;
 
       default:
@@ -1088,45 +1202,52 @@ extension Damage on Theory {
     }
 
     switch (enemy.ability) {
+      // もふもふ
       case Abilities.fluffy:
         // ほのおタイプの技のダメージを2倍
         if (move.type == Types.fire) {
-          correct = (correct * 2.0.to12bit() / 1.0.to12bit()).round();
+          setCorrect(2.0);
         }
         // 接触技のダメージを0.5倍
         if (move.isContact) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
+      // マルチスケイル
       case Abilities.multiscale:
         // HP満タンの時に受けるダメージを0.5倍
-        // TODO: 連続技の対応
-        correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+        if (enemy.abilityMeta != 0) {
+          setCorrect(0.5);
+        }
         break;
 
+      // パンクロック
       case Abilities.punk_rock:
         // 受ける音技のダメージを0.5倍
         if (move.isSound) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
+      // こおりのりんぷん
       case Abilities.ice_scales:
         // こおりタイプの技のダメージを0.5倍
         if (move.type == Types.ice) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
+      // ハードロック
+      // フィルター
+      // プリズムアーマー
       case Abilities.solid_rock:
       case Abilities.filter:
       case Abilities.prism_armor:
         // 効果抜群のダメージを0.75倍
-        // if (typeEfficacy >= 2) {
-        //   correct = Math.floor((correct * 3072) / 4096);
-        // }
-        // TODO: 対応
+        if (typeEfficacy >= 2) {
+          setCorrect(0.75);
+        }
         break;
 
       default:
@@ -1134,20 +1255,14 @@ extension Damage on Theory {
     }
 
     switch (move) {
+      // アクセルブレイク
+      // イナズマドライブ
+      case Moves.electro_drift:
       case Moves.collision_course:
         // 効果抜群の技のダメージを4/3倍
-        // if (typeEfficacy >= 2) {
-        //   correct = (correct * 1.33.to12bit() / 1.0.to12bit()).round();
-        // }
-        // TODO: 対応
-        break;
-
-      case Moves.electro_drift:
-        // 効果抜群の技のダメージを4/3倍
-        // if (typeEfficacy >= 2) {
-        //   correct = (correct * 1.33.to12bit() / 1.0.to12bit()).round();
-        // }
-        // TODO: 対応
+        if (typeEfficacy >= 2) {
+          setCorrect(1.33);
+        }
         break;
 
       default:
@@ -1155,6 +1270,7 @@ extension Damage on Theory {
     }
 
     switch (item) {
+      // メトロノーム
       case Items.metronome:
         // 2回目 4915
         // 3回目 5734
@@ -1164,17 +1280,18 @@ extension Damage on Theory {
         // TODO: 対応
         break;
 
+      // たつじんのおび
       case Items.expertbelt:
         // 効果抜群の技のダメージを1.2倍
-        // if (typeEfficacy >= 2) {
-        //     correct = (correct * 1.2.to12bit() / 1.0.to12bit()).round();
-        // }
-        // TODO: 対応
+        if (typeEfficacy >= 2) {
+          setCorrect(1.2);
+        }
         break;
 
+      // いのちのたま
       case Items.lifeorb:
         // 技のダメージを1.3倍
-        correct = (correct * 1.3.to12bit() / 1.0.to12bit()).round();
+        setCorrect(1.3);
         break;
 
       default:
@@ -1185,119 +1302,119 @@ extension Damage on Theory {
       case Items.roseliberry:
         // フェアリータイプの技のダメージを0.5倍
         if (move.type == Types.fairy) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.chilanberry:
         // ノーマルタイプの技のダメージを0.5倍
         if (move.type == Types.normal) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.babiriberry:
         // はがねタイプの技のダメージを0.5倍
         if (move.type == Types.steel) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.colburberry:
         // あくタイプの技のダメージを0.5倍
         if (move.type == Types.dark) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.habanberry:
         // ドラゴンタイプの技のダメージを0.5倍
         if (move.type == Types.dragon) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.kasibberry:
         // ゴーストタイプの技のダメージを0.5倍
         if (move.type == Types.ghost) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.chartiberry:
         // いわタイプの技のダメージを0.5倍
         if (move.type == Types.rock) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.tangaberry:
         // むしタイプの技のダメージを0.5倍
         if (move.type == Types.rock) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.payapaberry:
         // エスパータイプの技のダメージを0.5倍
         if (move.type == Types.psychic) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.cobaberry:
         // ひこうタイプの技のダメージを0.5倍
         if (move.type == Types.flying) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.shucaberry:
         // じめんタイプの技のダメージを0.5倍
         if (move.type == Types.ground) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.kebiaberry:
         // どくタイプの技のダメージを0.5倍
         if (move.type == Types.poison) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.chopleberry:
         // かくとうタイプの技のダメージを0.5倍
         if (move.type == Types.fighting) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.yacheberry:
         // こおりタイプの技のダメージを0.5倍
         if (move.type == Types.ice) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.rindoberry:
         // くさタイプの技のダメージを0.5倍
         if (move.type == Types.grass) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.passhoberry:
         // みずタイプの技のダメージを0.5倍
         if (move.type == Types.water) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
       case Items.occaberry:
         // ほのおタイプの技のダメージを0.5倍
         if (move.type == Types.fire) {
-          correct = (correct * 0.5.to12bit() / 1.0.to12bit()).round();
+          setCorrect(0.5);
         }
         break;
 
@@ -1333,6 +1450,45 @@ extension Damage on Theory {
     // 変化技、ダメージなしは0を返す
     if (move.power == null) {
       return 0;
+    }
+
+    // シェルアーマーは急所に当たらない
+    if (condition.critical) {
+      if (enemy.ability == Abilities.shell_armor) {
+        condition = condition.copyWith(critical: false);
+      }
+    }
+
+    // 急所による壁、ランクの変化
+    if (condition.critical) {
+      // 急所の時は壁無効
+      enemyCondition = enemyCondition.copyWith(shield: Shields.none);
+
+      // ランク
+      // 自分の攻撃の下降補正を0にする
+      if (condition.rank.a < 0) {
+        condition = condition.copyWith(
+          rank: condition.rank.copyWith(a: 0),
+        );
+      }
+      // 自分の特攻の下降補正を0にする
+      if (condition.rank.c < 0) {
+        condition = condition.copyWith(
+          rank: condition.rank.copyWith(a: 0),
+        );
+      }
+      // 相手の防御の上昇補正を0にする
+      if (enemyCondition.rank.b > 0) {
+        enemyCondition = enemyCondition.copyWith(
+          rank: enemyCondition.rank.copyWith(b: 0),
+        );
+      }
+      // 相手の特防の上昇補正を0にする
+      if (enemyCondition.rank.d > 0) {
+        enemyCondition = enemyCondition.copyWith(
+          rank: enemyCondition.rank.copyWith(b: 0),
+        );
+      }
     }
 
     // 基本ダメージを計算
@@ -1398,8 +1554,10 @@ extension Damage on Theory {
         break;
     }
 
-    // 急所
-    // TODO: 対応
+    // 急所はダメージが1.5倍
+    if (condition.critical) {
+      damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
+    }
 
     // 乱数
     damage = (damage * rand.to12bit() / 1.0.to12bit()).floor();
@@ -1440,14 +1598,19 @@ extension Damage on Theory {
     }
     damage = (damage * efficacy).floor();
 
-    // やけど
-    // TODO: 対応
+    // やけどはダメージが0.5倍
+    if (condition.ailment == Ailments.burn) {
+      damage = (damage * 0.5.to12bit() / 1.0.to12bit()).round6();
+    }
 
     // ダメージ補正値
     damage = (damage *
             _damageCorrect(
               move: move,
               enemy: enemy,
+              condition: condition,
+              enemyCondition: enemyCondition,
+              typeEfficacy: efficacy,
             ) /
             1.0.to12bit())
         .round6();

@@ -335,6 +335,10 @@ enum Abilities implements StringNamedEnum {
       case stakeout:
       // マルチスケイル
       case multiscale:
+      // とうそうしん
+      case rivalry:
+      // ちからづく
+      case sheer_force:
       // アナライズ
       case analytic:
         // 有効/無効
