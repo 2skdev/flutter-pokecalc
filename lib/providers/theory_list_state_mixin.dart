@@ -9,9 +9,10 @@ const _uuid = Uuid();
 /// TheoryのCRUDのMixin
 mixin TheoryList on StateNotifier<List<Theory>> {
   /// 新しいTheoryを生成する
+  ///
+  /// 生成したTheoryを返す
   Theory create() {
-    const theory = Theory();
-    add(theory);
+    final theory = add(const Theory());
     return theory;
   }
 
@@ -21,7 +22,7 @@ mixin TheoryList on StateNotifier<List<Theory>> {
   /// [types]を[pokedex]から設定する
   ///
   /// 新しいものから降順にするため、先頭に追加する
-  void add(Theory theory) {
+  Theory add(Theory theory) {
     // キーを設定する
     if (theory.key == null || theory.key!.isEmpty) {
       theory = theory.copyWith(key: _uuid.v4());
@@ -35,6 +36,8 @@ mixin TheoryList on StateNotifier<List<Theory>> {
 
     // 先頭に追加する
     state = [theory, ...state];
+
+    return theory;
   }
 
   /// Theoryを複製する
