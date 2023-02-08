@@ -18,7 +18,7 @@ mixin TheoryList on StateNotifier<List<Theory>> {
     if (theory.key == null || theory.key!.isEmpty) {
       theory = theory.copyWith(key: _uuid.v4());
     }
-    state = [...state, theory];
+    state = [theory, ...state];
   }
 
   Theory clone(Theory theory) {
