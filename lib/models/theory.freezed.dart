@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Theory {
   String? get key => throw _privateConstructorUsedError;
   Pokedex get pokemon => throw _privateConstructorUsedError;
+  List<Types> get types => throw _privateConstructorUsedError;
   Types get teratype => throw _privateConstructorUsedError;
+  bool get terastal => throw _privateConstructorUsedError;
   Abilities get ability => throw _privateConstructorUsedError;
   Items get item => throw _privateConstructorUsedError;
   Natures get nature => throw _privateConstructorUsedError;
@@ -26,6 +28,7 @@ mixin _$Theory {
   Stats get effort => throw _privateConstructorUsedError;
   Stats get individual => throw _privateConstructorUsedError;
   String get memo => throw _privateConstructorUsedError;
+  int get abilityMeta => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TheoryCopyWith<Theory> get copyWith => throw _privateConstructorUsedError;
@@ -39,14 +42,17 @@ abstract class $TheoryCopyWith<$Res> {
   $Res call(
       {String? key,
       Pokedex pokemon,
+      List<Types> types,
       Types teratype,
+      bool terastal,
       Abilities ability,
       Items item,
       Natures nature,
       List<Moves?> moves,
       Stats effort,
       Stats individual,
-      String memo});
+      String memo,
+      int abilityMeta});
 }
 
 /// @nodoc
@@ -64,7 +70,9 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
   $Res call({
     Object? key = freezed,
     Object? pokemon = null,
+    Object? types = null,
     Object? teratype = null,
+    Object? terastal = null,
     Object? ability = null,
     Object? item = null,
     Object? nature = null,
@@ -72,6 +80,7 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
     Object? effort = null,
     Object? individual = null,
     Object? memo = null,
+    Object? abilityMeta = null,
   }) {
     return _then(_value.copyWith(
       key: freezed == key
@@ -82,10 +91,18 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
           ? _value.pokemon
           : pokemon // ignore: cast_nullable_to_non_nullable
               as Pokedex,
+      types: null == types
+          ? _value.types
+          : types // ignore: cast_nullable_to_non_nullable
+              as List<Types>,
       teratype: null == teratype
           ? _value.teratype
           : teratype // ignore: cast_nullable_to_non_nullable
               as Types,
+      terastal: null == terastal
+          ? _value.terastal
+          : terastal // ignore: cast_nullable_to_non_nullable
+              as bool,
       ability: null == ability
           ? _value.ability
           : ability // ignore: cast_nullable_to_non_nullable
@@ -114,6 +131,10 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String,
+      abilityMeta: null == abilityMeta
+          ? _value.abilityMeta
+          : abilityMeta // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -127,14 +148,17 @@ abstract class _$$_TheoryCopyWith<$Res> implements $TheoryCopyWith<$Res> {
   $Res call(
       {String? key,
       Pokedex pokemon,
+      List<Types> types,
       Types teratype,
+      bool terastal,
       Abilities ability,
       Items item,
       Natures nature,
       List<Moves?> moves,
       Stats effort,
       Stats individual,
-      String memo});
+      String memo,
+      int abilityMeta});
 }
 
 /// @nodoc
@@ -149,7 +173,9 @@ class __$$_TheoryCopyWithImpl<$Res>
   $Res call({
     Object? key = freezed,
     Object? pokemon = null,
+    Object? types = null,
     Object? teratype = null,
+    Object? terastal = null,
     Object? ability = null,
     Object? item = null,
     Object? nature = null,
@@ -157,6 +183,7 @@ class __$$_TheoryCopyWithImpl<$Res>
     Object? effort = null,
     Object? individual = null,
     Object? memo = null,
+    Object? abilityMeta = null,
   }) {
     return _then(_$_Theory(
       key: freezed == key
@@ -167,10 +194,18 @@ class __$$_TheoryCopyWithImpl<$Res>
           ? _value.pokemon
           : pokemon // ignore: cast_nullable_to_non_nullable
               as Pokedex,
+      types: null == types
+          ? _value._types
+          : types // ignore: cast_nullable_to_non_nullable
+              as List<Types>,
       teratype: null == teratype
           ? _value.teratype
           : teratype // ignore: cast_nullable_to_non_nullable
               as Types,
+      terastal: null == terastal
+          ? _value.terastal
+          : terastal // ignore: cast_nullable_to_non_nullable
+              as bool,
       ability: null == ability
           ? _value.ability
           : ability // ignore: cast_nullable_to_non_nullable
@@ -199,6 +234,10 @@ class __$$_TheoryCopyWithImpl<$Res>
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String,
+      abilityMeta: null == abilityMeta
+          ? _value.abilityMeta
+          : abilityMeta // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -209,15 +248,19 @@ class _$_Theory extends _Theory {
   const _$_Theory(
       {this.key,
       this.pokemon = Pokedex.sprigatito,
+      final List<Types> types = const <Types>[],
       this.teratype = Types.grass,
+      this.terastal = false,
       this.ability = Abilities.overgrow,
       this.item = Items.sitrusberry,
       this.nature = Natures.jolly,
       final List<Moves?> moves = const [null, null, null, null],
       this.effort = const Stats(h: 0, a: 0, b: 0, c: 0, d: 0, s: 0),
       this.individual = const Stats(h: 31, a: 31, b: 31, c: 31, d: 31, s: 31),
-      this.memo = ''})
-      : _moves = moves,
+      this.memo = '',
+      this.abilityMeta = 0})
+      : _types = types,
+        _moves = moves,
         super._();
 
   @override
@@ -225,9 +268,21 @@ class _$_Theory extends _Theory {
   @override
   @JsonKey()
   final Pokedex pokemon;
+  final List<Types> _types;
+  @override
+  @JsonKey()
+  List<Types> get types {
+    if (_types is EqualUnmodifiableListView) return _types;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_types);
+  }
+
   @override
   @JsonKey()
   final Types teratype;
+  @override
+  @JsonKey()
+  final bool terastal;
   @override
   @JsonKey()
   final Abilities ability;
@@ -255,10 +310,13 @@ class _$_Theory extends _Theory {
   @override
   @JsonKey()
   final String memo;
+  @override
+  @JsonKey()
+  final int abilityMeta;
 
   @override
   String toString() {
-    return 'Theory(key: $key, pokemon: $pokemon, teratype: $teratype, ability: $ability, item: $item, nature: $nature, moves: $moves, effort: $effort, individual: $individual, memo: $memo)';
+    return 'Theory(key: $key, pokemon: $pokemon, types: $types, teratype: $teratype, terastal: $terastal, ability: $ability, item: $item, nature: $nature, moves: $moves, effort: $effort, individual: $individual, memo: $memo, abilityMeta: $abilityMeta)';
   }
 
   @override
@@ -268,8 +326,11 @@ class _$_Theory extends _Theory {
             other is _$_Theory &&
             (identical(other.key, key) || other.key == key) &&
             (identical(other.pokemon, pokemon) || other.pokemon == pokemon) &&
+            const DeepCollectionEquality().equals(other._types, _types) &&
             (identical(other.teratype, teratype) ||
                 other.teratype == teratype) &&
+            (identical(other.terastal, terastal) ||
+                other.terastal == terastal) &&
             (identical(other.ability, ability) || other.ability == ability) &&
             (identical(other.item, item) || other.item == item) &&
             (identical(other.nature, nature) || other.nature == nature) &&
@@ -277,7 +338,9 @@ class _$_Theory extends _Theory {
             (identical(other.effort, effort) || other.effort == effort) &&
             (identical(other.individual, individual) ||
                 other.individual == individual) &&
-            (identical(other.memo, memo) || other.memo == memo));
+            (identical(other.memo, memo) || other.memo == memo) &&
+            (identical(other.abilityMeta, abilityMeta) ||
+                other.abilityMeta == abilityMeta));
   }
 
   @override
@@ -285,14 +348,17 @@ class _$_Theory extends _Theory {
       runtimeType,
       key,
       pokemon,
+      const DeepCollectionEquality().hash(_types),
       teratype,
+      terastal,
       ability,
       item,
       nature,
       const DeepCollectionEquality().hash(_moves),
       effort,
       individual,
-      memo);
+      memo,
+      abilityMeta);
 
   @JsonKey(ignore: true)
   @override
@@ -305,14 +371,17 @@ abstract class _Theory extends Theory {
   const factory _Theory(
       {final String? key,
       final Pokedex pokemon,
+      final List<Types> types,
       final Types teratype,
+      final bool terastal,
       final Abilities ability,
       final Items item,
       final Natures nature,
       final List<Moves?> moves,
       final Stats effort,
       final Stats individual,
-      final String memo}) = _$_Theory;
+      final String memo,
+      final int abilityMeta}) = _$_Theory;
   const _Theory._() : super._();
 
   @override
@@ -320,7 +389,11 @@ abstract class _Theory extends Theory {
   @override
   Pokedex get pokemon;
   @override
+  List<Types> get types;
+  @override
   Types get teratype;
+  @override
+  bool get terastal;
   @override
   Abilities get ability;
   @override
@@ -335,6 +408,8 @@ abstract class _Theory extends Theory {
   Stats get individual;
   @override
   String get memo;
+  @override
+  int get abilityMeta;
   @override
   @JsonKey(ignore: true)
   _$$_TheoryCopyWith<_$_Theory> get copyWith =>

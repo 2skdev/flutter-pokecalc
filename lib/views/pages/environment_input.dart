@@ -58,19 +58,6 @@ class EnvironmentInputPage extends ConsumerWidget {
             child: Text('自分'),
           ),
           ListTile(
-            leading: const Text('テラスタル'),
-            minLeadingWidth: kMinLeadingWidth,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Switch(
-                  value: false,
-                  onChanged: (value) {},
-                ),
-              ],
-            ),
-          ),
-          ListTile(
             leading: const Text('急所'),
             minLeadingWidth: kMinLeadingWidth,
             title: Row(

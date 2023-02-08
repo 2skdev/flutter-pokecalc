@@ -305,4 +305,43 @@ enum Abilities implements StringNamedEnum {
 
   @override
   final String string;
+
+  int get meta {
+    switch (this) {
+      // そうだいしょう
+      case supreme_overlord:
+        // 最大数
+        return 5;
+
+      // スロースタート
+      case slow_start:
+      // よわき
+      case defeatist:
+      // しんりょく
+      case overgrow:
+      // もうか
+      case blaze:
+      // げきりゅう
+      case torrent:
+      // むしのしらせ
+      case swarm:
+      // もらいび
+      case flash_fire:
+      // プラス
+      case plus:
+      // マイナス
+      case minus:
+      // はりこみ
+      case stakeout:
+      // マルチスケイル
+      case multiscale:
+      // アナライズ
+      case analytic:
+        // 有効/無効
+        return 1;
+
+      default:
+        return 0;
+    }
+  }
 }

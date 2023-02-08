@@ -26,16 +26,33 @@ class TheoryInputPage extends StatelessWidget {
             ),
           ),
           DetailSelectTile.teraType(
-            type: theory.teratype,
+            teratype: theory.teratype,
+            terastal: theory.terastal,
             onChanged: (value) => onChanged?.call(
               theory.copyWith(teratype: value),
+            ),
+            onTerastalChanged: (value) => onChanged?.call(
+              theory.copyWith(terastal: value),
+            ),
+          ),
+          TypeSelectTile(
+            types: theory.types,
+            onChanged: (value) => onChanged?.call(
+              theory.copyWith(types: value),
+            ),
+            onReset: () => onChanged?.call(
+              theory.copyWith(types: theory.pokemon.types),
             ),
           ),
           DetailSelectTile.ability(
             ability: theory.ability,
+            meta: theory.abilityMeta,
             abilities: theory.pokemon.abilities,
             onChanged: (value) => onChanged?.call(
               theory.copyWith(ability: value),
+            ),
+            onMetaChanged: (value) => onChanged?.call(
+              theory.copyWith(abilityMeta: value),
             ),
           ),
           DetailSelectTile.item(

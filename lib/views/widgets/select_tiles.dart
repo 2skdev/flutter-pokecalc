@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pokecalc/views/widgets/tiles.dart';
 
 import '../../enums/base.dart';
@@ -103,12 +104,14 @@ class SelectTile<T> extends StatelessWidget {
 extension DetailSelectTile on SelectTile {
   static SelectTile teraType({
     Key? key,
-    required Types type,
+    required Types teratype,
+    required bool terastal,
     ValueChanged<Types>? onChanged,
+    ValueChanged<bool>? onTerastalChanged,
   }) {
     return SelectTile<Types>(
       key: key,
-      value: type,
+      value: teratype,
       list: Types.values,
       onChanged: (value) => onChanged?.call(value),
       leading: const Text('テラスタル'),
@@ -118,21 +121,65 @@ extension DetailSelectTile on SelectTile {
           Text(item.string),
         ],
       ),
+      childBuilder: (context) => Row(
+        children: [
+          Image.asset(teratype.teraicon, width: 32),
+          Text(teratype.string),
+          const Spacer(),
+          Switch(value: terastal, onChanged: onTerastalChanged),
+        ],
+      ),
     );
   }
 
   static SelectTile ability({
     Key? key,
     required Abilities ability,
+    required int meta,
     List<Abilities> abilities = Abilities.values,
     ValueChanged<Abilities>? onChanged,
+    ValueChanged<int>? onMetaChanged,
   }) {
+    Widget? append;
+
+    // abilityの効果の有無を選択するウィジェットを追加する
+    if (ability.meta == 1) {
+      // 2値で選択するものはSwitchで選択する
+      append = Switch(
+        value: meta > 0,
+        onChanged: (value) => onMetaChanged?.call(value ? 1 : 0),
+      );
+    } else if (ability.meta > 1) {
+      // 1以上を選択するものはDropdownで選択する
+      append = DropdownButton(
+        value: meta,
+        underline: const SizedBox(),
+        items: List.generate(
+          ability.meta + 1,
+          (index) => DropdownMenuItem(
+            value: index,
+            child: Text(index.toString()),
+          ),
+        ),
+        onChanged: (value) {
+          if (value != null) onMetaChanged?.call(value);
+        },
+      );
+    }
+
     return SelectTile<Abilities>(
       value: ability,
       list: abilities,
       onChanged: (value) => onChanged?.call(value),
       leading: const Text('特性'),
       itemBuilder: (context, item) => Text(item.string),
+      childBuilder: (context) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(ability.string),
+          if (append != null) append,
+        ],
+      ),
     );
   }
 
@@ -194,8 +241,50 @@ extension DetailSelectTile on SelectTile {
       value: pokedex,
       list: Pokedex.values,
       onChanged: (value) => onChanged?.call(value),
-      itemBuilder: (context, item) => buildItem(item, 64),
-      childBuilder: (context) => buildItem(pokedex, 96),
+      itemBuilder: (context, item) => Row(
+        children: [
+          Image.asset(item.icon, width: 64),
+          const Space(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(item.string),
+              Text(
+                item.stats.toString(),
+                // TODO: フォントサイズをテーマにする
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+              Row(
+                children: item.types
+                    .map(
+                      (e) => Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: TypeChip(type: e),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      childBuilder: (context) => Row(
+        children: [
+          Image.asset(pokedex.icon, width: 96),
+          const Space(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(pokedex.string),
+              Text(
+                pokedex.stats.toString(),
+                // TODO: フォントサイズをテーマにする
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -339,6 +428,142 @@ class NatureSelectTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// タイプ選択のモーダル
+///
+/// 元のstateはモーダル表示時のNavigatorを挟むと更新されないため
+/// モーダル上の表示をuseStateで状態管理する
+///
+/// 複数選択可能なUIのため、選択時にはNavigator.popしない
+class _TypeSelectModal extends HookWidget {
+  const _TypeSelectModal({
+    required this.types,
+    this.onChanged,
+  });
+
+  /// タイプリスト
+  final List<Types> types;
+
+  /// タイプ更新通知
+  final ValueChanged<List<Types>>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    // モーダル内の状態
+    final state = useState(types);
+
+    // モーダルが更新された時にコールバックで通知する
+    state.addListener(() => onChanged?.call(state.value));
+
+    // タイプを設定する
+    setType(Types type) {
+      // すでに2つ設定されていたら設定しない
+      if (state.value.length < 2) {
+        state.value = [...state.value, type];
+      }
+    }
+
+    // タイプをクリアする
+    clearType(Types type) {
+      state.value = state.value.where((e) => e != type).toList();
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('タイプ'),
+      ),
+      body: SingleChildScrollView(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: Types.values.length,
+          itemBuilder: (context, index) => ListTile(
+            leading: Checkbox(
+              // タイプリストに含む場合、チェックボックスにチェックをつける
+              value: state.value.contains(Types.values[index]),
+              onChanged: (value) {
+                if (value != null) {
+                  // チェックボックスの値に応じてリストに加える
+                  if (value) {
+                    setType(Types.values[index]);
+                  } else {
+                    clearType(Types.values[index]);
+                  }
+                }
+              },
+            ),
+            title: TypeChip(type: Types.values[index]),
+            onTap: () {
+              // ListTileがタップされた時は選択・非選択を切り替える
+              if (state.value.contains(Types.values[index])) {
+                clearType(Types.values[index]);
+              } else {
+                setType(Types.values[index]);
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// タイプを選択するリストタイルウィジェット
+class TypeSelectTile extends StatelessWidget {
+  const TypeSelectTile({
+    super.key,
+    required this.types,
+    this.onChanged,
+    this.onReset,
+  });
+
+  /// タイプリスト
+  final List<Types> types;
+
+  /// タイプリスト更新通知
+  final ValueChanged<List<Types>>? onChanged;
+
+  /// タイプリスト初期化通知
+  ///
+  /// 通知のみで値の更新は親ウィジェットで管理する
+  final Function()? onReset;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const LeadingSizedBox(
+        child: Text('タイプ'),
+      ),
+      title: Row(
+        children: types
+            .map<Widget>(
+              (e) => Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: TypeChip(type: e),
+              ),
+            )
+            .toList()
+          ..addAll([
+            const Spacer(),
+            IconButton(
+              onPressed: onReset,
+              icon: const Icon(Icons.restart_alt_rounded),
+            ),
+          ]),
+      ),
+      onTap: () {
+        showFullHeightModalSheet(
+          context: context,
+          builder: (context) => _TypeSelectModal(
+            types: types,
+            onChanged: onChanged,
+          ),
+        );
+      },
     );
   }
 }

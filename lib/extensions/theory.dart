@@ -303,6 +303,7 @@ extension Damage on Theory {
         }
         break;
 
+      // もらいび
       case Abilities.flash_fire:
         // ほのお技を受けた状態でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
         // TODO: 効果の有無の対応
@@ -317,7 +318,7 @@ extension Damage on Theory {
         break;
 
       // プラス
-      // マイナスz
+      // マイナス
       case Abilities.plus:
       case Abilities.minus:
         // もう一方が戦闘に出ると、特攻が1.5倍
