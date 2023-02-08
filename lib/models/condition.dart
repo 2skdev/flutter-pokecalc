@@ -14,7 +14,6 @@ abstract class Condition with _$Condition {
     @Default(Ailments.none) Ailments ailment,
     @Default(Shields.none) Shields shield,
     @Default(Stats(h: 0, a: 0, b: 0, c: 0, d: 0, s: 0)) Stats rank,
-    @Default(false) bool terastal,
     @Default(false) bool critical,
   }) = _Condition;
 }

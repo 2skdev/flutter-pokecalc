@@ -19,7 +19,6 @@ mixin _$Condition {
   Ailments get ailment => throw _privateConstructorUsedError;
   Shields get shield => throw _privateConstructorUsedError;
   Stats get rank => throw _privateConstructorUsedError;
-  bool get terastal => throw _privateConstructorUsedError;
   bool get critical => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -32,12 +31,7 @@ abstract class $ConditionCopyWith<$Res> {
   factory $ConditionCopyWith(Condition value, $Res Function(Condition) then) =
       _$ConditionCopyWithImpl<$Res, Condition>;
   @useResult
-  $Res call(
-      {Ailments ailment,
-      Shields shield,
-      Stats rank,
-      bool terastal,
-      bool critical});
+  $Res call({Ailments ailment, Shields shield, Stats rank, bool critical});
 }
 
 /// @nodoc
@@ -56,7 +50,6 @@ class _$ConditionCopyWithImpl<$Res, $Val extends Condition>
     Object? ailment = null,
     Object? shield = null,
     Object? rank = null,
-    Object? terastal = null,
     Object? critical = null,
   }) {
     return _then(_value.copyWith(
@@ -72,10 +65,6 @@ class _$ConditionCopyWithImpl<$Res, $Val extends Condition>
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as Stats,
-      terastal: null == terastal
-          ? _value.terastal
-          : terastal // ignore: cast_nullable_to_non_nullable
-              as bool,
       critical: null == critical
           ? _value.critical
           : critical // ignore: cast_nullable_to_non_nullable
@@ -91,12 +80,7 @@ abstract class _$$_ConditionCopyWith<$Res> implements $ConditionCopyWith<$Res> {
       __$$_ConditionCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Ailments ailment,
-      Shields shield,
-      Stats rank,
-      bool terastal,
-      bool critical});
+  $Res call({Ailments ailment, Shields shield, Stats rank, bool critical});
 }
 
 /// @nodoc
@@ -113,7 +97,6 @@ class __$$_ConditionCopyWithImpl<$Res>
     Object? ailment = null,
     Object? shield = null,
     Object? rank = null,
-    Object? terastal = null,
     Object? critical = null,
   }) {
     return _then(_$_Condition(
@@ -129,10 +112,6 @@ class __$$_ConditionCopyWithImpl<$Res>
           ? _value.rank
           : rank // ignore: cast_nullable_to_non_nullable
               as Stats,
-      terastal: null == terastal
-          ? _value.terastal
-          : terastal // ignore: cast_nullable_to_non_nullable
-              as bool,
       critical: null == critical
           ? _value.critical
           : critical // ignore: cast_nullable_to_non_nullable
@@ -148,7 +127,6 @@ class _$_Condition extends _Condition {
       {this.ailment = Ailments.none,
       this.shield = Shields.none,
       this.rank = const Stats(h: 0, a: 0, b: 0, c: 0, d: 0, s: 0),
-      this.terastal = false,
       this.critical = false})
       : super._();
 
@@ -163,14 +141,11 @@ class _$_Condition extends _Condition {
   final Stats rank;
   @override
   @JsonKey()
-  final bool terastal;
-  @override
-  @JsonKey()
   final bool critical;
 
   @override
   String toString() {
-    return 'Condition(ailment: $ailment, shield: $shield, rank: $rank, terastal: $terastal, critical: $critical)';
+    return 'Condition(ailment: $ailment, shield: $shield, rank: $rank, critical: $critical)';
   }
 
   @override
@@ -181,15 +156,12 @@ class _$_Condition extends _Condition {
             (identical(other.ailment, ailment) || other.ailment == ailment) &&
             (identical(other.shield, shield) || other.shield == shield) &&
             (identical(other.rank, rank) || other.rank == rank) &&
-            (identical(other.terastal, terastal) ||
-                other.terastal == terastal) &&
             (identical(other.critical, critical) ||
                 other.critical == critical));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, ailment, shield, rank, terastal, critical);
+  int get hashCode => Object.hash(runtimeType, ailment, shield, rank, critical);
 
   @JsonKey(ignore: true)
   @override
@@ -203,7 +175,6 @@ abstract class _Condition extends Condition {
       {final Ailments ailment,
       final Shields shield,
       final Stats rank,
-      final bool terastal,
       final bool critical}) = _$_Condition;
   const _Condition._() : super._();
 
@@ -213,8 +184,6 @@ abstract class _Condition extends Condition {
   Shields get shield;
   @override
   Stats get rank;
-  @override
-  bool get terastal;
   @override
   bool get critical;
   @override

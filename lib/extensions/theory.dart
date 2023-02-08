@@ -1036,7 +1036,7 @@ extension Damage on Theory {
         (move.power! * correct / 1.0.to12bit()).round6().clamp(0, 0xffffffff);
 
     // テラスタイプと技のタイプが同じで威力が60未満の時は60にする
-    if (condition.terastal) {
+    if (terastal) {
       if (currentTypes.firstWhereOrNull((e) => e == move.type) != null) {
         if (power < 60) {
           power = 60;
@@ -1406,12 +1406,12 @@ extension Damage on Theory {
 
     // タイプ一致
     // テラスタイプ一致
-    if (condition.terastal && teratype == move.type) {
+    if (terastal && teratype == move.type) {
       if (ability == Abilities.adaptability) {
         // テラスタイプ一致+適応力は2.25倍
         damage = (damage * 2.25.to12bit() / 1.0.to12bit()).round6();
       } else {
-        if (pokemon.types.firstWhereOrNull((e) => e == teratype) != null) {
+        if (types.firstWhereOrNull((e) => e == teratype) != null) {
           // 元のタイプと同じテラスタイプの場合は2倍
           damage = (damage * 2.0.to12bit() / 1.0.to12bit()).round6();
         } else {
@@ -1419,7 +1419,7 @@ extension Damage on Theory {
           damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
         }
       }
-    } else if (pokemon.types.firstWhereOrNull((e) => e == move.type) != null) {
+    } else if (types.firstWhereOrNull((e) => e == move.type) != null) {
       if (ability == Abilities.adaptability) {
         // タイプ一致+適応力は2倍
         damage = (damage * 2.0.to12bit() / 1.0.to12bit()).round6();

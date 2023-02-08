@@ -34,7 +34,7 @@ abstract class Theory implements _$Theory {
     if (false) {
       return [teratype];
     } else {
-      return pokemon.types;
+      return types;
     }
   }
 
