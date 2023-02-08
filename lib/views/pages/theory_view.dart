@@ -199,17 +199,9 @@ class TheoryViewPage extends HookConsumerWidget {
       ),
       onClone: () {
         // 複製
-        Theory clone = ref.read(notifier.notifier).clone(theory);
-        // ルートを置き換える
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TheoryViewPage(
-              theoryKey: clone.key!,
-              enemy: enemy,
-            ),
-          ),
-        );
+        ref.read(notifier.notifier).clone(theory);
+        // ルートを戻る
+        Navigator.pop(context);
       },
       onDelete: () {
         // 削除

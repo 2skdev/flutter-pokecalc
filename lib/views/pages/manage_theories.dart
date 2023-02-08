@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../models/theory.dart';
 import '../../providers/providers.dart';
+import '../widgets/space.dart';
 import '../widgets/theory_card.dart';
 import 'theory_view.dart';
 
@@ -28,6 +29,7 @@ class ManageTheoriesPage extends HookConsumerWidget {
                       theory.moves[index]!.type.icon,
                       width: 20,
                     ),
+                    const Space(),
                     Text(theory.moves[index]!.string),
                   ],
                 ),
