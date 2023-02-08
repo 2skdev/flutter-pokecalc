@@ -203,39 +203,6 @@ extension DetailSelectTile on SelectTile {
     required Pokedex pokedex,
     ValueChanged<Pokedex>? onChanged,
   }) {
-    Widget buildItem(Pokedex item, double width) {
-      return Row(
-        children: [
-          Image.asset(
-            item.icon,
-            width: width,
-          ),
-          const Space(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(item.string),
-              Text(
-                item.stats.toString(),
-                // TODO: フォントサイズをテーマにする
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
-              ),
-              Row(
-                children: item.types
-                    .map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: TypeChip(type: e),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-        ],
-      );
-    }
-
     return SelectTile<Pokedex>(
       key: key,
       value: pokedex,
