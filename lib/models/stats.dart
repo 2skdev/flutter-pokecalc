@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'stats.g.dart';
 
 @immutable
+@JsonSerializable()
 class Stats {
   /// ステータスクラスを生成する
   const Stats({
@@ -11,6 +15,9 @@ class Stats {
     this.d = 0,
     this.s = 0,
   });
+
+  factory Stats.fromJson(Map<String, dynamic> json) => _$StatsFromJson(json);
+  Map<String, dynamic> toJson() => _$StatsToJson(this);
 
   /// HP
   final int h;

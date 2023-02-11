@@ -3,11 +3,26 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/theory.dart';
+import 'preferences.dart';
 
 const _uuid = Uuid();
 
 /// TheoryのCRUDのMixin
 mixin TheoryList on StateNotifier<List<Theory>> {
+  void init(String key) async {
+    final list = await Preference.get(key);
+
+    if (list != null) {
+      for (var e in list) {
+        add(e);
+      }
+    }
+
+    addListener((state) async {
+      await Preference.save(key, state);
+    });
+  }
+
   /// 新しいTheoryを生成する
   ///
   /// 生成したTheoryを返す

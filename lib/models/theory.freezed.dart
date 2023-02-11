@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Theory _$TheoryFromJson(Map<String, dynamic> json) {
+  return _Theory.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Theory {
   String? get key => throw _privateConstructorUsedError;
@@ -30,6 +34,7 @@ mixin _$Theory {
   String get memo => throw _privateConstructorUsedError;
   int get abilityMeta => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $TheoryCopyWith<Theory> get copyWith => throw _privateConstructorUsedError;
 }
@@ -243,7 +248,7 @@ class __$$_TheoryCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Theory extends _Theory {
   const _$_Theory(
       {this.key,
@@ -262,6 +267,9 @@ class _$_Theory extends _Theory {
       : _types = types,
         _moves = moves,
         super._();
+
+  factory _$_Theory.fromJson(Map<String, dynamic> json) =>
+      _$$_TheoryFromJson(json);
 
   @override
   final String? key;
@@ -343,6 +351,7 @@ class _$_Theory extends _Theory {
                 other.abilityMeta == abilityMeta));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -365,6 +374,13 @@ class _$_Theory extends _Theory {
   @pragma('vm:prefer-inline')
   _$$_TheoryCopyWith<_$_Theory> get copyWith =>
       __$$_TheoryCopyWithImpl<_$_Theory>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_TheoryToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Theory extends Theory {
@@ -383,6 +399,8 @@ abstract class _Theory extends Theory {
       final String memo,
       final int abilityMeta}) = _$_Theory;
   const _Theory._() : super._();
+
+  factory _Theory.fromJson(Map<String, dynamic> json) = _$_Theory.fromJson;
 
   @override
   String? get key;

@@ -4,7 +4,7 @@ import '../enums/enums.dart';
 import 'stats.dart';
 
 part 'theory.freezed.dart';
-// part 'theory.g.dart';
+part 'theory.g.dart';
 
 typedef TheoryKey = String?;
 
@@ -27,4 +27,6 @@ abstract class Theory implements _$Theory {
     @Default('') String memo,
     @Default(0) int abilityMeta,
   }) = _Theory;
+
+  factory Theory.fromJson(Map<String, dynamic> json) => _$TheoryFromJson(json);
 }
