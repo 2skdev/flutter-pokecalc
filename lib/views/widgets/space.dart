@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Space extends StatelessWidget {
-  const Space({super.key, this.width = 10});
+  const Space({super.key, this.width = 6});
 
   final double width;
 

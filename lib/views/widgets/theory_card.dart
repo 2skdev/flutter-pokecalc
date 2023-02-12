@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pokecalc/views/widgets/space.dart';
-import 'package:pokecalc/views/widgets/tiles.dart';
 
+import '../../extensions/theory.dart';
 import '../../models/theory.dart';
+import 'space.dart';
 import 'stats_text_with_buff.dart';
+import 'tiles.dart';
 
 class TheoryCard extends StatelessWidget {
   const TheoryCard({
@@ -75,7 +76,7 @@ class TheoryCard extends StatelessWidget {
                         style: const TextStyle(fontSize: 16),
                       ),
                       StatsTextWithBuff(
-                        stats: theory.effort,
+                        stats: theory.actual,
                         nature: theory.nature,
                       ),
                       Text(theory.ability.string),

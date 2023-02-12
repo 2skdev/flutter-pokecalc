@@ -25,13 +25,8 @@ class TypeChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Space(
-            width: 6,
-          ),
-          Image.asset(
-            type.icon,
-            width: 16,
-          ),
+          const Space(),
+          Image.asset(type.icon, width: 16),
           SizedBox(
             width: 90,
             child: Center(
