@@ -107,9 +107,9 @@ class TheoryCard extends StatelessWidget {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text(
+                  child: Text(
                     'キャンセル',
-                    style: TextStyle(color: Colors.black),
+                    style: Theme.of(context).textTheme.button,
                   ),
                 ),
                 TextButton(
