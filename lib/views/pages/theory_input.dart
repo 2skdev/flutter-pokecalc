@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/theory.dart';
 import '../widgets/select_tiles.dart';
-import '../widgets/stats_input_list_tile.dart';
+import '../widgets/stats_inputs.dart';
 
 class TheoryInputPage extends StatelessWidget {
   const TheoryInputPage({
@@ -70,7 +70,7 @@ class TheoryInputPage extends StatelessWidget {
               theory.copyWith(nature: nature, effort: effort),
             ),
           ),
-          ...StatsInputListTile.tilesFromTheory(
+          StatsInputs(
             theory: theory,
             onChanged: (value) => onChanged?.call(value),
           ),

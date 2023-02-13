@@ -39,13 +39,18 @@ ThemeData customTheme(ThemeMode mode) {
       thumbColor: MaterialStateProperty.all(primaryColor),
       trackColor: MaterialStateProperty.resolveWith(
         (states) => states.contains(MaterialState.selected)
-            ? primaryColor.shade300
+            ? primaryColor.shade200
             : null,
       ),
     ),
 
     toggleButtonsTheme: ToggleButtonsThemeData(
       color: foregroundColor,
+    ),
+
+    inputDecorationTheme: const InputDecorationTheme(
+      filled: true,
+      border: InputBorder.none,
     ),
   );
 }

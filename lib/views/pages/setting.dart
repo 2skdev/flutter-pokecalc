@@ -16,8 +16,8 @@ class SettingPage extends ConsumerWidget {
       ),
       body: SettingsList(
         lightTheme: SettingsThemeData(
-          titleTextColor: Theme.of(context).textTheme.bodySmall?.color,
-          settingsTileTextColor: Theme.of(context).textTheme.bodyLarge?.color,
+          titleTextColor: Theme.of(context).textTheme.caption?.color,
+          settingsTileTextColor: Theme.of(context).textTheme.bodyText1?.color,
           settingsListBackground: Theme.of(context).backgroundColor,
           settingsSectionBackground: Theme.of(context).cardColor,
           dividerColor: Theme.of(context).backgroundColor,
