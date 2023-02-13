@@ -26,6 +26,7 @@ ThemeData customTheme(ThemeMode mode) {
       titleTextStyle: TextStyle(
         color: foregroundColor,
         fontWeight: FontWeight.bold,
+        fontSize: 16,
       ),
     ),
 
