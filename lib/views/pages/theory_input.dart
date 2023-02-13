@@ -97,7 +97,7 @@ class TheoryInputPage extends StatelessWidget {
                 border: InputBorder.none,
               ),
             ),
-          )
+          ),
         ],
       ),
     );

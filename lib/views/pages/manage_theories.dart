@@ -52,18 +52,20 @@ class ManageTheoriesPage extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ポケモン'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          final tmp = ref.read(theoriesNotifier.notifier).create();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TheoryViewPage(theoryKey: tmp.key!),
-            ),
-          );
-        },
+        actions: [
+          IconButton(
+            onPressed: () {
+              final tmp = ref.read(theoriesNotifier.notifier).create();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TheoryViewPage(theoryKey: tmp.key!),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
       body: ReorderableListView.builder(
         itemCount: theories.length,

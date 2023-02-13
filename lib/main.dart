@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pokecalc/views/widgets/ad_container.dart';
 
 import 'providers/providers.dart';
 import 'theme/theme.dart';
@@ -8,10 +10,12 @@ import 'views/pages/manage_theories.dart';
 import 'views/pages/setting.dart';
 
 void main() {
+  // AdMob
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
-    ),
+    const ProviderScope(child: MyApp()),
   );
 }
 
@@ -72,19 +76,29 @@ class RootPage extends HookConsumerWidget {
 
     return Scaffold(
       body: Stack(
-        children: Navs.values
-            .map(
-              (nav) => Offstage(
-                offstage: navState.value != nav,
-                child: Navigator(
-                  key: _navigatorKeys[nav],
-                  onGenerateRoute: (settings) => MaterialPageRoute(
-                    builder: (context) => nav.screen,
+        children: [
+          ...Navs.values
+              .map(
+                (nav) => Padding(
+                  // バナー広告で隠れるので、下にパディングを入れる
+                  padding: const EdgeInsets.only(bottom: 64),
+                  child: Offstage(
+                    offstage: navState.value != nav,
+                    child: Navigator(
+                      key: _navigatorKeys[nav],
+                      onGenerateRoute: (settings) => MaterialPageRoute(
+                        builder: (context) => nav.screen,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
+          const Positioned(
+            bottom: 0,
+            child: AdContainer(),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

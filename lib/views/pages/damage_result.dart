@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pokecalc/extensions/theory.dart';
+import 'package:pokecalc/views/widgets/ad_container.dart';
 import 'package:pokecalc/views/widgets/theory_card.dart';
 
 import '../../models/condition.dart';
@@ -149,34 +151,35 @@ class DamageResultPage extends ConsumerWidget {
     final condition = ref.watch(conditionNofifier);
     final environment = ref.watch(environmentNofifier);
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final enemy = ref.read(enemiesNotifier.notifier).create();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TheoryViewPage(
-                theoryKey: enemy.key!,
-                enemy: true,
-              ),
-            ),
-          );
-        },
-        child: const Icon(Icons.calculate),
+    final List<Widget> cards = enemies
+        .map(
+          (e) => damageCard(
+            context: context,
+            enemy: e,
+            condition: condition,
+            environment: environment,
+          ),
+        )
+        .toList();
+
+    for (var i = 3; i < cards.length; i += 4) {
+      cards.insert(
+        i,
+        const AdContainer(
+          adSize: AdSize.largeBanner,
+        ),
+      );
+    }
+    cards.add(
+      const AdContainer(
+        adSize: AdSize.mediumRectangle,
       ),
+    );
+
+    return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: enemies
-              .map(
-                (e) => damageCard(
-                  context: context,
-                  enemy: e,
-                  condition: condition,
-                  environment: environment,
-                ),
-              )
-              .toList(),
+          children: cards,
         ),
       ),
     );

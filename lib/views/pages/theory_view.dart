@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 
 import '../../models/theory.dart';
 import '../../providers/providers.dart';
@@ -10,38 +9,6 @@ import '../widgets/modals.dart';
 import 'damage_result.dart';
 import 'environment_input.dart';
 import 'theory_input.dart';
-
-class ActionTextField extends StatelessWidget {
-  ActionTextField({super.key});
-
-  final node = FocusNode();
-
-  KeyboardActionsConfig keyboardActionsConfig(BuildContext context) {
-    return KeyboardActionsConfig(
-      keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
-      keyboardBarColor: Colors.red,
-      nextFocus: false,
-      actions: [
-        KeyboardActionsItem(focusNode: node),
-      ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 200,
-      height: 200,
-      child: KeyboardActions(
-        config: keyboardActionsConfig(context),
-        child: TextField(
-          focusNode: node,
-          keyboardType: TextInputType.number,
-        ),
-      ),
-    );
-  }
-}
 
 class TheoryViewPage extends HookConsumerWidget {
   const TheoryViewPage({
@@ -59,6 +26,8 @@ class TheoryViewPage extends HookConsumerWidget {
     required Widget toggleButtons,
     Function()? onClone,
     Function()? onDelete,
+    Function()? onAddEnemy,
+    int page = 0,
   }) {
     // 仮想敵の場合はポケモン名、それ以外はページコントロール用のボタンをタイトルに表示
     Widget title = (enemy) ? Text(theory.pokemon.string) : toggleButtons;
@@ -82,26 +51,33 @@ class TheoryViewPage extends HookConsumerWidget {
       );
     }
 
-    // 複製、削除用のボタンは常に表示
-    actions.add(
-      PopupMenuButton(
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Icon(Icons.more_horiz),
+    if (page == 0) {
+      // 複製、削除用のボタンを表示
+      actions.add(
+        PopupMenuButton(
+          icon: const Icon(Icons.more_horiz),
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              onTap: onClone,
+              child: const Text('複製'),
+            ),
+            PopupMenuItem(
+              textStyle: const TextStyle(color: Colors.red),
+              onTap: onDelete,
+              child: const Text('削除'),
+            ),
+          ],
         ),
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            onTap: onClone,
-            child: const Text('複製'),
-          ),
-          PopupMenuItem(
-            textStyle: const TextStyle(color: Colors.red),
-            onTap: onDelete,
-            child: const Text('削除'),
-          ),
-        ],
-      ),
-    );
+      );
+    } else {
+      // 計算結果のページは追加ボタンを表示
+      actions.add(
+        IconButton(
+          onPressed: onAddEnemy,
+          icon: const Icon(Icons.add),
+        ),
+      );
+    }
 
     return AppBar(
       title: title,
@@ -113,14 +89,8 @@ class TheoryViewPage extends HookConsumerWidget {
   Widget _buildPageToggleButtons({
     required PageController controller,
     required List<String> labels,
+    int page = 0,
   }) {
-    final page = useState(controller.initialPage);
-
-    // ページを扱うために、イベントを受け取る
-    controller.addListener(() {
-      if (controller.page != null) page.value = controller.page!.round();
-    });
-
     // ページのラベルウィジェットを生成
     final pageLabels = labels
         .map(
@@ -132,9 +102,7 @@ class TheoryViewPage extends HookConsumerWidget {
         .toList();
 
     // 選択されているページを判定
-    final pageSelected = [
-      for (var i = 0; i < labels.length; i++) i == page.value
-    ];
+    final pageSelected = [for (var i = 0; i < labels.length; i++) i == page];
 
     return SizedBox(
       height: 38,
@@ -188,14 +156,24 @@ class TheoryViewPage extends HookConsumerWidget {
 
     AppBar appbar;
     Widget body;
-    final controller = usePageController(initialPage: 0);
 
+    final controller = usePageController(initialPage: 0);
+    final page = useState(controller.initialPage);
+
+    // ページを扱うために、イベントを受け取る
+    controller.addListener(() {
+      if (controller.page != null) page.value = controller.page!.round();
+    });
+
+    // appbar
     appbar = _buildAppBar(
       context: context,
       theory: theory,
+      page: page.value,
       toggleButtons: _buildPageToggleButtons(
         labels: ['ポケモン', '計算履歴'],
         controller: controller,
+        page: page.value,
       ),
       onClone: () {
         // 複製
@@ -209,8 +187,23 @@ class TheoryViewPage extends HookConsumerWidget {
         // ルートを戻る
         Navigator.pop(context);
       },
+      onAddEnemy: () {
+        // 仮想敵を追加
+        final enemy = ref.read(enemiesNotifier.notifier).create();
+        // ページ遷移
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TheoryViewPage(
+              theoryKey: enemy.key!,
+              enemy: true,
+            ),
+          ),
+        );
+      },
     );
 
+    // body
     body = _buildBody(
       controller: controller,
       theory: theory,
