@@ -77,6 +77,7 @@ class EnvironmentInputPage extends ConsumerWidget {
     final condition = ref.watch(conditionNofifier);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(title: const Text('環境')),
       body: SingleChildScrollView(
         child: Column(

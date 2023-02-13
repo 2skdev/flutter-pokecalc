@@ -10,7 +10,7 @@ import 'theory_view.dart';
 class ManageTheoriesPage extends HookConsumerWidget {
   const ManageTheoriesPage({super.key});
 
-  Widget movesRow(Theory theory, int start) {
+  Widget movesRow(BuildContext context, Theory theory, int start) {
     final rows = <Widget>[];
 
     for (var index = start; index < start + 2; index++) {
@@ -19,7 +19,7 @@ class ManageTheoriesPage extends HookConsumerWidget {
           Expanded(
             child: Container(
               margin: const EdgeInsets.all(4.0),
-              color: Colors.grey.shade50,
+              color: Theme.of(context).backgroundColor,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -81,8 +81,8 @@ class ManageTheoriesPage extends HookConsumerWidget {
               ref.read(theoriesNotifier.notifier).delete(theories[index]),
           children: [
             const Divider(),
-            movesRow(theories[index], 0),
-            movesRow(theories[index], 2),
+            movesRow(context, theories[index], 0),
+            movesRow(context, theories[index], 2),
           ],
         ),
         onReorder: (oldIndex, newIndex) =>

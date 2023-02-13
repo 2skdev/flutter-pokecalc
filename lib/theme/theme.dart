@@ -4,35 +4,46 @@ ThemeData customTheme(ThemeMode mode) {
   T useColorModeValue<T>(T light, T dark) =>
       mode == ThemeMode.light ? light : dark;
 
+  MaterialColor primaryColor = Colors.red;
+
   ThemeData themeData = useColorModeValue(ThemeData.light(), ThemeData.dark());
 
-  themeData = themeData.copyWith(
-      colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red));
-
-  Color backgroundColor =
-      useColorModeValue(Colors.grey.shade50, Colors.grey.shade900);
+  Color backgroundColor = themeData.scaffoldBackgroundColor;
   Color foregroundColor = useColorModeValue(Colors.black, Colors.white);
 
   return themeData.copyWith(
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: primaryColor),
     backgroundColor: backgroundColor,
+
+    // タップエフェクトを無効にする
+    splashColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+
     appBarTheme: AppBarTheme(
       elevation: 0,
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
+      titleTextStyle: TextStyle(
+        color: foregroundColor,
+        fontWeight: FontWeight.bold,
+      ),
     ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 0,
       ),
     ),
-    chipTheme: const ChipThemeData(
-      labelStyle: TextStyle(color: Colors.white),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
+
+    switchTheme: SwitchThemeData(
+      thumbColor: MaterialStateProperty.all(primaryColor),
+      trackColor: MaterialStateProperty.resolveWith(
+        (states) => states.contains(MaterialState.selected)
+            ? primaryColor.shade300
+            : null,
       ),
     ),
+
     toggleButtonsTheme: ToggleButtonsThemeData(
       color: foregroundColor,
     ),
