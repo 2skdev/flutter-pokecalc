@@ -25,18 +25,15 @@ class DamageResultPage extends ConsumerWidget {
     required Environment environment,
   }) {
     final statsSpans = <TextSpan>[];
-    final effortList = enemy.effort.toArray();
-    final actualList = enemy.actual.toArray();
-    final buffList = enemy.nature.buff.toArray();
 
     for (var index = 0; index < 6; index++) {
       statsSpans.add(
         TextSpan(
-          text: '${actualList[index]}(${effortList[index]})',
+          text: '${enemy.actual[index]}(${enemy.effort[index]})',
           style: TextStyle(
-            color: buffList[index] > 0
+            color: enemy.nature.buff[index] > 0
                 ? Colors.red
-                : buffList[index] < 0
+                : enemy.nature.buff[index] < 0
                     ? Colors.blue
                     : Colors.grey,
           ),
