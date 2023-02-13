@@ -10,7 +10,7 @@ const _uuid = Uuid();
 /// TheoryのCRUDのMixin
 mixin TheoryList on StateNotifier<List<Theory>> {
   void init(String key) async {
-    final list = await Preference.get(key);
+    final list = await Preference.getTheories(key);
 
     if (list != null) {
       for (var e in list) {
@@ -19,7 +19,7 @@ mixin TheoryList on StateNotifier<List<Theory>> {
     }
 
     addListener((state) async {
-      await Preference.save(key, state);
+      await Preference.saveTheories(key, state);
     });
   }
 

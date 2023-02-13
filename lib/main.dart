@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'providers/providers.dart';
 import 'theme/theme.dart';
 import 'views/pages/manage_theories.dart';
 import 'views/pages/setting.dart';
@@ -14,17 +15,19 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(settingsNofifier);
+
     return MaterialApp(
       title: 'Poke Calc',
       debugShowCheckedModeBanner: false,
       theme: customTheme(ThemeMode.light),
       darkTheme: customTheme(ThemeMode.dark),
-      themeMode: ThemeMode.dark,
+      themeMode: settings.theme,
       home: RootPage(),
     );
   }
