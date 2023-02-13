@@ -248,7 +248,7 @@ extension Damage on Theory {
           } else if (highest == ranked.d) {
             setCorrect(d: 1.3);
           } else if (highest == ranked.s) {
-            setCorrect(s: 1.3);
+            setCorrect(s: 1.5);
           }
         }
         break;
@@ -269,7 +269,7 @@ extension Damage on Theory {
           } else if (highest == ranked.d) {
             setCorrect(d: 1.3);
           } else if (highest == ranked.s) {
-            setCorrect(s: 1.3);
+            setCorrect(s: 1.5);
           }
         }
         break;
