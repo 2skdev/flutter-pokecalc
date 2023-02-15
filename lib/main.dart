@@ -3,12 +3,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pokecalc/views/widgets/ad_container.dart';
 
 import 'providers/providers.dart';
 import 'theme/theme.dart';
+import 'views/pages/manage_parties.dart';
 import 'views/pages/manage_theories.dart';
 import 'views/pages/setting.dart';
+import 'views/widgets/ad_container.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +63,12 @@ enum Navs {
     icon: ImageIcon(AssetImage('assets/icon/icon-punch.png')),
     label: 'ポケモン',
     screen: ManageTheoriesPage(),
+  ),
+
+  party(
+    icon: ImageIcon(AssetImage('assets/icon/icon-dex.png')),
+    label: 'パーティ',
+    screen: ManagePartiesPage(),
   ),
 
   setting(
