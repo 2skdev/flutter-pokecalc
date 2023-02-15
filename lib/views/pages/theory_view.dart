@@ -216,7 +216,8 @@ class TheoryViewPage extends HookConsumerWidget {
       title: title,
       centerTitle: true,
       actions: [
-        environmentButton,
+        // 仮想敵画面では環境入力ボタンを表示しない
+        if (enemy == false) environmentButton,
         // 仮想敵一覧画面では追加ボタンを表示する
         page.value == 1 ? addEnemyButton : popupMenuButton,
       ],
