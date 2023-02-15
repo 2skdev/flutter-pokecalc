@@ -5,9 +5,10 @@ import 'preferences.dart';
 import 'theory_list_state_mixin.dart';
 
 class EnemiesNotifier extends StateNotifier<List<Theory>> with TheoryList {
-  EnemiesNotifier() : super([]) {
-    init(Preference.kEnemiesKey);
-  }
+  @override
+  final String key = Preference.kEnemiesKey;
+
+  EnemiesNotifier() : super([]);
 }
 
 final enemiesNotifier = StateNotifierProvider<EnemiesNotifier, List<Theory>>(

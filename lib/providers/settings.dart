@@ -5,7 +5,9 @@ import '../models/setting.dart';
 import 'preferences.dart';
 
 class SettingsNotifier extends StateNotifier<Setting> {
-  SettingsNotifier() : super(const Setting()) {
+  SettingsNotifier() : super(const Setting());
+
+  Future init() async {
     Preference.getSettings().then((settings) {
       if (settings != null) {
         state = settings;

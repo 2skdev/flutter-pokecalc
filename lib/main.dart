@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pokecalc/views/widgets/ad_container.dart';
@@ -10,21 +11,40 @@ import 'views/pages/manage_theories.dart';
 import 'views/pages/setting.dart';
 
 void main() {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // AdMob
-  WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+  // splash
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   runApp(
     const ProviderScope(child: MyApp()),
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
+
+  /// Providerの読み込み待ちをする
+  Future init(WidgetRef ref) async {
+    await ref.read(settingsNofifier.notifier).init();
+    await ref.read(theoriesNotifier.notifier).init();
+    await ref.read(enemiesNotifier.notifier).init();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsNofifier);
+
+    // 起動時にSharedPreferenceの読み込みを行う
+    useEffect(() {
+      init(ref).then((value) async {
+        // 読み込み完了後、テーマ判明まで待つ
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        FlutterNativeSplash.remove();
+      });
+      return null;
+    }, []);
 
     return MaterialApp(
       title: 'Poke Calc',
