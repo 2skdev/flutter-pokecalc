@@ -5,11 +5,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'providers/providers.dart';
+import 'screens/parties_screen.dart';
+import 'screens/setting_screen.dart';
+import 'screens/theories_screen.dart';
 import 'theme/theme.dart';
-import 'views/pages/manage_parties.dart';
-import 'views/pages/manage_theories.dart';
-import 'views/pages/setting.dart';
-import 'views/widgets/ad_container.dart';
+import 'widgets/ad_container_widget.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -28,14 +28,14 @@ class MyApp extends HookConsumerWidget {
 
   /// Providerの読み込み待ちをする
   Future init(WidgetRef ref) async {
-    await ref.read(settingsNofifier.notifier).init();
-    await ref.read(theoriesNotifier.notifier).init();
-    await ref.read(enemiesNotifier.notifier).init();
+    await ref.read(settingProvider.notifier).init();
+    await ref.read(theoryListProvider.notifier).init();
+    await ref.read(enemyListProvider.notifier).init();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsNofifier);
+    final settings = ref.watch(settingProvider);
 
     // 起動時にSharedPreferenceの読み込みを行う
     useEffect(() {
@@ -62,19 +62,19 @@ enum Navs {
   home(
     icon: ImageIcon(AssetImage('assets/icon/icon-punch.png')),
     label: 'ポケモン',
-    screen: ManageTheoriesPage(),
+    screen: TheoriesScreen(),
   ),
 
   party(
     icon: ImageIcon(AssetImage('assets/icon/icon-dex.png')),
     label: 'パーティ',
-    screen: ManagePartiesPage(),
+    screen: PartiesScreen(),
   ),
 
   setting(
     icon: Icon(Icons.settings),
     label: '設定',
-    screen: SettingPage(),
+    screen: SettingScreen(),
   );
 
   const Navs({
@@ -123,7 +123,7 @@ class RootPage extends HookConsumerWidget {
               .toList(),
           const Positioned(
             bottom: 0,
-            child: AdContainer(),
+            child: AdContainerWidget(),
           ),
         ],
       ),

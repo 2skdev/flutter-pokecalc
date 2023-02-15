@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 
 import '../enums/enums.dart';
-import '../models/condition.dart';
-import '../models/environment.dart';
-import '../models/stats.dart';
-import '../models/theory.dart';
+import '../models/condition_model.dart';
+import '../models/environment_model.dart';
+import '../models/stats_model.dart';
+import '../models/theory_model.dart';
 import 'double.dart';
 
 /// Theoryの情報を集約する関数を拡張

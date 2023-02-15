@@ -1,4 +1,4 @@
-import '../models/stats.dart';
+import '../models/stats_model.dart';
 import 'base.dart';
 
 enum Natures implements StringNamedEnum {

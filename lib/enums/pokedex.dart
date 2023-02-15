@@ -1,5 +1,5 @@
 // ignore_for_file: constant_identifier_names
-import '../models/stats.dart';
+import '../models/stats_model.dart';
 import 'abilities.dart';
 import 'base.dart';
 import 'types.dart';
