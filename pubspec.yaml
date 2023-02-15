@@ -66,7 +66,8 @@ dev_dependencies:
   freezed: ^2.3.2
   build_runner: ^2.3.3
 
-  flutter_native_splash: ^2.2.17
+  flutter_native_splash: ^2.2.16
+  flutter_launcher_icons: ^0.11.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -113,3 +114,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#FAFAFA"
+  image: "assets/icon/splash.png"
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon-app.png"
