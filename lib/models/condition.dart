@@ -16,4 +16,10 @@ abstract class Condition with _$Condition {
     @Default(Stats(h: 0, a: 0, b: 0, c: 0, d: 0, s: 0)) Stats rank,
     @Default(false) bool critical,
   }) = _Condition;
+
+  bool get isDefault =>
+      ailment == Ailments.none &&
+      shield == Shields.none &&
+      rank.isDefault &&
+      critical == false;
 }

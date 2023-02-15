@@ -43,6 +43,10 @@ class Stats {
   /// ステータスのアルファベットのリスト
   static List<String> get initials => ['H', 'A', 'B', 'C', 'D', 'S'];
 
+  /// 初期値と同じかを返す
+  bool get isDefault =>
+      h == 0 && a == 0 && b == 0 && c == 0 && d == 0 && s == 0;
+
   /// ステータスをindexと値でループする
   void forEach(Function(int index, int value) action) {
     for (var i = 0; i < 6; i++) {

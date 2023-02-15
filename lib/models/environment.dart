@@ -13,4 +13,6 @@ abstract class Environment with _$Environment {
     @Default(Weathers.none) Weathers weather,
     @Default(Fields.none) Fields field,
   }) = _Environment;
+
+  bool get isDefault => weather == Weathers.none && field == Fields.none;
 }

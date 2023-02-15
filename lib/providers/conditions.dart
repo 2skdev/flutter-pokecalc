@@ -16,6 +16,8 @@ class ConditionState {
   ConditionState copyWith({Condition? self, Condition? enemy}) {
     return ConditionState(self: self ?? this.self, enemy: enemy ?? this.enemy);
   }
+
+  bool get isDefault => self.isDefault && enemy.isDefault;
 }
 
 class ConditionNotifier extends StateNotifier<ConditionState> {

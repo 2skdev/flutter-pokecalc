@@ -14,6 +14,7 @@ ThemeData customTheme(ThemeMode mode) {
   return themeData.copyWith(
     colorScheme: ColorScheme.fromSwatch(primarySwatch: primaryColor),
     backgroundColor: backgroundColor,
+    primaryColor: primaryColor,
 
     // タップエフェクトを無効にする
     splashColor: Colors.transparent,

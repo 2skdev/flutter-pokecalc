@@ -20,23 +20,12 @@ class TheoryViewPage extends HookConsumerWidget {
   final String theoryKey;
   final bool enemy;
 
-  AppBar _buildAppBar({
+  Widget _environmentButton({
     required BuildContext context,
-    required Theory theory,
-    required Widget toggleButtons,
-    Function()? onClone,
-    Function()? onDelete,
-    Function()? onAddEnemy,
-    int page = 0,
+    bool badge = false,
   }) {
-    // 仮想敵の場合はポケモン名、それ以外はページコントロール用のボタンをタイトルに表示
-    Widget title = (enemy) ? Text(theory.pokemon.string) : toggleButtons;
-
-    List<Widget> actions = [];
-
-    // 仮想敵じゃない場合は、環境設定用のボタンは表示しない
-    if (enemy == false) {
-      actions.add(
+    return Stack(
+      children: [
         IconButton(
           onPressed: () {
             showFullHeightModalSheet(
@@ -48,49 +37,81 @@ class TheoryViewPage extends HookConsumerWidget {
           },
           icon: const Icon(Icons.list_alt),
         ),
-      );
-    }
-
-    if (page == 0) {
-      // 複製、削除用のボタンを表示
-      actions.add(
-        PopupMenuButton(
-          icon: const Icon(Icons.more_horiz),
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              onTap: onClone,
-              child: const Text('複製'),
+        // 変更されている値がある場合、バッジを表示する
+        if (badge)
+          Positioned(
+            top: 8,
+            left: 8,
+            child: Icon(
+              Icons.fiber_manual_record,
+              size: 10,
+              color: Theme.of(context).primaryColor,
             ),
-            PopupMenuItem(
-              textStyle: const TextStyle(color: Colors.red),
-              onTap: onDelete,
-              child: const Text('削除'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      // 計算結果のページは追加ボタンを表示
-      actions.add(
-        IconButton(
-          onPressed: onAddEnemy,
-          icon: const Icon(Icons.add),
-        ),
-      );
-    }
-
-    return AppBar(
-      title: title,
-      actions: actions,
-      centerTitle: true,
+          )
+      ],
     );
   }
 
-  Widget _buildPageToggleButtons({
-    required PageController controller,
-    required List<String> labels,
-    int page = 0,
+  PopupMenuButton _popupMenuButton({
+    required BuildContext context,
+    Function()? onClone,
+    Function()? onDelete,
   }) {
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_horiz),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          onTap: () {
+            // 複製
+            onClone?.call();
+            // ルートを戻る
+            Navigator.pop(context);
+          },
+          child: const Text('複製'),
+        ),
+        PopupMenuItem(
+          textStyle: const TextStyle(color: Colors.red),
+          onTap: () {
+            // 削除
+            onDelete?.call();
+            // ルートを戻る
+            Navigator.pop(context);
+          },
+          child: const Text('削除'),
+        ),
+      ],
+    );
+  }
+
+  IconButton _addEnemyButton({
+    required BuildContext context,
+    required Theory Function() onCreate,
+  }) {
+    return IconButton(
+      onPressed: () {
+        // 仮想敵を追加
+        final enemy = onCreate();
+        // ページ遷移
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TheoryViewPage(
+              theoryKey: enemy.key!,
+              enemy: true,
+            ),
+          ),
+        );
+      },
+      icon: const Icon(Icons.add),
+    );
+  }
+
+  Widget _toggleButtons({
+    required PageController controller,
+    required int page,
+  }) {
+    final labels = ['ポケモン', '計算履歴'];
+
     // ページのラベルウィジェットを生成
     final pageLabels = labels
         .map(
@@ -102,7 +123,9 @@ class TheoryViewPage extends HookConsumerWidget {
         .toList();
 
     // 選択されているページを判定
-    final pageSelected = [for (var i = 0; i < labels.length; i++) i == page];
+    final pageSelected = [
+      for (var i = 0; i < labels.length; i++) i == page,
+    ];
 
     return SizedBox(
       height: 38,
@@ -119,7 +142,7 @@ class TheoryViewPage extends HookConsumerWidget {
     );
   }
 
-  Widget _buildBody({
+  Widget _body({
     required PageController controller,
     required Theory theory,
     Function(Theory)? onChanged,
@@ -154,57 +177,53 @@ class TheoryViewPage extends HookConsumerWidget {
       return const Scaffold();
     }
 
-    AppBar appbar;
-    Widget body;
-
     final controller = usePageController(initialPage: 0);
     final page = useState(controller.initialPage);
 
     // ページを扱うために、イベントを受け取る
     controller.addListener(() {
-      if (controller.page != null) page.value = controller.page!.round();
+      page.value = controller.page!.round();
     });
 
-    // appbar
-    appbar = _buildAppBar(
+    // 環境入力モーダル表示ボタン
+    final environmentButton = _environmentButton(
       context: context,
-      theory: theory,
-      page: page.value,
-      toggleButtons: _buildPageToggleButtons(
-        labels: ['ポケモン', '計算履歴'],
-        controller: controller,
-        page: page.value,
-      ),
-      onClone: () {
-        // 複製
-        ref.read(notifier.notifier).clone(theory);
-        // ルートを戻る
-        Navigator.pop(context);
-      },
-      onDelete: () {
-        // 削除
-        ref.read(notifier.notifier).delete(theory);
-        // ルートを戻る
-        Navigator.pop(context);
-      },
-      onAddEnemy: () {
-        // 仮想敵を追加
-        final enemy = ref.read(enemiesNotifier.notifier).create();
-        // ページ遷移
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TheoryViewPage(
-              theoryKey: enemy.key!,
-              enemy: true,
-            ),
-          ),
-        );
-      },
+      // デフォルト値から変更されているか
+      badge: !(ref.watch(environmentNofifier).isDefault &&
+          ref.watch(conditionNofifier).isDefault),
+    );
+
+    // ポップアップメニュー
+    final popupMenuButton = _popupMenuButton(
+      context: context,
+      onClone: () => ref.read(notifier.notifier).clone(theory),
+      onDelete: () => ref.read(notifier.notifier).delete(theory),
+    );
+
+    // 仮想敵追加ボタン
+    final addEnemyButton = _addEnemyButton(
+      context: context,
+      onCreate: () => ref.read(enemiesNotifier.notifier).create(),
+    );
+
+    // 仮想敵の場合はポケモン名、それ以外はページコントロール用のボタンをタイトルに表示
+    final title = (enemy)
+        ? Text(theory.pokemon.string)
+        : _toggleButtons(controller: controller, page: page.value);
+
+    // appbar
+    final appbar = AppBar(
+      title: title,
+      centerTitle: true,
+      actions: [
+        environmentButton,
+        // 仮想敵一覧画面では追加ボタンを表示する
+        page.value == 1 ? addEnemyButton : popupMenuButton,
+      ],
     );
 
     // body
-    body = _buildBody(
+    final body = _body(
       controller: controller,
       theory: theory,
       onChanged: (value) {
