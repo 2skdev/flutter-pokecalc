@@ -26,7 +26,7 @@ class TypeChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Space(),
-          Image.asset(type.icon, width: 16),
+          Image.asset(type.icon, width: 20),
           SizedBox(
             width: 90,
             child: Center(
@@ -34,7 +34,16 @@ class TypeChip extends StatelessWidget {
                 padding: EdgeInsets.only(right: padding),
                 child: Text(
                   type.string,
-                  style: const TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withAlpha(200),
+                        offset: Offset.zero,
+                        blurRadius: 20.0,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -20,7 +20,10 @@ class NatureTile extends StatelessWidget {
       if (value > 0) {
         children.add(
           Chip(
-            label: Text(Stats.strings[i]),
+            label: Text(
+              Stats.strings[i],
+              style: const TextStyle(color: Colors.white),
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -35,7 +38,10 @@ class NatureTile extends StatelessWidget {
       if (value < 0) {
         children.add(
           Chip(
-            label: Text(Stats.strings[i]),
+            label: Text(
+              Stats.strings[i],
+              style: const TextStyle(color: Colors.white),
+            ),
             backgroundColor: Colors.blue,
           ),
         );
