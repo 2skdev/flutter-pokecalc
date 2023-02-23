@@ -126,8 +126,9 @@ class EnvironmentWidget extends ConsumerWidget {
             ),
             ..._buildCondition(
               condition: condition.self,
-              onChanged: (value) =>
-                  ref.read(conditionProvider.notifier).setState(self: value),
+              onChanged: (value) => ref
+                  .read(conditionProvider.notifier)
+                  .setState(condition.copyWith(self: value)),
             ),
             const Divider(),
             const Padding(
@@ -136,8 +137,9 @@ class EnvironmentWidget extends ConsumerWidget {
             ),
             ..._buildCondition(
               condition: condition.enemy,
-              onChanged: (value) =>
-                  ref.read(conditionProvider.notifier).setState(enemy: value),
+              onChanged: (value) => ref
+                  .read(conditionProvider.notifier)
+                  .setState(condition.copyWith(enemy: value)),
             ),
           ],
         ),

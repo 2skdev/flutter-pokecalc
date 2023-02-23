@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pokecalc/extensions/theory.dart';
 
 import '../constants/dimens.dart';
-import '../extensions/theory.dart';
-import '../models/condition_model.dart';
+import '../misc/calculator.dart';
 import '../models/environment_model.dart';
 import '../models/theory_model.dart';
 import '../providers/providers.dart';
@@ -24,56 +24,57 @@ class EnemiesScreen extends ConsumerWidget {
 
   Widget damageCard({
     required BuildContext context,
-    required Theory enemy,
-    required Conditions condition,
+    required TheoryCondition self,
+    required TheoryCondition enemy,
     required Environment environment,
   }) {
     List<Widget> listDamages(
-      Theory attacker,
-      Condition attackerCondition,
-      Theory defence,
-      Condition defenceCondition,
+      TheoryCondition attacker,
+      TheoryCondition defence,
     ) {
       final damages = <Widget>[];
 
       for (var index = 0; index < 4; index++) {
-        if (attacker.moves[index] != null &&
-            attacker.moves[index]!.power != null) {
-          final damageMin = attacker.damage(
-            move: attacker.moves[index]!,
+        // 攻撃技以外は表示しない
+        if (attacker.theory.moves[index] != null &&
+            attacker.theory.moves[index]!.power != null) {
+          // 最小乱数のダメージ
+          final damageMin = attacker.calcDamage(
+            move: attacker.theory.moves[index]!,
             enemy: defence,
-            condition: attackerCondition,
-            enemyCondition: defenceCondition,
             environment: environment,
             rand: 0.85,
           );
 
-          final damageMax = attacker.damage(
-            move: attacker.moves[index]!,
+          // 最大乱数のダメージ
+          final damageMax = attacker.calcDamage(
+            move: attacker.theory.moves[index]!,
             enemy: defence,
-            rand: 1.00,
-            condition: attackerCondition,
-            enemyCondition: defenceCondition,
             environment: environment,
+            rand: 1.00,
           );
+
+          // HPに対する割合を計算
+          final damageMinPer = damageMin / defence.theory.actual.h;
+          final damageMaxPer = damageMax / defence.theory.actual.h;
 
           damages.addAll([
             Row(
               children: [
                 Image.asset(
-                  attacker.moves[index]!.type.icon,
+                  attacker.theory.moves[index]!.type.icon,
                   width: Dimens.kSmallIconSize,
                 ),
-                Text(attacker.moves[index]!.string),
+                Text(attacker.theory.moves[index]!.string),
                 Text(
-                    ' $damageMin ~ $damageMax (${(100 * damageMin / defence.actual.h).toStringAsFixed(1)}% ~ ${(100 * damageMax / defence.actual.h).toStringAsFixed(1)}%)'),
+                    ' $damageMin ~ $damageMax (${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)'),
               ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
               child: DamageBarWidget(
-                damageMin: damageMin / defence.actual.h,
-                damageMax: damageMax / defence.actual.h,
+                damageMin: damageMinPer,
+                damageMax: damageMaxPer,
               ),
             ),
           ]);
@@ -83,28 +84,19 @@ class EnemiesScreen extends ConsumerWidget {
       return damages;
     }
 
-    final attackDamages = listDamages(
-      theory,
-      condition.self,
-      enemy,
-      condition.enemy,
-    );
-    final defenceDamages = listDamages(
-      enemy,
-      condition.enemy,
-      theory,
-      condition.self,
-    );
+    // ダメージ一覧のウィジェットを生成する
+    final attackDamages = listDamages(self, enemy);
+    final defenceDamages = listDamages(enemy, self);
 
     return TheoryCardWidget(
-      key: Key(enemy.key!),
-      theory: enemy,
-      terastal: enemy.terastal,
+      key: Key(enemy.theory.key!),
+      theory: enemy.theory,
+      terastal: enemy.theory.terastal,
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => TheoryScreen(
-            theoryKey: enemy.key!,
+            theoryKey: enemy.theory.key!,
             enemy: true,
           ),
         ),
@@ -132,8 +124,8 @@ class EnemiesScreen extends ConsumerWidget {
         .map(
           (e) => damageCard(
             context: context,
-            enemy: e,
-            condition: condition,
+            self: TheoryCondition(theory: theory, condition: condition.self),
+            enemy: TheoryCondition(theory: e, condition: condition.enemy),
             environment: environment,
           ),
         )
