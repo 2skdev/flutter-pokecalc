@@ -89,7 +89,7 @@ class PartiesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final parties = ref.watch(partyListProvider);
-    final theories = ref.read(theoryListProvider);
+    final theories = ref.watch(theoryListProvider);
 
     return Scaffold(
       appBar: AppBar(
