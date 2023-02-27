@@ -44,6 +44,18 @@ class PartyListProvider extends StateNotifier<List<Party>> {
   void update(Party party) {
     state = state.map((e) => e.id == party.id ? party : e).toList();
   }
+
+  void reorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      // 後ろに追加する場合、削除を先に行うためインデックスをひとつ前にする
+      newIndex -= 1;
+    }
+
+    final party = state[oldIndex];
+    state = [...state]
+      ..removeAt(oldIndex)
+      ..insert(newIndex, party);
+  }
 }
 
 final partyListProvider = StateNotifierProvider<PartyListProvider, List<Party>>(

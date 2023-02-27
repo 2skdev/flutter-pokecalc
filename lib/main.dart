@@ -28,6 +28,9 @@ class MyApp extends HookConsumerWidget {
 
   /// Providerの読み込み待ちをする
   Future init(WidgetRef ref) async {
+    // final pref = await SharedPreferences.getInstance();
+    // pref.clear();
+
     await ref.read(settingProvider.notifier).init();
     await ref.read(partyListProvider.notifier).init();
     await ref.read(theoryListProvider.notifier).init();

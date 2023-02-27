@@ -109,22 +109,19 @@ class PartiesScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: parties
-              .map(
-                (e) => DeleteDismissWidget(
-                  key: Key(e.id),
-                  child: PartyCard(
-                    theories: theories,
-                    party: e,
-                  ),
-                  onDelete: () =>
-                      ref.read(partyListProvider.notifier).delete(e),
-                ),
-              )
-              .toList(),
+      body: ReorderableListView.builder(
+        itemCount: parties.length,
+        itemBuilder: (context, index) => DeleteDismissWidget(
+          key: Key(parties[index].id),
+          child: PartyCard(
+            theories: theories,
+            party: parties[index],
+          ),
+          onDelete: () =>
+              ref.read(partyListProvider.notifier).delete(parties[index]),
         ),
+        onReorder: (oldIndex, newIndex) =>
+            ref.read(partyListProvider.notifier).reorder(oldIndex, newIndex),
       ),
     );
   }
