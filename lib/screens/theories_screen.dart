@@ -19,11 +19,11 @@ class TheoriesScreen extends HookConsumerWidget {
         actions: [
           IconButton(
             onPressed: () {
-              final tmp = ref.read(theoryListProvider.notifier).create();
+              final newTheory = ref.read(theoryListProvider.notifier).create();
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TheoryScreen(theoryKey: tmp.key!),
+                  builder: (context) => TheoryScreen(theoryId: newTheory.id),
                 ),
               );
             },
@@ -34,13 +34,12 @@ class TheoriesScreen extends HookConsumerWidget {
       body: ReorderableListView.builder(
         itemCount: theories.length,
         itemBuilder: (context, index) => TheoryCardWidget(
-          key: Key(theories[index].key!),
+          key: Key(theories[index].id),
           theory: theories[index],
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  TheoryScreen(theoryKey: theories[index].key!),
+              builder: (context) => TheoryScreen(theoryId: theories[index].id),
             ),
           ),
           onDelete: () =>

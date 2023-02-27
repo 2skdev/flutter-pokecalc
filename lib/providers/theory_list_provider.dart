@@ -32,7 +32,7 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
   ///
   /// 生成したTheoryを返す
   Theory create() {
-    final theory = add(const Theory());
+    final theory = add(Theory(id: _uuid.v4()));
     return theory;
   }
 
@@ -44,12 +44,12 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
   /// 新しいものから降順にするため、先頭に追加する
   Theory add(Theory theory) {
     // キーを設定する
-    if (theory.key == null || theory.key!.isEmpty) {
-      theory = theory.copyWith(key: _uuid.v4());
+    if (theory.id.isEmpty) {
+      theory = theory.copyWith(id: _uuid.v4());
     }
 
     // キーが重複した場合、アサート
-    assert(state.firstWhereOrNull((e) => e.key == theory.key) == null);
+    assert(state.firstWhereOrNull((e) => e.id == theory.id) == null);
 
     // 追加時にタイプの初期値を設定する
     theory = theory.copyWith(types: theory.pokemon.types);
@@ -65,14 +65,14 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
   /// 異なるキーを生成して設定する
   /// 複製したTheoryを返す
   Theory clone(Theory theory) {
-    theory = theory.copyWith(key: _uuid.v4());
+    theory = theory.copyWith(id: _uuid.v4());
     add(theory);
     return theory;
   }
 
   /// Theoryを削除する
   void delete(Theory theory) {
-    state = state.where((e) => e.key != theory.key).toList();
+    state = state.where((e) => e.id != theory.id).toList();
   }
 
   /// Theoryを更新する
@@ -81,7 +81,7 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
   /// 特性を変更した場合に、特性のメタ情報を初期化する
   /// ポケモンが変わった時に、タイプを初期化する
   void update(Theory theory) {
-    final current = state.firstWhereOrNull((e) => e.key == theory.key);
+    final current = state.firstWhereOrNull((e) => e.id == theory.id);
 
     // 選択している特性を含まない時は置き換える
     if (theory.pokemon.abilities.firstWhereOrNull((e) => e == theory.ability) ==
@@ -102,7 +102,7 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
         theory = theory.copyWith(types: theory.pokemon.types);
       }
 
-      state = state.map((e) => e.key == theory.key ? theory : e).toList();
+      state = state.map((e) => e.id == theory.id ? theory : e).toList();
     }
   }
 

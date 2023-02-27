@@ -13,11 +13,11 @@ import 'enemies_screen.dart';
 class TheoryScreen extends HookConsumerWidget {
   const TheoryScreen({
     super.key,
-    required this.theoryKey,
+    required this.theoryId,
     this.enemy = false,
   });
 
-  final String theoryKey;
+  final String theoryId;
   final bool enemy;
 
   Widget _environmentButton({
@@ -96,7 +96,7 @@ class TheoryScreen extends HookConsumerWidget {
           context,
           MaterialPageRoute(
             builder: (context) => TheoryScreen(
-              theoryKey: enemy.key!,
+              theoryId: enemy.id,
               enemy: true,
             ),
           ),
@@ -170,7 +170,7 @@ class TheoryScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = enemy ? enemyListProvider : theoryListProvider;
     final theory =
-        ref.watch(notifier).firstWhereOrNull((e) => e.key == theoryKey);
+        ref.watch(notifier).firstWhereOrNull((e) => e.id == theoryId);
 
     // 削除した後のwatchでnullになるため、以降の処理を行わない
     if (theory == null) {

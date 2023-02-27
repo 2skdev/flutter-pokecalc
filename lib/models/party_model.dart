@@ -22,7 +22,7 @@ abstract class Party with _$Party {
       null,
       null,
     ])
-        List<TheoryKey> member,
+        List<String?> member,
   }) = _Party;
 
   factory Party.fromJson(Map<String, dynamic> json) => _$PartyFromJson(json);
@@ -31,7 +31,7 @@ abstract class Party with _$Party {
     final ret = <Theory?>[];
 
     for (final id in member) {
-      final theory = theories.firstWhereOrNull((e) => e.key == id);
+      final theory = theories.firstWhereOrNull((e) => e.id == id);
 
       ret.add(theory);
     }

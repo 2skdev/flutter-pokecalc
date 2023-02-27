@@ -282,7 +282,7 @@ class EditPartyScreen extends ConsumerWidget {
                   // Keyに戻してPartyを更新
                   ref.read(partyListProvider.notifier).update(
                         party.copyWith(
-                          member: result.map((e) => e?.key).toList(),
+                          member: result.map((e) => e?.id).toList(),
                         ),
                       );
                 }

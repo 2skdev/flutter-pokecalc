@@ -87,14 +87,14 @@ class EnemiesScreen extends ConsumerWidget {
     final defenceDamages = listDamages(enemy, self);
 
     return TheoryCardWidget(
-      key: Key(enemy.theory.key!),
+      key: Key(enemy.theory.id),
       theory: enemy.theory,
       terastal: enemy.theory.terastal,
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => TheoryScreen(
-            theoryKey: enemy.theory.key!,
+            theoryId: enemy.theory.id,
             enemy: true,
           ),
         ),

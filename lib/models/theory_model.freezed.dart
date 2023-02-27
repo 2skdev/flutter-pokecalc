@@ -20,7 +20,7 @@ Theory _$TheoryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Theory {
-  String? get key => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   Pokedex get pokemon => throw _privateConstructorUsedError;
   List<Types> get types => throw _privateConstructorUsedError;
   Types get teratype => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $TheoryCopyWith<$Res> {
       _$TheoryCopyWithImpl<$Res, Theory>;
   @useResult
   $Res call(
-      {String? key,
+      {String id,
       Pokedex pokemon,
       List<Types> types,
       Types teratype,
@@ -73,7 +73,7 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? key = freezed,
+    Object? id = null,
     Object? pokemon = null,
     Object? types = null,
     Object? teratype = null,
@@ -88,10 +88,10 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
     Object? abilityMeta = null,
   }) {
     return _then(_value.copyWith(
-      key: freezed == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as String?,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       pokemon: null == pokemon
           ? _value.pokemon
           : pokemon // ignore: cast_nullable_to_non_nullable
@@ -151,7 +151,7 @@ abstract class _$$_TheoryCopyWith<$Res> implements $TheoryCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? key,
+      {String id,
       Pokedex pokemon,
       List<Types> types,
       Types teratype,
@@ -176,7 +176,7 @@ class __$$_TheoryCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? key = freezed,
+    Object? id = null,
     Object? pokemon = null,
     Object? types = null,
     Object? teratype = null,
@@ -191,10 +191,10 @@ class __$$_TheoryCopyWithImpl<$Res>
     Object? abilityMeta = null,
   }) {
     return _then(_$_Theory(
-      key: freezed == key
-          ? _value.key
-          : key // ignore: cast_nullable_to_non_nullable
-              as String?,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       pokemon: null == pokemon
           ? _value.pokemon
           : pokemon // ignore: cast_nullable_to_non_nullable
@@ -251,7 +251,7 @@ class __$$_TheoryCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Theory extends _Theory {
   const _$_Theory(
-      {this.key,
+      {required this.id,
       this.pokemon = Pokedex.sprigatito,
       final List<Types> types = const <Types>[],
       this.teratype = Types.grass,
@@ -272,7 +272,7 @@ class _$_Theory extends _Theory {
       _$$_TheoryFromJson(json);
 
   @override
-  final String? key;
+  final String id;
   @override
   @JsonKey()
   final Pokedex pokemon;
@@ -324,7 +324,7 @@ class _$_Theory extends _Theory {
 
   @override
   String toString() {
-    return 'Theory(key: $key, pokemon: $pokemon, types: $types, teratype: $teratype, terastal: $terastal, ability: $ability, item: $item, nature: $nature, moves: $moves, effort: $effort, individual: $individual, memo: $memo, abilityMeta: $abilityMeta)';
+    return 'Theory(id: $id, pokemon: $pokemon, types: $types, teratype: $teratype, terastal: $terastal, ability: $ability, item: $item, nature: $nature, moves: $moves, effort: $effort, individual: $individual, memo: $memo, abilityMeta: $abilityMeta)';
   }
 
   @override
@@ -332,7 +332,7 @@ class _$_Theory extends _Theory {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Theory &&
-            (identical(other.key, key) || other.key == key) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.pokemon, pokemon) || other.pokemon == pokemon) &&
             const DeepCollectionEquality().equals(other._types, _types) &&
             (identical(other.teratype, teratype) ||
@@ -355,7 +355,7 @@ class _$_Theory extends _Theory {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      key,
+      id,
       pokemon,
       const DeepCollectionEquality().hash(_types),
       teratype,
@@ -385,7 +385,7 @@ class _$_Theory extends _Theory {
 
 abstract class _Theory extends Theory {
   const factory _Theory(
-      {final String? key,
+      {required final String id,
       final Pokedex pokemon,
       final List<Types> types,
       final Types teratype,
@@ -403,7 +403,7 @@ abstract class _Theory extends Theory {
   factory _Theory.fromJson(Map<String, dynamic> json) = _$_Theory.fromJson;
 
   @override
-  String? get key;
+  String get id;
   @override
   Pokedex get pokemon;
   @override

@@ -62,7 +62,7 @@ class PartyCard extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          TheoryScreen(theoryKey: member[index]!.key!),
+                          TheoryScreen(theoryId: member[index]!.id),
                     ),
                   );
                 } else {

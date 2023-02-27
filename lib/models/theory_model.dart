@@ -6,14 +6,12 @@ import 'stats_model.dart';
 part 'theory_model.freezed.dart';
 part 'theory_model.g.dart';
 
-typedef TheoryKey = String?;
-
 @freezed
 abstract class Theory implements _$Theory {
   const Theory._();
 
   const factory Theory({
-    TheoryKey key,
+    required String id,
     @Default(Pokedex.sprigatito) Pokedex pokemon,
     @Default(<Types>[]) List<Types> types,
     @Default(Types.grass) Types teratype,

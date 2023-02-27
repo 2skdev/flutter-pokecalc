@@ -7,7 +7,7 @@ part of 'theory_model.dart';
 // **************************************************************************
 
 _$_Theory _$$_TheoryFromJson(Map<String, dynamic> json) => _$_Theory(
-      key: json['key'] as String?,
+      id: json['id'] as String,
       pokemon: $enumDecodeNullable(_$PokedexEnumMap, json['pokemon']) ??
           Pokedex.sprigatito,
       types: (json['types'] as List<dynamic>?)
@@ -38,7 +38,7 @@ _$_Theory _$$_TheoryFromJson(Map<String, dynamic> json) => _$_Theory(
     );
 
 Map<String, dynamic> _$$_TheoryToJson(_$_Theory instance) => <String, dynamic>{
-      'key': instance.key,
+      'id': instance.id,
       'pokemon': _$PokedexEnumMap[instance.pokemon]!,
       'types': instance.types.map((e) => _$TypesEnumMap[e]!).toList(),
       'teratype': _$TypesEnumMap[instance.teratype]!,
