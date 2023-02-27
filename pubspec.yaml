@@ -49,6 +49,9 @@ dependencies:
   keyboard_actions: ^4.1.0
   dotted_border: ^2.0.0+3
   settings_ui: ^2.0.2
+  launch_review: ^3.0.1
+  url_launcher: ^6.1.10
+  package_info_plus: ^3.0.3
   flutter_native_splash: ^2.2.16
 
   google_mobile_ads: ^2.3.0

@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:launch_review/launch_review.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+import '../constants/strings.dart';
 import '../providers/providers.dart';
+import 'terms_screen.dart';
 
-class SettingScreen extends ConsumerWidget {
+class SettingScreen extends HookConsumerWidget {
   const SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingProvider);
+    final version = useState('');
+
+    useEffect(() {
+      // アプリのバージョンを取得する
+      PackageInfo.fromPlatform().then((info) => version.value = info.version);
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,9 +48,6 @@ class SettingScreen extends ConsumerWidget {
                 onPressed: (context) =>
                     ref.read(settingProvider.notifier).toggleTheme(),
               ),
-              SettingsTile.navigation(
-                title: const Text('サブスクリプション'),
-              ),
             ],
           ),
           SettingsSection(
@@ -45,9 +55,16 @@ class SettingScreen extends ConsumerWidget {
             tiles: [
               SettingsTile.navigation(
                 title: const Text('アプリをレビュー'),
+                // TODO: アプリIDを登録する
+                onPressed: (context) => LaunchReview.launch(),
               ),
               SettingsTile.navigation(
                 title: const Text('問い合わせ'),
+                onPressed: (context) async {
+                  if (await canLaunchUrlString(kGoogleFormURL)) {
+                    await launchUrlString(kGoogleFormURL);
+                  }
+                },
               ),
             ],
           ),
@@ -56,13 +73,16 @@ class SettingScreen extends ConsumerWidget {
             tiles: [
               SettingsTile(
                 title: const Text('バージョン'),
-                value: const Text('1.0.0'),
+                value: Text(version.value),
               ),
               SettingsTile.navigation(
-                title: const Text('利用規約'),
-              ),
-              SettingsTile.navigation(
-                title: const Text('プライバシーポリシー'),
+                title: const Text('利用規約・プライバシーポリシー'),
+                onPressed: (context) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TermsScreen(),
+                  ),
+                ),
               ),
             ],
           ),

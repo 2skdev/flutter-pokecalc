@@ -103,11 +103,13 @@ class StatsTextFieldWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // コントローラに初期値をアサインする
-    // TODO: 無駄にビルドされないか確認したい...
-    controller.value = controller.value.copyWith(
-      text: value.toString(),
-      selection: TextSelection.collapsed(offset: value.toString().length),
-    );
+    useEffect(() {
+      controller.value = controller.value.copyWith(
+        text: value.toString(),
+        selection: TextSelection.collapsed(offset: value.toString().length),
+      );
+      return () => controller.dispose();
+    }, [controller]);
 
     return TextField(
       focusNode: node,

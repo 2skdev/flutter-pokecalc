@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-// TODO: StatsTextFieldWidgetも移植したい
 class HookTextFieldWidget extends HookWidget {
   const HookTextFieldWidget({
     super.key,
