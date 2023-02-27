@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pokecalc/constants/dimens.dart';
@@ -207,13 +208,45 @@ class EditPartyScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final party =
-        ref.watch(partyListProvider).firstWhere((e) => e.id == partyId);
+        ref.watch(partyListProvider).firstWhereOrNull((e) => e.id == partyId);
+
+    // 削除した後のwatchでnullになるため、以降の処理を行わない
+    if (party == null) {
+      return const Scaffold();
+    }
+
     final theories = ref.read(theoryListProvider);
     final member = party.getMember(theories);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('パーティを編集'),
+        actions: [
+          PopupMenuButton(
+            icon: const Icon(Icons.more_horiz),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                onTap: () {
+                  // 複製
+                  ref.read(partyListProvider.notifier).clone(party);
+                  // ルートを戻る
+                  Navigator.pop(context);
+                },
+                child: const Text('複製'),
+              ),
+              PopupMenuItem(
+                textStyle: const TextStyle(color: Colors.red),
+                onTap: () {
+                  // 削除
+                  ref.read(partyListProvider.notifier).delete(party);
+                  // ルートを戻る
+                  Navigator.pop(context);
+                },
+                child: const Text('削除'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -31,6 +31,12 @@ class PartyListProvider extends StateNotifier<List<Party>> {
     return newParty;
   }
 
+  Party clone(Party party) {
+    party = party.copyWith(id: _uuid.v4());
+    addParty(party: party);
+    return party;
+  }
+
   void delete(Party party) {
     state = state.where((e) => e.id != party.id).toList();
   }

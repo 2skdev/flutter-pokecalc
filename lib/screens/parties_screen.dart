@@ -57,11 +57,20 @@ class PartyCard extends StatelessWidget {
               member: member,
               onTap: (index) {
                 if (member[index] != null) {
+                  // 登録済みの場合、Theoryのページへ遷移
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
                           TheoryScreen(theoryKey: member[index]!.key!),
+                    ),
+                  );
+                } else {
+                  // 未登録の場合、パーティ編集ページへ遷移
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditPartyScreen(partyId: party.id),
                     ),
                   );
                 }
