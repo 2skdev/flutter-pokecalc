@@ -12,7 +12,7 @@ _$_Party _$$_PartyFromJson(Map<String, dynamic> json) => _$_Party(
       member: (json['member'] as List<dynamic>?)
               ?.map((e) => e as String?)
               .toList() ??
-          const [],
+          const [null, null, null, null, null, null],
     );
 
 Map<String, dynamic> _$$_PartyToJson(_$_Party instance) => <String, dynamic>{

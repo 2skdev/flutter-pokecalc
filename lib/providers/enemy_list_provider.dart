@@ -7,7 +7,7 @@ import 'theory_list_provider_mixin.dart';
 class EnemyListProvider extends StateNotifier<List<Theory>>
     with TheoryListProviderMixin {
   @override
-  final String key = Preference.kEnemiesKey;
+  final key = PreferenceKeys.enemies;
 
   EnemyListProvider() : super([]);
 }

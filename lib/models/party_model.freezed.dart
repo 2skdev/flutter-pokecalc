@@ -114,7 +114,9 @@ class __$$_PartyCopyWithImpl<$Res> extends _$PartyCopyWithImpl<$Res, _$_Party>
 @JsonSerializable()
 class _$_Party extends _Party {
   const _$_Party(
-      {required this.id, this.name = "", final List<String?> member = const []})
+      {required this.id,
+      this.name = "",
+      final List<String?> member = const [null, null, null, null, null, null]})
       : _member = member,
         super._();
 

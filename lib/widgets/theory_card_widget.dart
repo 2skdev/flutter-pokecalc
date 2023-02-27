@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../extensions/theory.dart';
 import '../../models/theory_model.dart';
+import 'delete_dismiss_widget.dart';
 import 'space_widget.dart';
 import 'stats_text_widget.dart';
 import 'tile_widget.dart';
@@ -93,45 +94,9 @@ class TheoryCardWidget extends StatelessWidget {
     );
 
     if (onDelete != null) {
-      child = Dismissible(
+      child = DeleteDismissWidget(
         key: super.key!,
-        direction: onDelete != null
-            ? DismissDirection.endToStart
-            : DismissDirection.none,
-        onDismissed: (direction) => onDelete?.call(),
-        confirmDismiss: (direction) async {
-          return showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('削除しますか？'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text(
-                    'キャンセル',
-                    style: Theme.of(context).textTheme.button,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: const Text(
-                    'はい',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-        background: Container(
-          color: Colors.red,
-          alignment: AlignmentDirectional.centerEnd,
-          padding: const EdgeInsets.only(right: 32),
-          child: const Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-        ),
+        onDelete: onDelete,
         child: child,
       );
     }

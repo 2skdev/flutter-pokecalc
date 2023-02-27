@@ -29,6 +29,7 @@ class MyApp extends HookConsumerWidget {
   /// Providerの読み込み待ちをする
   Future init(WidgetRef ref) async {
     await ref.read(settingProvider.notifier).init();
+    await ref.read(partyListProvider.notifier).init();
     await ref.read(theoryListProvider.notifier).init();
     await ref.read(enemyListProvider.notifier).init();
   }
