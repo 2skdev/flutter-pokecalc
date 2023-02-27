@@ -78,7 +78,21 @@ class EnvironmentWidget extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(title: const Text('環境')),
+      appBar: AppBar(
+        title: const Text('環境'),
+        actions: [
+          IconButton(
+            // 両方初期値の時は初期化ボタンを無効化
+            onPressed: environment.isDefault && condition.isDefault
+                ? null
+                : () {
+                    ref.read(environmentProvider.notifier).reset();
+                    ref.read(conditionProvider.notifier).reset();
+                  },
+            icon: const Icon(Icons.restart_alt),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

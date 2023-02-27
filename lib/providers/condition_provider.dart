@@ -8,6 +8,10 @@ class ConditionProvider extends StateNotifier<Conditions> {
   void setState(Conditions conditions) {
     state = conditions;
   }
+
+  void reset() {
+    state = const Conditions();
+  }
 }
 
 final conditionProvider = StateNotifierProvider<ConditionProvider, Conditions>(

@@ -8,6 +8,10 @@ class EnvironmentProvider extends StateNotifier<Environment> {
   void setState(Environment env) {
     state = env;
   }
+
+  void reset() {
+    state = const Environment();
+  }
 }
 
 final environmentProvider =
