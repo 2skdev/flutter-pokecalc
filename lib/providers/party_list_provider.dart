@@ -26,7 +26,7 @@ class PartyListProvider extends StateNotifier<List<Party>> {
   }
 
   Party addParty({Party? party}) {
-    final newParty = party ?? Party(id: _uuid.v4());
+    final newParty = party ?? Party(id: _uuid.v4(), name: '新しいパーティ');
     state = [party ?? newParty, ...state];
     return newParty;
   }

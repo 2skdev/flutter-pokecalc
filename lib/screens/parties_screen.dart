@@ -10,53 +10,6 @@ import '../widgets/delete_dismiss_widget.dart';
 import '../widgets/party_member_widget.dart';
 import '../widgets/space_widget.dart';
 
-class PartiesScreen extends ConsumerWidget {
-  const PartiesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final parties = ref.watch(partyListProvider);
-    final theories = ref.read(theoryListProvider);
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('パーティ'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              final party = ref.read(partyListProvider.notifier).addParty();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditPartyScreen(partyId: party.id),
-                ),
-              );
-            },
-            icon: const Icon(Icons.add),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: parties
-              .map(
-                (e) => DeleteDismissWidget(
-                  key: Key(e.id),
-                  child: PartyCard(
-                    theories: theories,
-                    party: e,
-                  ),
-                  onDelete: () =>
-                      ref.read(partyListProvider.notifier).delete(e),
-                ),
-              )
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
 class PartyCard extends StatelessWidget {
   const PartyCard({
     super.key,
@@ -115,6 +68,53 @@ class PartyCard extends StatelessWidget {
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class PartiesScreen extends ConsumerWidget {
+  const PartiesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final parties = ref.watch(partyListProvider);
+    final theories = ref.read(theoryListProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('パーティ'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              final party = ref.read(partyListProvider.notifier).addParty();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditPartyScreen(partyId: party.id),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: parties
+              .map(
+                (e) => DeleteDismissWidget(
+                  key: Key(e.id),
+                  child: PartyCard(
+                    theories: theories,
+                    party: e,
+                  ),
+                  onDelete: () =>
+                      ref.read(partyListProvider.notifier).delete(e),
+                ),
+              )
+              .toList(),
         ),
       ),
     );
