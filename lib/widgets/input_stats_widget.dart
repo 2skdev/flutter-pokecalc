@@ -103,13 +103,10 @@ class StatsTextFieldWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     // コントローラに初期値をアサインする
-    useEffect(() {
-      controller.value = controller.value.copyWith(
-        text: value.toString(),
-        selection: TextSelection.collapsed(offset: value.toString().length),
-      );
-      return null;
-    }, [controller]);
+    controller.value = controller.value.copyWith(
+      text: value.toString(),
+      selection: TextSelection.collapsed(offset: value.toString().length),
+    );
 
     return TextField(
       focusNode: node,
@@ -153,51 +150,52 @@ class InputStatsWidget extends HookWidget {
     required int min,
     required int max,
     ValueChanged<int>? onChanged,
-  }) =>
-      KeyboardActionsItem(
-        focusNode: node,
-        toolbarAlignment: MainAxisAlignment.spaceBetween,
-        // フォーカスの入れ替えボタン
-        displayArrows: true,
-        toolbarButtons: [
-          (node) => Row(
-                children: [
-                  TextButton(
-                    onPressed: () => onChanged?.call(min),
-                    child: Text(
-                      min.toString(),
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                      ),
+  }) {
+    return KeyboardActionsItem(
+      focusNode: node,
+      toolbarAlignment: MainAxisAlignment.spaceBetween,
+      // フォーカスの入れ替えボタン
+      displayArrows: true,
+      toolbarButtons: [
+        (node) => Row(
+              children: [
+                TextButton(
+                  onPressed: () => onChanged?.call(min),
+                  child: Text(
+                    min.toString(),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () => onChanged?.call(max),
-                    child: Text(
-                      max.toString(),
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                      ),
+                ),
+                TextButton(
+                  onPressed: () => onChanged?.call(max),
+                  child: Text(
+                    max.toString(),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                     ),
                   ),
-                ],
-              ),
-          (node) => const Spacer(),
-          (node) => Row(
-                children: [
-                  TextButton(
-                    onPressed: () => node.unfocus(),
-                    child: Text(
-                      'Done',
-                      style: TextStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                      ),
+                ),
+              ],
+            ),
+        (node) => const Spacer(),
+        (node) => Row(
+              children: [
+                TextButton(
+                  onPressed: () => node.unfocus(),
+                  child: Text(
+                    'Done',
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
                     ),
                   ),
-                ],
-              ),
-        ],
-      );
+                ),
+              ],
+            ),
+      ],
+    );
+  }
 
   /// 実数値が変化する分だけ努力値を丸める
   ///
