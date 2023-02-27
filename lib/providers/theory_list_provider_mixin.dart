@@ -15,9 +15,11 @@ mixin TheoryListProviderMixin on StateNotifier<List<Theory>> {
     final list = await Preference.getTheories(key);
 
     if (list != null) {
+      final initState = <Theory>[];
       for (var e in list) {
-        add(e);
+        initState.add(e);
       }
+      state = initState;
     }
 
     addListener((state) async {

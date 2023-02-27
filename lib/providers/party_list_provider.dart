@@ -13,9 +13,11 @@ class PartyListProvider extends StateNotifier<List<Party>> {
     final list = await Preference.getParties();
 
     if (list != null) {
+      final initState = <Party>[];
       for (var e in list) {
-        addParty(party: e);
+        initState.add(e);
       }
+      state = initState;
     }
 
     addListener((state) async {
@@ -25,7 +27,7 @@ class PartyListProvider extends StateNotifier<List<Party>> {
 
   Party addParty({Party? party}) {
     final newParty = party ?? Party(id: _uuid.v4());
-    state = [...state, party ?? newParty];
+    state = [party ?? newParty, ...state];
     return newParty;
   }
 
