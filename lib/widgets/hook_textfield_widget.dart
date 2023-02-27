@@ -20,7 +20,7 @@ class HookTextFieldWidget extends HookWidget {
     // コントローラに初期値をアサインする
     useEffect(() {
       controller.value = controller.value.copyWith(text: initialValue);
-      return () => controller.dispose();
+      return null;
     }, [controller]);
 
     return TextField(

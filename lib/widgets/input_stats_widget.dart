@@ -108,7 +108,7 @@ class StatsTextFieldWidget extends HookWidget {
         text: value.toString(),
         selection: TextSelection.collapsed(offset: value.toString().length),
       );
-      return () => controller.dispose();
+      return null;
     }, [controller]);
 
     return TextField(
