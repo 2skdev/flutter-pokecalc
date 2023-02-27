@@ -254,8 +254,7 @@ class PokedexSelectWidget extends StatelessWidget {
               Text(item.string),
               Text(
                 item.stats.toString(),
-                // TODO: フォントサイズをテーマにする
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
+                style: Theme.of(context).textTheme.caption,
               ),
               Row(
                 children: item.types
@@ -281,8 +280,7 @@ class PokedexSelectWidget extends StatelessWidget {
               Text(pokedex.string),
               Text(
                 pokedex.stats.toString(),
-                // TODO: フォントサイズをテーマにする
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
+                style: Theme.of(context).textTheme.caption,
               ),
             ],
           ),

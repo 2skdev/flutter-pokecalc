@@ -49,6 +49,7 @@ dependencies:
   keyboard_actions: ^4.1.0
   dotted_border: ^2.0.0+3
   settings_ui: ^2.0.2
+  flutter_native_splash: ^2.2.16
 
   google_mobile_ads: ^2.3.0
 
@@ -66,7 +67,6 @@ dev_dependencies:
   freezed: ^2.3.2
   build_runner: ^2.3.3
 
-  flutter_native_splash: ^2.2.16
   flutter_launcher_icons: ^0.11.0
 
 # For information on the generic Dart part of this file, see the
