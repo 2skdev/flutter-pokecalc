@@ -8,6 +8,7 @@ import '../enums/types.dart';
 import '../extensions/iterable.dart';
 import '../models/theory_model.dart';
 import '../providers/providers.dart';
+import '../widgets/grid_moves_widget.dart';
 import '../widgets/hook_textfield_widget.dart';
 import '../widgets/modal_widget.dart';
 import '../widgets/party_member_widget.dart';
@@ -95,9 +96,12 @@ class TypeEfficacyWidget extends StatelessWidget {
             .map(
               (type) => TableRow(
                 children: [
-                  SizedBox(
-                    height: Dimens.kSmallIconSize,
-                    child: Image.asset(type.icon),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: SizedBox(
+                      height: Dimens.kSmallIconSize,
+                      child: Image.asset(type.icon),
+                    ),
                   ),
                   ...member
                       .map(
@@ -150,6 +154,10 @@ class SelectMemberWidget extends ConsumerWidget {
               .map(
                 (e) => TheoryCardWidget(
                   theory: e,
+                  children: [
+                    const Divider(),
+                    GridMovesWidget(moves: e.moves),
+                  ],
                   onTap: () {
                     final searchIndex = member.firstWhereIndexOrNull(
                       (element) => element == e,
