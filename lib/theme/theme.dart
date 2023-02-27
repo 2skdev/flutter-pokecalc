@@ -46,6 +46,13 @@ ThemeData customTheme(ThemeMode mode) {
       ),
     ),
 
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.resolveWith(
+        (states) =>
+            states.contains(MaterialState.selected) ? primaryColor : null,
+      ),
+    ),
+
     toggleButtonsTheme: ToggleButtonsThemeData(
       color: foregroundColor,
     ),
