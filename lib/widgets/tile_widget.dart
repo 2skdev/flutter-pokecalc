@@ -4,6 +4,7 @@ import '../../constants/dimens.dart';
 import '../../enums/enums.dart';
 import '../../models/stats_model.dart';
 import 'space_widget.dart';
+import 'type_chip_widget.dart';
 
 class NatureTileWidget extends StatelessWidget {
   const NatureTileWidget({super.key, required this.nature});
@@ -93,12 +94,10 @@ class MoveTileWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Image.asset(
-              move.type.icon,
-              width: Dimens.kSmallIconSize,
+            TypeChipWidget(
+              type: move.type,
+              text: move.string,
             ),
-            const SpaceWidget(),
-            Text(move.string),
           ],
         ),
         Row(

@@ -124,16 +124,16 @@ class TeraTypeSelectWidget extends StatelessWidget {
       list: Types.values,
       onChanged: (value) => onChanged?.call(value),
       leading: const Text('テラスタル'),
-      itemBuilder: (context, item) => Row(
-        children: [
-          Image.asset(item.teraicon, width: 32),
-          Text(item.string),
-        ],
+      itemBuilder: (context, item) => TypeChipWidget(
+        type: item,
+        terastal: true,
       ),
       childBuilder: (context) => Row(
         children: [
-          Image.asset(teratype.teraicon, width: 32),
-          Text(teratype.string),
+          TypeChipWidget(
+            type: teratype,
+            terastal: true,
+          ),
           const Spacer(),
           Switch(value: terastal, onChanged: onTerastalChanged),
         ],

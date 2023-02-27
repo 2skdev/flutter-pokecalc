@@ -3,7 +3,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pokecalc/extensions/theory.dart';
 
-import '../constants/dimens.dart';
 import '../misc/calculator.dart';
 import '../models/environment_model.dart';
 import '../models/theory_model.dart';
@@ -12,6 +11,7 @@ import '../screens/theory_screen.dart';
 import '../widgets/ad_container_widget.dart';
 import '../widgets/damage_bar_widget.dart';
 import '../widgets/theory_card_widget.dart';
+import '../widgets/type_chip_widget.dart';
 
 class EnemiesScreen extends ConsumerWidget {
   const EnemiesScreen({
@@ -61,13 +61,11 @@ class EnemiesScreen extends ConsumerWidget {
           damages.addAll([
             Row(
               children: [
-                Image.asset(
-                  attacker.theory.moves[index]!.type.icon,
-                  width: Dimens.kSmallIconSize,
+                TypeChipWidget(
+                  type: attacker.theory.moves[index]!.type,
+                  text:
+                      '${attacker.theory.moves[index]!.string} $damageMin ~ $damageMax (${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)',
                 ),
-                Text(attacker.theory.moves[index]!.string),
-                Text(
-                    ' $damageMin ~ $damageMax (${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)'),
               ],
             ),
             Padding(

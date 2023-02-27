@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/dimens.dart';
 import '../enums/enums.dart';
-import 'space_widget.dart';
+import 'type_chip_widget.dart';
 
 class GridMovesWidget extends StatelessWidget {
   const GridMovesWidget({
@@ -22,9 +22,10 @@ class GridMovesWidget extends StatelessWidget {
 
       if (move != null) {
         moveLabel = [
-          Image.asset(move.type.icon, width: Dimens.kSmallIconSize),
-          const SpaceWidget(),
-          Text(move.string),
+          TypeChipWidget(
+            type: move.type,
+            text: move.string,
+          ),
         ];
       } else {
         moveLabel = [

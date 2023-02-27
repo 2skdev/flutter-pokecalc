@@ -13,6 +13,7 @@ import '../widgets/hook_textfield_widget.dart';
 import '../widgets/modal_widget.dart';
 import '../widgets/party_member_widget.dart';
 import '../widgets/theory_card_widget.dart';
+import '../widgets/type_icon_widget.dart';
 
 class TypeEfficacyWidget extends StatelessWidget {
   const TypeEfficacyWidget({
@@ -77,44 +78,51 @@ class TypeEfficacyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(color: Theme.of(context).dividerColor),
-      children: [
-        TableRow(
-          children: [
-            const SizedBox(),
-            ...member
-                .map(
-                  (e) => e == null
-                      ? const SizedBox()
-                      : Image.asset(e.pokemon.icon),
-                )
-                .toList(),
-          ],
-        ),
-        ...Types.values
-            .map(
-              (type) => TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
-                    child: SizedBox(
-                      height: Dimens.kSmallIconSize,
-                      child: Image.asset(type.icon),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Table(
+        border: TableBorder.all(color: Theme.of(context).dividerColor),
+        children: [
+          TableRow(
+            children: [
+              const SizedBox(),
+              ...member
+                  .map(
+                    (e) => e == null
+                        ? const SizedBox()
+                        : Image.asset(e.pokemon.icon),
+                  )
+                  .toList(),
+            ],
+          ),
+          ...Types.values
+              .map(
+                (type) => TableRow(
+                  children: [
+                    TableCell(
+                      child: SizedBox(
+                        height: Dimens.kSmallIconSize,
+                        width: Dimens.kSmallIconSize,
+                        child: TypeIconWidget(type: type),
+                      ),
                     ),
-                  ),
-                  ...member
-                      .map(
-                        (e) => e == null
-                            ? const SizedBox()
-                            : Center(child: typeEfficacyIcon(type, e)),
-                      )
-                      .toList(),
-                ],
-              ),
-            )
-            .toList()
-      ],
+                    ...member
+                        .map(
+                          (e) => e == null
+                              ? const SizedBox()
+                              : TableCell(
+                                  verticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  child: typeEfficacyIcon(type, e),
+                                ),
+                        )
+                        .toList(),
+                  ],
+                ),
+              )
+              .toList()
+        ],
+      ),
     );
   }
 }

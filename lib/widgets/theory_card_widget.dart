@@ -6,6 +6,7 @@ import 'delete_dismiss_widget.dart';
 import 'space_widget.dart';
 import 'stats_text_widget.dart';
 import 'tile_widget.dart';
+import 'type_icon_widget.dart';
 
 class TheoryCardWidget extends StatelessWidget {
   const TheoryCardWidget({
@@ -28,9 +29,9 @@ class TheoryCardWidget extends StatelessWidget {
     Widget typeIcon;
 
     if (terastal) {
-      typeIcon = Image.asset(
-        theory.teratype.teraicon,
-        width: 32,
+      typeIcon = TypeIconWidget(
+        type: theory.teratype,
+        terastal: true,
       );
     } else {
       typeIcon = Row(
@@ -38,10 +39,7 @@ class TheoryCardWidget extends StatelessWidget {
             .map(
               (e) => Padding(
                 padding: const EdgeInsets.only(right: 4.0),
-                child: Image.asset(
-                  e.icon,
-                  width: 18,
-                ),
+                child: TypeIconWidget(type: e),
               ),
             )
             .toList(),
