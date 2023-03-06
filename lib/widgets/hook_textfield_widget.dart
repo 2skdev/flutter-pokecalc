@@ -7,11 +7,15 @@ class HookTextFieldWidget extends HookWidget {
     this.initialValue,
     this.onChanged,
     this.decoration,
+    this.style,
+    this.textAlignVertical,
   });
 
   final String? initialValue;
   final Function(String value)? onChanged;
   final InputDecoration? decoration;
+  final TextAlignVertical? textAlignVertical;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +25,14 @@ class HookTextFieldWidget extends HookWidget {
     useEffect(() {
       controller.value = controller.value.copyWith(text: initialValue);
       return null;
-    }, [controller]);
+    }, [controller, initialValue]);
 
     return TextField(
       controller: controller,
       onChanged: onChanged,
       decoration: decoration,
+      style: style,
+      textAlignVertical: textAlignVertical,
     );
   }
 }

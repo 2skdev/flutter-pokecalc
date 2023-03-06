@@ -26,7 +26,10 @@ class TypeChipWidget extends StatelessWidget {
           terastal: terastal,
         ),
         const SpaceWidget(),
-        Text(text ?? type.string),
+        Text(
+          text ?? type.string,
+          overflow: TextOverflow.ellipsis,
+        ),
       ],
     );
   }

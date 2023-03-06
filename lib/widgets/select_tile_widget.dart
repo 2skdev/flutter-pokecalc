@@ -7,6 +7,7 @@ import '../../extensions/string.dart';
 import '../../models/stats_model.dart';
 import '../constants/dimens.dart';
 import 'align_list_tile_widget.dart';
+import 'hook_textfield_widget.dart';
 import 'modal_widget.dart';
 import 'search_list_scaffold_widget.dart';
 import 'space_widget.dart';
@@ -312,6 +313,51 @@ class MoveSelectWidget extends StatelessWidget {
       leading: leading,
       itemBuilder: (context, item) =>
           item == null ? const SizedBox() : MoveTileWidget(move: item),
+      childBuilder: (context) => move == null
+          ? const SizedBox()
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TypeChipWidget(
+                  type: move!.type,
+                  text: move!.string,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 48,
+                      height: 28,
+                      child: HookTextFieldWidget(
+                        initialValue: move!.power.toString(),
+                        textAlignVertical: TextAlignVertical.center,
+                        style: const TextStyle(fontSize: 14),
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(8),
+                          isCollapsed: true,
+                        ),
+                      ),
+                    ),
+                    const SpaceWidget(),
+                    ToggleButtons(
+                      constraints: BoxConstraints.tight(
+                        const Size(Dimens.kSmallIconSize * 2, 26),
+                      ),
+                      isSelected: const [true, false],
+                      children: [
+                        Image.asset(
+                          MoveCategory.physical.icon,
+                          width: Dimens.kSmallIconSize,
+                        ),
+                        Image.asset(
+                          MoveCategory.special.icon,
+                          width: Dimens.kSmallIconSize,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
     );
   }
 }
