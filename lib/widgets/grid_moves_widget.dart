@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/dimens.dart';
-import '../enums/enums.dart';
+import '../models/move_model.dart';
 import 'type_chip_widget.dart';
 
 class GridMovesWidget extends StatelessWidget {
@@ -11,7 +11,7 @@ class GridMovesWidget extends StatelessWidget {
     required this.moves,
   });
 
-  final List<Moves?> moves;
+  final List<MoveModel> moves;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,11 @@ class GridMovesWidget extends StatelessWidget {
     moves.forEachIndexed((index, move) {
       List<Widget>? moveLabel;
 
-      if (move != null) {
+      if (move.state != null) {
         moveLabel = [
           TypeChipWidget(
-            type: move.type,
-            text: move.string,
+            type: move.state!.type,
+            text: move.state!.string,
           ),
         ];
       } else {

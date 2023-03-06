@@ -36,19 +36,21 @@ class EnemiesScreen extends ConsumerWidget {
 
       for (var index = 0; index < 4; index++) {
         // 攻撃技以外は表示しない
-        if (attacker.theory.moves[index] != null &&
-            attacker.theory.moves[index]!.power != null) {
+        if (attacker.theory.moves[index].state != null &&
+            attacker.theory.moves[index].state!.power != null) {
           // 最小乱数のダメージ
+          // TODO: move.state -> moveに変える
           final damageMin = attacker.calcDamage(
-            move: attacker.theory.moves[index]!,
+            move: attacker.theory.moves[index].state!,
             enemy: defence,
             environment: environment,
             rand: 0.85,
           );
 
           // 最大乱数のダメージ
+          // TODO: move.state -> moveに変える
           final damageMax = attacker.calcDamage(
-            move: attacker.theory.moves[index]!,
+            move: attacker.theory.moves[index].state!,
             enemy: defence,
             environment: environment,
             rand: 1.00,
@@ -62,9 +64,9 @@ class EnemiesScreen extends ConsumerWidget {
             Row(
               children: [
                 TypeChipWidget(
-                  type: attacker.theory.moves[index]!.type,
+                  type: attacker.theory.moves[index].state!.type,
                   text:
-                      '${attacker.theory.moves[index]!.string} $damageMin ~ $damageMax (${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)',
+                      '${attacker.theory.moves[index].state!.string} $damageMin ~ $damageMax (${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)',
                 ),
               ],
             ),

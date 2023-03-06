@@ -45,20 +45,20 @@ class EditTheoryScreen extends StatelessWidget {
             ),
           ),
           AbilitySelectWidget(
-            ability: theory.ability,
-            meta: theory.abilityMeta,
+            ability: theory.ability.state,
+            meta: theory.ability.meta,
             abilities: theory.pokemon.abilities,
             onChanged: (value) => onChanged?.call(
-              theory.copyWith(ability: value),
+              theory.copyWith(ability: theory.ability.copyWith(state: value)),
             ),
             onMetaChanged: (value) => onChanged?.call(
-              theory.copyWith(abilityMeta: value),
+              theory.copyWith(ability: theory.ability.copyWith(meta: value)),
             ),
           ),
           ItemSelectWidget(
-            item: theory.item,
+            item: theory.item.state,
             onChanged: (value) => onChanged?.call(
-              theory.copyWith(item: value),
+              theory.copyWith(item: theory.item.copyWith(state: value)),
             ),
           ),
           NatureSelectWidget(
@@ -77,10 +77,10 @@ class EditTheoryScreen extends StatelessWidget {
           for (var i = 0; i < 4; i++)
             MoveSelectWidget(
               leading: Text('技${i + 1}'),
-              move: theory.moves[i],
+              move: theory.moves[i].state,
               onChanged: (value) {
                 var moves = [...theory.moves];
-                moves[i] = value;
+                moves[i] = moves[i].copyWith(state: value);
                 onChanged?.call(
                   theory.copyWith(moves: moves),
                 );

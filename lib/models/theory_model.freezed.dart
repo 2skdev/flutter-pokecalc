@@ -25,14 +25,13 @@ mixin _$Theory {
   List<Types> get types => throw _privateConstructorUsedError;
   Types get teratype => throw _privateConstructorUsedError;
   bool get terastal => throw _privateConstructorUsedError;
-  Abilities get ability => throw _privateConstructorUsedError;
-  Items get item => throw _privateConstructorUsedError;
+  AbilityModel get ability => throw _privateConstructorUsedError;
+  ItemModel get item => throw _privateConstructorUsedError;
   Natures get nature => throw _privateConstructorUsedError;
-  List<Moves?> get moves => throw _privateConstructorUsedError;
+  List<MoveModel> get moves => throw _privateConstructorUsedError;
   Stats get effort => throw _privateConstructorUsedError;
   Stats get individual => throw _privateConstructorUsedError;
   String get memo => throw _privateConstructorUsedError;
-  int get abilityMeta => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,14 +49,16 @@ abstract class $TheoryCopyWith<$Res> {
       List<Types> types,
       Types teratype,
       bool terastal,
-      Abilities ability,
-      Items item,
+      AbilityModel ability,
+      ItemModel item,
       Natures nature,
-      List<Moves?> moves,
+      List<MoveModel> moves,
       Stats effort,
       Stats individual,
-      String memo,
-      int abilityMeta});
+      String memo});
+
+  $AbilityModelCopyWith<$Res> get ability;
+  $ItemModelCopyWith<$Res> get item;
 }
 
 /// @nodoc
@@ -85,7 +86,6 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
     Object? effort = null,
     Object? individual = null,
     Object? memo = null,
-    Object? abilityMeta = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -111,11 +111,11 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
       ability: null == ability
           ? _value.ability
           : ability // ignore: cast_nullable_to_non_nullable
-              as Abilities,
+              as AbilityModel,
       item: null == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
-              as Items,
+              as ItemModel,
       nature: null == nature
           ? _value.nature
           : nature // ignore: cast_nullable_to_non_nullable
@@ -123,7 +123,7 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
       moves: null == moves
           ? _value.moves
           : moves // ignore: cast_nullable_to_non_nullable
-              as List<Moves?>,
+              as List<MoveModel>,
       effort: null == effort
           ? _value.effort
           : effort // ignore: cast_nullable_to_non_nullable
@@ -136,11 +136,23 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String,
-      abilityMeta: null == abilityMeta
-          ? _value.abilityMeta
-          : abilityMeta // ignore: cast_nullable_to_non_nullable
-              as int,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AbilityModelCopyWith<$Res> get ability {
+    return $AbilityModelCopyWith<$Res>(_value.ability, (value) {
+      return _then(_value.copyWith(ability: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemModelCopyWith<$Res> get item {
+    return $ItemModelCopyWith<$Res>(_value.item, (value) {
+      return _then(_value.copyWith(item: value) as $Val);
+    });
   }
 }
 
@@ -156,14 +168,18 @@ abstract class _$$_TheoryCopyWith<$Res> implements $TheoryCopyWith<$Res> {
       List<Types> types,
       Types teratype,
       bool terastal,
-      Abilities ability,
-      Items item,
+      AbilityModel ability,
+      ItemModel item,
       Natures nature,
-      List<Moves?> moves,
+      List<MoveModel> moves,
       Stats effort,
       Stats individual,
-      String memo,
-      int abilityMeta});
+      String memo});
+
+  @override
+  $AbilityModelCopyWith<$Res> get ability;
+  @override
+  $ItemModelCopyWith<$Res> get item;
 }
 
 /// @nodoc
@@ -188,7 +204,6 @@ class __$$_TheoryCopyWithImpl<$Res>
     Object? effort = null,
     Object? individual = null,
     Object? memo = null,
-    Object? abilityMeta = null,
   }) {
     return _then(_$_Theory(
       id: null == id
@@ -214,11 +229,11 @@ class __$$_TheoryCopyWithImpl<$Res>
       ability: null == ability
           ? _value.ability
           : ability // ignore: cast_nullable_to_non_nullable
-              as Abilities,
+              as AbilityModel,
       item: null == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
-              as Items,
+              as ItemModel,
       nature: null == nature
           ? _value.nature
           : nature // ignore: cast_nullable_to_non_nullable
@@ -226,7 +241,7 @@ class __$$_TheoryCopyWithImpl<$Res>
       moves: null == moves
           ? _value._moves
           : moves // ignore: cast_nullable_to_non_nullable
-              as List<Moves?>,
+              as List<MoveModel>,
       effort: null == effort
           ? _value.effort
           : effort // ignore: cast_nullable_to_non_nullable
@@ -239,10 +254,6 @@ class __$$_TheoryCopyWithImpl<$Res>
           ? _value.memo
           : memo // ignore: cast_nullable_to_non_nullable
               as String,
-      abilityMeta: null == abilityMeta
-          ? _value.abilityMeta
-          : abilityMeta // ignore: cast_nullable_to_non_nullable
-              as int,
     ));
   }
 }
@@ -256,14 +267,18 @@ class _$_Theory extends _Theory {
       final List<Types> types = const <Types>[],
       this.teratype = Types.grass,
       this.terastal = false,
-      this.ability = Abilities.overgrow,
-      this.item = Items.sitrusberry,
+      this.ability = const AbilityModel(),
+      this.item = const ItemModel(),
       this.nature = Natures.jolly,
-      final List<Moves?> moves = const [null, null, null, null],
+      final List<MoveModel> moves = const [
+        MoveModel(),
+        MoveModel(),
+        MoveModel(),
+        MoveModel()
+      ],
       this.effort = const Stats(h: 0, a: 0, b: 0, c: 0, d: 0, s: 0),
       this.individual = const Stats(h: 31, a: 31, b: 31, c: 31, d: 31, s: 31),
-      this.memo = '',
-      this.abilityMeta = 0})
+      this.memo = ''})
       : _types = types,
         _moves = moves,
         super._();
@@ -293,17 +308,17 @@ class _$_Theory extends _Theory {
   final bool terastal;
   @override
   @JsonKey()
-  final Abilities ability;
+  final AbilityModel ability;
   @override
   @JsonKey()
-  final Items item;
+  final ItemModel item;
   @override
   @JsonKey()
   final Natures nature;
-  final List<Moves?> _moves;
+  final List<MoveModel> _moves;
   @override
   @JsonKey()
-  List<Moves?> get moves {
+  List<MoveModel> get moves {
     if (_moves is EqualUnmodifiableListView) return _moves;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_moves);
@@ -318,13 +333,10 @@ class _$_Theory extends _Theory {
   @override
   @JsonKey()
   final String memo;
-  @override
-  @JsonKey()
-  final int abilityMeta;
 
   @override
   String toString() {
-    return 'Theory(id: $id, pokemon: $pokemon, types: $types, teratype: $teratype, terastal: $terastal, ability: $ability, item: $item, nature: $nature, moves: $moves, effort: $effort, individual: $individual, memo: $memo, abilityMeta: $abilityMeta)';
+    return 'Theory(id: $id, pokemon: $pokemon, types: $types, teratype: $teratype, terastal: $terastal, ability: $ability, item: $item, nature: $nature, moves: $moves, effort: $effort, individual: $individual, memo: $memo)';
   }
 
   @override
@@ -346,9 +358,7 @@ class _$_Theory extends _Theory {
             (identical(other.effort, effort) || other.effort == effort) &&
             (identical(other.individual, individual) ||
                 other.individual == individual) &&
-            (identical(other.memo, memo) || other.memo == memo) &&
-            (identical(other.abilityMeta, abilityMeta) ||
-                other.abilityMeta == abilityMeta));
+            (identical(other.memo, memo) || other.memo == memo));
   }
 
   @JsonKey(ignore: true)
@@ -366,8 +376,7 @@ class _$_Theory extends _Theory {
       const DeepCollectionEquality().hash(_moves),
       effort,
       individual,
-      memo,
-      abilityMeta);
+      memo);
 
   @JsonKey(ignore: true)
   @override
@@ -390,14 +399,13 @@ abstract class _Theory extends Theory {
       final List<Types> types,
       final Types teratype,
       final bool terastal,
-      final Abilities ability,
-      final Items item,
+      final AbilityModel ability,
+      final ItemModel item,
       final Natures nature,
-      final List<Moves?> moves,
+      final List<MoveModel> moves,
       final Stats effort,
       final Stats individual,
-      final String memo,
-      final int abilityMeta}) = _$_Theory;
+      final String memo}) = _$_Theory;
   const _Theory._() : super._();
 
   factory _Theory.fromJson(Map<String, dynamic> json) = _$_Theory.fromJson;
@@ -413,21 +421,19 @@ abstract class _Theory extends Theory {
   @override
   bool get terastal;
   @override
-  Abilities get ability;
+  AbilityModel get ability;
   @override
-  Items get item;
+  ItemModel get item;
   @override
   Natures get nature;
   @override
-  List<Moves?> get moves;
+  List<MoveModel> get moves;
   @override
   Stats get effort;
   @override
   Stats get individual;
   @override
   String get memo;
-  @override
-  int get abilityMeta;
   @override
   @JsonKey(ignore: true)
   _$$_TheoryCopyWith<_$_Theory> get copyWith =>

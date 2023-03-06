@@ -84,9 +84,9 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
     final current = state.firstWhereOrNull((e) => e.id == theory.id);
 
     // 選択している特性を含まない時は置き換える
-    if (theory.pokemon.abilities.firstWhereOrNull((e) => e == theory.ability) ==
-        null) {
-      theory = theory.copyWith(ability: theory.pokemon.abilities[0]);
+    if (theory.pokemon.abilities.contains(theory.ability.state) == false) {
+      theory = theory.copyWith(
+          ability: theory.ability.copyWith(state: theory.pokemon.abilities[0]));
     }
 
     if (current == null) {
@@ -95,11 +95,27 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
     } else {
       // 特性が変わった時、メタを初期化する
       if (current.ability != theory.ability) {
-        theory = theory.copyWith(abilityMeta: 0);
+        theory = theory.copyWith(ability: theory.ability.copyWith(meta: 0));
       }
       // ポケモンが変わった時、タイプを初期化する
       if (current.pokemon != theory.pokemon) {
         theory = theory.copyWith(types: theory.pokemon.types);
+      }
+      // 技が変わった時、威力を設定する
+      for (var i = 0; i < theory.moves.length; i++) {
+        if (current.moves[i] != theory.moves[i]) {
+          if (current.moves[i].state != null) {
+            current.moves[i] = current.moves[i].copyWith(
+              power: current.moves[i].state!.power,
+              category: current.moves[i].state!.category,
+            );
+          } else {
+            current.moves[i] = current.moves[i].copyWith(
+              power: null,
+              category: null,
+            );
+          }
+        }
       }
 
       state = state.map((e) => e.id == theory.id ? theory : e).toList();

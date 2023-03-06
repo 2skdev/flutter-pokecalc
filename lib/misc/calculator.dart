@@ -39,11 +39,11 @@ class TheoryCondition {
       return true;
     }
     // 特性: 浮遊
-    else if (theory.ability == Abilities.levitate) {
+    else if (theory.ability.state == Abilities.levitate) {
       return true;
     }
     // 持ち物: 風船
-    else if (theory.item == Items.airballoon) {
+    else if (theory.item.state == Items.airballoon) {
       return true;
     }
 
@@ -128,11 +128,11 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.ability) {
+    switch (theory.ability.state) {
       // スロースタート
       case Abilities.slow_start:
         // 5ターンの間、攻撃が0.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(a: 0.5);
         }
         break;
@@ -140,7 +140,7 @@ class TheoryCondition {
       // よわき
       case Abilities.defeatist:
         // HPが半分になると、攻撃が0.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(a: 0.5);
         }
         break;
@@ -149,7 +149,7 @@ class TheoryCondition {
       case Abilities.quark_drive:
         // エレキフィールド状態か、ブーストエナジーを持っている時、最も高い能力(ランク補正込み)が1.3倍
         if (environment.field == Fields.electric ||
-            theory.item == Items.boosterenergy) {
+            theory.item.state == Items.boosterenergy) {
           final highest = ranked.toArray().sublist(1).reduce(max);
 
           if (highest == ranked.a) {
@@ -170,7 +170,7 @@ class TheoryCondition {
       case Abilities.protosynthesis:
         // にほんばれ状態か、ブーストエナジーを持っている時、最も高い能力(ランク補正込み)が1.3倍
         if (environment.weather == Weathers.sunshine ||
-            theory.item == Items.boosterenergy) {
+            theory.item.state == Items.boosterenergy) {
           final highest = ranked.toArray().sublist(1).reduce(max);
 
           if (highest == ranked.a) {
@@ -230,7 +230,7 @@ class TheoryCondition {
       // しんりょく
       case Abilities.overgrow:
         // HPが1/3以下でくさタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           if (move.type == Types.grass) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -240,7 +240,7 @@ class TheoryCondition {
       // もうか
       case Abilities.blaze:
         // HPが1/3以下でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           if (move.type == Types.fire) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -250,7 +250,7 @@ class TheoryCondition {
       // げきりゅう
       case Abilities.torrent:
         // HPが1/3以下でみずタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           if (move.type == Types.water) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -260,7 +260,7 @@ class TheoryCondition {
       // むしのしらせ
       case Abilities.swarm:
         // HPが1/3以下でむしタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           if (move.type == Types.bug) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -270,7 +270,7 @@ class TheoryCondition {
       // もらいび
       case Abilities.flash_fire:
         // ほのお技を受けた状態でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           if (move.type == Types.fire) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -290,7 +290,7 @@ class TheoryCondition {
       case Abilities.plus:
       case Abilities.minus:
         // もう一方が戦闘に出ると、特攻が1.5倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(c: 1.5);
         }
         break;
@@ -357,7 +357,7 @@ class TheoryCondition {
       // はりこみ
       case Abilities.stakeout:
         // 交代で出てきた相手に攻撃する時、攻撃と特攻が2倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(a: 2.0, c: 2.0);
         }
         break;
@@ -380,7 +380,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.ability) {
+    switch (enemy.theory.ability.state) {
       // わざわいのおふだ
       case Abilities.tablets_of_ruin:
         // 自分以外の攻撃が3/4倍
@@ -425,7 +425,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.item) {
+    switch (theory.item.state) {
       // こだわりハチマキ
       case Items.choiceband:
         // 攻撃が1.5倍
@@ -497,12 +497,12 @@ class TheoryCondition {
       return 0;
     }
 
-    switch (theory.ability) {
+    switch (theory.ability.state) {
       // とうそうしん
       case Abilities.rivalry:
         // 同じ性別の相手の時、技の威力が1.25倍
         // 違う性別の相手の時、技の威力が0.75倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(1.25);
         } else {
           setCorrect(0.75);
@@ -518,7 +518,7 @@ class TheoryCondition {
       // そうだいしょう
       case Abilities.supreme_overlord:
         // 1体につき+10%
-        setCorrect(1.0 + theory.abilityMeta * 0.1);
+        setCorrect(1.0 + theory.ability.meta * 0.1);
         break;
 
       // エレキスキン
@@ -562,7 +562,7 @@ class TheoryCondition {
       // ちからずく
       case Abilities.sheer_force:
         // 追加効果がなくなるが、威力が1.3倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(1.3);
         }
         break;
@@ -582,7 +582,7 @@ class TheoryCondition {
       // アナライズ
       case Abilities.analytic:
         // 一番最後に技を出すと威力が1.3倍
-        if (theory.abilityMeta != 0) {
+        if (theory.ability.meta != 0) {
           setCorrect(1.3);
         }
         break;
@@ -772,7 +772,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.ability) {
+    switch (enemy.theory.ability.state) {
       // たいねつ
       case Abilities.heatproof:
         // 相手のほのおタイプの技の威力が0.5倍
@@ -793,7 +793,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.item) {
+    switch (theory.item.state) {
       // ちからのハチマキ
       case Items.muscleband:
         // 物理技の威力が1.1倍
@@ -1088,7 +1088,7 @@ class TheoryCondition {
       setCorrect(0.5);
     }
 
-    switch (theory.ability) {
+    switch (theory.ability.state) {
       // ブレインフォース
       case Abilities.neuroforce:
         // 効果抜群の技のダメージを1.25倍
@@ -1117,7 +1117,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.ability) {
+    switch (enemy.theory.ability.state) {
       // もふもふ
       case Abilities.fluffy:
         // ほのおタイプの技のダメージを2倍
@@ -1133,7 +1133,7 @@ class TheoryCondition {
       // マルチスケイル
       case Abilities.multiscale:
         // HP満タンの時に受けるダメージを0.5倍
-        if (enemy.theory.abilityMeta != 0) {
+        if (enemy.theory.ability.meta != 0) {
           setCorrect(0.5);
         }
         break;
@@ -1185,7 +1185,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.item) {
+    switch (theory.item.state) {
       // メトロノーム
       case Items.metronome:
         // 2回目 4915
@@ -1214,7 +1214,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.item) {
+    switch (enemy.theory.item.state) {
       case Items.roseliberry:
         // フェアリータイプの技のダメージを0.5倍
         if (move.type == Types.fairy) {
@@ -1368,7 +1368,7 @@ class TheoryCondition {
 
     // シェルアーマーは急所に当たらない
     if (condition.critical) {
-      if (enemy.theory.ability == Abilities.shell_armor) {
+      if (enemy.theory.ability.state == Abilities.shell_armor) {
         condition = condition.copyWith(critical: false);
       }
     }
@@ -1475,7 +1475,7 @@ class TheoryCondition {
     // タイプ一致
     // テラスタイプ一致
     if (theory.terastal && theory.teratype == move.type) {
-      if (theory.ability == Abilities.adaptability) {
+      if (theory.ability.state == Abilities.adaptability) {
         // テラスタイプ一致+適応力は2.25倍
         damage = (damage * 2.25.to12bit() / 1.0.to12bit()).round6();
       } else {
@@ -1488,7 +1488,7 @@ class TheoryCondition {
         }
       }
     } else if (theory.types.contains(move.type)) {
-      if (theory.ability == Abilities.adaptability) {
+      if (theory.ability.state == Abilities.adaptability) {
         // タイプ一致+適応力は2倍
         damage = (damage * 2.0.to12bit() / 1.0.to12bit()).round6();
       } else {
@@ -1503,7 +1503,7 @@ class TheoryCondition {
       efficacy = efficacy * move.type.efficacy(type);
     }
     // ふゆうはじめんタイプの技を受けない
-    if (enemy.theory.ability == Abilities.levitate) {
+    if (enemy.theory.ability.state == Abilities.levitate) {
       efficacy = 0.0;
     }
     damage = (damage * efficacy).floor();
