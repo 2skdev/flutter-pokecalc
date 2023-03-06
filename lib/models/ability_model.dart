@@ -9,11 +9,16 @@ part 'ability_model.g.dart';
 
 @freezed
 class AbilityModel with _$AbilityModel {
+  const AbilityModel._();
+
   const factory AbilityModel({
     @Default(Abilities.overgrow) Abilities state,
-    @Default(0) @JsonKey(ignore: true) int meta,
+    @Default(null) dynamic metadata,
   }) = _AbilityModel;
 
   factory AbilityModel.fromJson(Map<String, dynamic> json) =>
       _$AbilityModelFromJson(json);
+
+  AbilityModel initMetadata() =>
+      copyWith(metadata: state.metaclass.defaultValue);
 }

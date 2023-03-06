@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../extensions/theory.dart';
 import '../misc/calculator.dart';
+import '../models/condition_model.dart';
 import '../models/environment_model.dart';
 import '../models/theory_model.dart';
 import '../providers/providers.dart';
@@ -22,83 +23,80 @@ class EnemiesScreen extends ConsumerWidget {
   /// ダメージ計算する対象のポケモン
   final Theory theory;
 
-  Widget damageCard({
-    required BuildContext context,
-    required TheoryCondition self,
-    required TheoryCondition enemy,
-    required Environment environment,
-  }) {
-    List<Widget> listDamages(
-      TheoryCondition attacker,
-      TheoryCondition defence,
-    ) {
-      final damages = <Widget>[];
+  List<Widget> listDamages(
+    Theory attacker,
+    Theory defence,
+    Conditions conditions,
+    Environment environment,
+  ) {
+    final damages = <Widget>[];
 
-      for (var index = 0; index < 4; index++) {
-        // 攻撃技以外は表示しない
-        if (attacker.theory.moves[index].state != null &&
-            attacker.theory.moves[index].state!.power != null) {
-          // 最小乱数のダメージ
-          // TODO: move.state -> moveに変える
-          final damageMin = attacker.calcDamage(
-            move: attacker.theory.moves[index].state!,
-            enemy: defence,
-            environment: environment,
-            rand: 0.85,
-          );
+    for (var index = 0; index < 4; index++) {
+      // 攻撃技以外は表示しない
+      if (attacker.moves[index].state != null &&
+          attacker.moves[index].state!.power != null) {
+        final damage = Damage(
+          attacker: attacker,
+          defence: defence,
+          conditions: conditions,
+          move: attacker.moves[index],
+          environment: environment,
+        );
+        // 最小乱数のダメージ
+        final damageMin = damage.calc(0.85);
 
-          // 最大乱数のダメージ
-          // TODO: move.state -> moveに変える
-          final damageMax = attacker.calcDamage(
-            move: attacker.theory.moves[index].state!,
-            enemy: defence,
-            environment: environment,
-            rand: 1.00,
-          );
+        // 最大乱数のダメージ
+        final damageMax = damage.calc(1.00);
 
-          // HPに対する割合を計算
-          final damageMinPer = damageMin / defence.theory.actual.h;
-          final damageMaxPer = damageMax / defence.theory.actual.h;
+        // HPに対する割合を計算
+        final damageMinPer = damageMin / defence.actual.h;
+        final damageMaxPer = damageMax / defence.actual.h;
 
-          damages.addAll([
-            Row(
-              children: [
-                TypeChipWidget(
-                  type: attacker.theory.moves[index].state!.type,
-                  text:
-                      '${attacker.theory.moves[index].state!.string} $damageMin ~ $damageMax (${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)',
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
-              child: DamageBarWidget(
-                damageMin: damageMinPer,
-                damageMax: damageMaxPer,
+        damages.addAll([
+          Row(
+            children: [
+              TypeChipWidget(
+                type: attacker.moves[index].state!.type,
+                text:
+                    '${attacker.moves[index].state!.string} $damageMin ~ $damageMax'
+                    '(${(100 * damageMinPer).toStringAsFixed(1)}% ~ ${(100 * damageMaxPer).toStringAsFixed(1)}%)',
               ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, bottom: 8.0),
+            child: DamageBarWidget(
+              damageMin: damageMinPer,
+              damageMax: damageMaxPer,
             ),
-          ]);
-        }
+          ),
+        ]);
       }
-
-      return damages;
     }
 
+    return damages;
+  }
+
+  Widget damageCard({
+    required BuildContext context,
+    required Theory self,
+    required Theory enemy,
+    required Conditions conditions,
+    required Environment environment,
+  }) {
     // ダメージ一覧のウィジェットを生成する
-    final attackDamages = listDamages(self, enemy);
-    final defenceDamages = listDamages(enemy, self);
+    final attackDamages = listDamages(self, enemy, conditions, environment);
+    final defenceDamages =
+        listDamages(enemy, self, conditions.swap, environment);
 
     return TheoryCardWidget(
-      key: Key(enemy.theory.id),
-      theory: enemy.theory,
-      terastal: enemy.theory.terastal,
+      key: Key(enemy.id),
+      theory: enemy,
+      terastal: enemy.terastal,
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TheoryScreen(
-            theoryId: enemy.theory.id,
-            enemy: true,
-          ),
+          builder: (context) => TheoryScreen(theoryId: enemy.id, enemy: true),
         ),
       ),
       children: [
@@ -124,8 +122,9 @@ class EnemiesScreen extends ConsumerWidget {
         .map(
           (e) => damageCard(
             context: context,
-            self: TheoryCondition(theory: theory, condition: condition.self),
-            enemy: TheoryCondition(theory: e, condition: condition.enemy),
+            self: theory,
+            enemy: e,
+            conditions: condition,
             environment: environment,
           ),
         )

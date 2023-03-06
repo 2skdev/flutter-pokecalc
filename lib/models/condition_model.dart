@@ -33,4 +33,6 @@ abstract class Conditions with _$Conditions {
   }) = _Conditions;
 
   bool get isDefault => self.isDefault && enemy.isDefault;
+
+  Conditions get swap => Conditions(self: enemy, enemy: self);
 }

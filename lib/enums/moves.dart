@@ -16,6 +16,22 @@ enum MoveCategory implements StringNamedEnum {
   String get icon => 'assets/move/move-${name.replaceAll('_', '-')}.png';
 }
 
+enum MoveMetaClass {
+  none(null), // 追加効果なし
+  hits_x2(null), // 2回攻撃(void)
+  hits_x3(null), // 3回攻撃(void)
+  hits_x2_x5(5), // 2~5回攻撃(int)
+  hits_x1_x10(10), // 1~10回攻撃(int)
+  damage_x2(true), // ダメージ2倍(bool)
+  damage_x1_5(true), // ダメージ1.5倍(bool)
+  input_power(0), // 威力入力(int)
+  ;
+
+  const MoveMetaClass(this.defaultValue);
+
+  final dynamic defaultValue;
+}
+
 enum Moves implements StringNamedEnum {
   absorb(
     string: "すいとる",
@@ -24,7 +40,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 25,
-    contact: false,
   ),
   accelerock(
     string: "アクセルロック",
@@ -33,7 +48,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   acid(
     string: "ようかいえき",
@@ -42,14 +56,12 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   acid_armor(
     string: "とける",
     type: Types.poison,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   acid_spray(
     string: "アシッドボム",
@@ -58,7 +70,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   acrobatics(
     string: "アクロバット",
@@ -67,14 +78,12 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   acupressure(
     string: "つぼをつく",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   aerial_ace(
     string: "つばめがえし",
@@ -83,7 +92,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: true,
   ),
   aeroblast(
     string: "エアロブラスト",
@@ -92,21 +100,18 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   after_you(
     string: "おさきにどうぞ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   agility(
     string: "こうそくいどう",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   air_cutter(
     string: "エアカッター",
@@ -115,7 +120,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 95,
     pp: 25,
-    contact: false,
   ),
   air_slash(
     string: "エアスラッシュ",
@@ -124,21 +128,18 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 95,
     pp: 15,
-    contact: false,
   ),
   ally_switch(
     string: "サイドチェンジ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   amnesia(
     string: "ドわすれ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   anchor_shot(
     string: "アンカーショット",
@@ -147,7 +148,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   ancient_power(
     string: "げんしのちから",
@@ -156,7 +156,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   apple_acid(
     string: "りんごさん",
@@ -165,7 +164,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   aqua_cutter(
     string: "アクアカッター",
@@ -174,7 +172,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   aqua_jet(
     string: "アクアジェット",
@@ -183,14 +180,12 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   aqua_ring(
     string: "アクアリング",
     type: Types.water,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   aqua_step(
     string: "アクアステップ",
@@ -199,7 +194,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   aqua_tail(
     string: "アクアテール",
@@ -208,7 +202,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   arm_thrust(
     string: "つっぱり",
@@ -217,7 +210,6 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   armor_cannon(
     string: "アーマーキャノン",
@@ -226,28 +218,24 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   aromatherapy(
     string: "アロマセラピー",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   aromatic_mist(
     string: "アロマミスト",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   assist(
     string: "ねこのて",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   assurance(
     string: "ダメおし",
@@ -256,7 +244,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   astonish(
     string: "おどろかす",
@@ -265,7 +252,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   astral_barrage(
     string: "アストラルビット",
@@ -274,7 +260,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   attack_order(
     string: "こうげきしれい",
@@ -283,7 +268,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   attract(
     string: "メロメロ",
@@ -291,7 +275,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   aura_sphere(
     string: "はどうだん",
@@ -300,7 +283,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: false,
   ),
   aura_wheel(
     string: "オーラぐるま",
@@ -309,7 +291,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   aurora_beam(
     string: "オーロラビーム",
@@ -318,21 +299,18 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   aurora_veil(
     string: "オーロラベール",
     type: Types.ice,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   autotomize(
     string: "ボディパージ",
     type: Types.steel,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   avalanche(
     string: "ゆきなだれ",
@@ -341,7 +319,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   axe_kick(
     string: "かかとおとし",
@@ -350,7 +327,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   baby_doll_eyes(
     string: "つぶらなひとみ",
@@ -358,7 +334,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   baddy_bad(
     string: "わるわるゾーン",
@@ -367,14 +342,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   baneful_bunker(
     string: "トーチカ",
     type: Types.poison,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   barb_barrage(
     string: "どくばりセンボン",
@@ -383,7 +356,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   barrage(
     string: "たまなげ",
@@ -392,21 +364,18 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 85,
     pp: 20,
-    contact: false,
   ),
   barrier(
     string: "バリアー",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   baton_pass(
     string: "バトンタッチ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   beak_blast(
     string: "くちばしキャノン",
@@ -415,7 +384,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   beat_up(
     string: "ふくろだたき",
@@ -423,7 +391,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   behemoth_bash(
     string: "きょじゅうだん",
@@ -432,7 +399,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   behemoth_blade(
     string: "きょじゅうざん",
@@ -441,7 +407,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   belch(
     string: "ゲップ",
@@ -450,21 +415,18 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   belly_drum(
     string: "はらだいこ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   bestow(
     string: "ギフトパス",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   bide(
     string: "がまん",
@@ -472,7 +434,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: kAccuracyMax,
     pp: 10,
-    contact: true,
   ),
   bind(
     string: "しめつける",
@@ -481,7 +442,6 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 85,
     pp: 20,
-    contact: true,
   ),
   bite(
     string: "かみつく",
@@ -490,7 +450,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   bitter_blade(
     string: "むねんのつるぎ",
@@ -499,7 +458,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   bitter_malice(
     string: "うらみつらみ",
@@ -508,7 +466,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   blast_burn(
     string: "ブラストバーン",
@@ -517,7 +474,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   blaze_kick(
     string: "ブレイズキック",
@@ -526,7 +482,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   blazing_torque(
     string: "バーンアクセル",
@@ -535,7 +490,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   bleakwind_storm(
     string: "こがらしあらし",
@@ -544,7 +498,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 80,
     pp: 10,
-    contact: false,
   ),
   blizzard(
     string: "ふぶき",
@@ -553,14 +506,12 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 70,
     pp: 5,
-    contact: false,
   ),
   block(
     string: "とおせんぼう",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   blue_flare(
     string: "あおいほのお",
@@ -569,7 +520,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 85,
     pp: 5,
-    contact: false,
   ),
   body_press(
     string: "ボディプレス",
@@ -578,7 +528,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   body_slam(
     string: "のしかかり",
@@ -587,7 +536,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   bolt_beak(
     string: "でんげきくちばし",
@@ -596,7 +544,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   bolt_strike(
     string: "らいげき",
@@ -605,7 +552,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 85,
     pp: 5,
-    contact: true,
   ),
   bone_club(
     string: "ホネこんぼう",
@@ -614,7 +560,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 85,
     pp: 20,
-    contact: false,
   ),
   bone_rush(
     string: "ボーンラッシュ",
@@ -623,7 +568,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   bonemerang(
     string: "ホネブーメラン",
@@ -632,7 +576,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   boomburst(
     string: "ばくおんぱ",
@@ -641,7 +584,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   bounce(
     string: "とびはねる",
@@ -650,7 +592,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 85,
     pp: 5,
-    contact: true,
   ),
   bouncy_bubble(
     string: "いきいきバブル",
@@ -659,7 +600,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   branch_poke(
     string: "えだづき",
@@ -668,7 +608,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 40,
-    contact: true,
   ),
   brave_bird(
     string: "ブレイブバード",
@@ -677,7 +616,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   breaking_swipe(
     string: "ワイドブレイカー",
@@ -686,7 +624,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   brick_break(
     string: "かわらわり",
@@ -695,7 +632,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   brine(
     string: "しおみず",
@@ -704,7 +640,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   brutal_swing(
     string: "ぶんまわす",
@@ -713,7 +648,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   bubble(
     string: "あわ",
@@ -722,7 +656,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   bubble_beam(
     string: "バブルこうせん",
@@ -731,7 +664,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   bug_bite(
     string: "むしくい",
@@ -740,7 +672,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   bug_buzz(
     string: "むしのさざめき",
@@ -749,14 +680,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   bulk_up(
     string: "ビルドアップ",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   bulldoze(
     string: "じならし",
@@ -765,7 +694,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   bullet_punch(
     string: "バレットパンチ",
@@ -774,7 +702,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   bullet_seed(
     string: "タネマシンガン",
@@ -783,7 +710,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   burn_up(
     string: "もえつきる",
@@ -792,7 +718,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   burning_jealousy(
     string: "しっとのほのお",
@@ -801,7 +726,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   buzzy_buzz(
     string: "びりびりエレキ",
@@ -810,21 +734,18 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   calm_mind(
     string: "めいそう",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   camouflage(
     string: "ほごしょく",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   captivate(
     string: "ゆうわく",
@@ -832,7 +753,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   catastropika(
     string: "ひっさつのピカチュート",
@@ -841,7 +761,6 @@ enum Moves implements StringNamedEnum {
     power: 210,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: true,
   ),
   ceaseless_edge(
     string: "ひけん・ちえなみ",
@@ -850,21 +769,18 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 90,
     pp: 15,
-    contact: false,
   ),
   celebrate(
     string: "おいわい",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   charge(
     string: "じゅうでん",
     type: Types.electric,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   charge_beam(
     string: "チャージビーム",
@@ -873,7 +789,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   charm(
     string: "あまえる",
@@ -881,7 +796,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   chatter(
     string: "おしゃべり",
@@ -890,7 +804,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   chilling_water(
     string: "ひやみず",
@@ -899,14 +812,12 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   chilly_reception(
     string: "さむいギャグ",
     type: Types.ice,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   chip_away(
     string: "なしくずし",
@@ -915,7 +826,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   chloroblast(
     string: "クロロブラスト",
@@ -924,7 +834,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   circle_throw(
     string: "ともえなげ",
@@ -933,7 +842,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   clamp(
     string: "からではさむ",
@@ -942,7 +850,6 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 85,
     pp: 15,
-    contact: true,
   ),
   clanging_scales(
     string: "スケイルノイズ",
@@ -951,7 +858,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   clangorous_soul(
     string: "ソウルビート",
@@ -959,7 +865,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   clangorous_soulblaze(
     string: "ブレイジングソウルビート",
@@ -968,7 +873,6 @@ enum Moves implements StringNamedEnum {
     power: 185,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   clear_smog(
     string: "クリアスモッグ",
@@ -977,7 +881,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: kAccuracyMax,
     pp: 15,
-    contact: false,
   ),
   close_combat(
     string: "インファイト",
@@ -986,21 +889,18 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   coaching(
     string: "コーチング",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   coil(
     string: "とぐろをまく",
     type: Types.poison,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   collision_course(
     string: "アクセルブレイク",
@@ -1009,7 +909,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   combat_torque(
     string: "ファイトアクセル",
@@ -1018,7 +917,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   comet_punch(
     string: "れんぞくパンチ",
@@ -1027,7 +925,6 @@ enum Moves implements StringNamedEnum {
     power: 18,
     accuracy: 85,
     pp: 15,
-    contact: true,
   ),
   comeuppance(
     string: "ほうふく",
@@ -1036,14 +933,12 @@ enum Moves implements StringNamedEnum {
     power: 1,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   confide(
     string: "ないしょばなし",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   confuse_ray(
     string: "あやしいひかり",
@@ -1051,7 +946,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   confusion(
     string: "ねんりき",
@@ -1060,7 +954,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 25,
-    contact: false,
   ),
   constrict(
     string: "からみつく",
@@ -1069,28 +962,24 @@ enum Moves implements StringNamedEnum {
     power: 10,
     accuracy: 100,
     pp: 35,
-    contact: true,
   ),
   conversion(
     string: "テクスチャー",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   conversion_2(
     string: "テクスチャー２",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   copycat(
     string: "まねっこ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   core_enforcer(
     string: "コアパニッシャー",
@@ -1099,7 +988,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   corrosive_gas(
     string: "ふしょくガス",
@@ -1107,21 +995,18 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 40,
-    contact: false,
   ),
   cosmic_power(
     string: "コスモパワー",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   cotton_guard(
     string: "コットンガード",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   cotton_spore(
     string: "わたほうし",
@@ -1129,7 +1014,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 40,
-    contact: false,
   ),
   counter(
     string: "カウンター",
@@ -1137,7 +1021,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   court_change(
     string: "コートチェンジ",
@@ -1145,7 +1028,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   covet(
     string: "ほしがる",
@@ -1154,7 +1036,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   crabhammer(
     string: "クラブハンマー",
@@ -1163,14 +1044,12 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   crafty_shield(
     string: "トリックガード",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   cross_chop(
     string: "クロスチョップ",
@@ -1179,7 +1058,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 80,
     pp: 5,
-    contact: true,
   ),
   cross_poison(
     string: "クロスポイズン",
@@ -1188,7 +1066,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   crunch(
     string: "かみくだく",
@@ -1197,7 +1074,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   crush_claw(
     string: "ブレイククロー",
@@ -1206,7 +1082,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 95,
     pp: 10,
-    contact: true,
   ),
   crush_grip(
     string: "にぎりつぶす",
@@ -1214,14 +1089,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   curse(
     string: "のろい",
     type: Types.ghost,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   cut(
     string: "いあいぎり",
@@ -1230,7 +1103,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 95,
     pp: 30,
-    contact: true,
   ),
   dark_pulse(
     string: "あくのはどう",
@@ -1239,7 +1111,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   dark_void(
     string: "ダークホール",
@@ -1247,7 +1118,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 50,
     pp: 10,
-    contact: false,
   ),
   darkest_lariat(
     string: "DDラリアト",
@@ -1256,7 +1126,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   dazzling_gleam(
     string: "マジカルシャイン",
@@ -1265,49 +1134,42 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   decorate(
     string: "デコレーション",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   defend_order(
     string: "ぼうぎょしれい",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   defense_curl(
     string: "まるくなる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   defog(
     string: "きりばらい",
     type: Types.flying,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   destiny_bond(
     string: "みちづれ",
     type: Types.ghost,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   detect(
     string: "みきり",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   diamond_storm(
     string: "ダイヤストーム",
@@ -1316,7 +1178,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   dig(
     string: "あなをほる",
@@ -1325,7 +1186,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   dire_claw(
     string: "フェイタルクロー",
@@ -1334,7 +1194,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   disable(
     string: "かなしばり",
@@ -1342,7 +1201,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   disarming_voice(
     string: "チャームボイス",
@@ -1351,7 +1209,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: kAccuracyMax,
     pp: 15,
-    contact: false,
   ),
   discharge(
     string: "ほうでん",
@@ -1360,7 +1217,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   dive(
     string: "ダイビング",
@@ -1369,7 +1225,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   dizzy_punch(
     string: "ピヨピヨパンチ",
@@ -1378,7 +1233,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   doodle(
     string: "うつしえ",
@@ -1386,7 +1240,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   doom_desire(
     string: "はめつのねがい",
@@ -1395,7 +1248,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   double_hit(
     string: "ダブルアタック",
@@ -1404,7 +1256,6 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   double_iron_bash(
     string: "ダブルパンツァー",
@@ -1413,7 +1264,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   double_kick(
     string: "にどげり",
@@ -1422,7 +1272,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   double_shock(
     string: "でんこうそうげき",
@@ -1431,7 +1280,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   double_slap(
     string: "おうふくビンタ",
@@ -1440,14 +1288,12 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 85,
     pp: 10,
-    contact: true,
   ),
   double_team(
     string: "かげぶんしん",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   double_edge(
     string: "すてみタックル",
@@ -1456,7 +1302,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   draco_meteor(
     string: "りゅうせいぐん",
@@ -1465,7 +1310,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   dragon_ascent(
     string: "ガリョウテンセイ",
@@ -1474,7 +1318,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   dragon_breath(
     string: "りゅうのいぶき",
@@ -1483,7 +1326,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   dragon_claw(
     string: "ドラゴンクロー",
@@ -1492,14 +1334,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   dragon_dance(
     string: "りゅうのまい",
     type: Types.dragon,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   dragon_darts(
     string: "ドラゴンアロー",
@@ -1508,7 +1348,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   dragon_energy(
     string: "ドラゴンエナジー",
@@ -1517,7 +1356,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   dragon_hammer(
     string: "ドラゴンハンマー",
@@ -1526,7 +1364,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   dragon_pulse(
     string: "りゅうのはどう",
@@ -1535,7 +1372,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   dragon_rage(
     string: "りゅうのいかり",
@@ -1543,7 +1379,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   dragon_rush(
     string: "ドラゴンダイブ",
@@ -1552,7 +1387,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 75,
     pp: 10,
-    contact: true,
   ),
   dragon_tail(
     string: "ドラゴンテール",
@@ -1561,7 +1395,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   drain_punch(
     string: "ドレインパンチ",
@@ -1570,7 +1403,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   draining_kiss(
     string: "ドレインキッス",
@@ -1579,7 +1411,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   dream_eater(
     string: "ゆめくい",
@@ -1588,7 +1419,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   drill_peck(
     string: "ドリルくちばし",
@@ -1597,7 +1427,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   drill_run(
     string: "ドリルライナー",
@@ -1606,7 +1435,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 95,
     pp: 10,
-    contact: true,
   ),
   drum_beating(
     string: "ドラムアタック",
@@ -1615,7 +1443,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   dual_chop(
     string: "ダブルチョップ",
@@ -1624,7 +1451,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 90,
     pp: 15,
-    contact: true,
   ),
   dual_wingbeat(
     string: "ダブルウイング",
@@ -1633,7 +1459,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   dynamax_cannon(
     string: "ダイマックスほう",
@@ -1642,7 +1467,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   dynamic_punch(
     string: "ばくれつパンチ",
@@ -1651,7 +1475,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 50,
     pp: 5,
-    contact: true,
   ),
   earth_power(
     string: "だいちのちから",
@@ -1660,7 +1483,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   earthquake(
     string: "じしん",
@@ -1669,7 +1491,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   echoed_voice(
     string: "エコーボイス",
@@ -1678,7 +1499,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   eerie_impulse(
     string: "かいでんぱ",
@@ -1686,7 +1506,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   eerie_spell(
     string: "ぶきみなじゅもん",
@@ -1695,7 +1514,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   egg_bomb(
     string: "タマゴばくだん",
@@ -1704,21 +1522,18 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 75,
     pp: 10,
-    contact: false,
   ),
   electric_terrain(
     string: "エレキフィールド",
     type: Types.electric,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   electrify(
     string: "そうでん",
     type: Types.electric,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   electro_ball(
     string: "エレキボール",
@@ -1726,7 +1541,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   electro_drift(
     string: "イナズマドライブ",
@@ -1735,7 +1549,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   electroweb(
     string: "エレキネット",
@@ -1744,7 +1557,6 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 95,
     pp: 15,
-    contact: false,
   ),
   embargo(
     string: "さしおさえ",
@@ -1752,7 +1564,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   ember(
     string: "ひのこ",
@@ -1761,7 +1572,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 25,
-    contact: false,
   ),
   encore(
     string: "アンコール",
@@ -1769,7 +1579,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   endeavor(
     string: "がむしゃら",
@@ -1777,14 +1586,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   endure(
     string: "こらえる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   energy_ball(
     string: "エナジーボール",
@@ -1793,7 +1600,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   entrainment(
     string: "なかまづくり",
@@ -1801,7 +1607,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   eruption(
     string: "ふんか",
@@ -1810,7 +1615,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   esper_wing(
     string: "オーラウイング",
@@ -1819,7 +1623,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   eternabeam(
     string: "ムゲンダイビーム",
@@ -1828,7 +1631,6 @@ enum Moves implements StringNamedEnum {
     power: 160,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   expanding_force(
     string: "ワイドフォース",
@@ -1837,7 +1639,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   explosion(
     string: "だいばくはつ",
@@ -1846,7 +1647,6 @@ enum Moves implements StringNamedEnum {
     power: 250,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   extrasensory(
     string: "じんつうりき",
@@ -1855,14 +1655,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   extreme_evoboost(
     string: "ナインエボルブースト",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 1,
-    contact: false,
   ),
   extreme_speed(
     string: "しんそく",
@@ -1871,7 +1669,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   facade(
     string: "からげんき",
@@ -1880,14 +1677,12 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   fairy_lock(
     string: "フェアリーロック",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   fairy_wind(
     string: "ようせいのかぜ",
@@ -1896,7 +1691,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   fake_out(
     string: "ねこだまし",
@@ -1905,7 +1699,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   fake_tears(
     string: "うそなき",
@@ -1913,7 +1706,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   false_surrender(
     string: "どげざつき",
@@ -1922,7 +1714,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: kAccuracyMax,
     pp: 10,
-    contact: true,
   ),
   false_swipe(
     string: "みねうち",
@@ -1931,7 +1722,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 40,
-    contact: true,
   ),
   feather_dance(
     string: "フェザーダンス",
@@ -1939,7 +1729,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   feint(
     string: "フェイント",
@@ -1948,7 +1737,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   feint_attack(
     string: "だましうち",
@@ -1957,7 +1745,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: true,
   ),
   fell_stinger(
     string: "とどめばり",
@@ -1966,7 +1753,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   fiery_dance(
     string: "ほのおのまい",
@@ -1975,7 +1761,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   fiery_wrath(
     string: "もえあがるいかり",
@@ -1984,14 +1769,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   fillet_away(
     string: "みをけずる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   final_gambit(
     string: "いのちがけ",
@@ -1999,7 +1782,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   fire_blast(
     string: "だいもんじ",
@@ -2008,7 +1790,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 85,
     pp: 5,
-    contact: false,
   ),
   fire_fang(
     string: "ほのおのキバ",
@@ -2017,7 +1798,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 95,
     pp: 15,
-    contact: true,
   ),
   fire_lash(
     string: "ほのおのムチ",
@@ -2026,7 +1806,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   fire_pledge(
     string: "ほのおのちかい",
@@ -2035,7 +1814,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   fire_punch(
     string: "ほのおのパンチ",
@@ -2044,7 +1822,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   fire_spin(
     string: "ほのおのうず",
@@ -2053,7 +1830,6 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 85,
     pp: 15,
-    contact: false,
   ),
   first_impression(
     string: "であいがしら",
@@ -2062,7 +1838,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   fishious_rend(
     string: "エラがみ",
@@ -2071,7 +1846,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   fissure(
     string: "じわれ",
@@ -2079,7 +1853,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 30,
     pp: 5,
-    contact: false,
   ),
   flail(
     string: "じたばた",
@@ -2087,7 +1860,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   flame_burst(
     string: "はじけるほのお",
@@ -2096,7 +1868,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   flame_charge(
     string: "ニトロチャージ",
@@ -2105,7 +1876,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   flame_wheel(
     string: "かえんぐるま",
@@ -2114,7 +1884,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   flamethrower(
     string: "かえんほうしゃ",
@@ -2123,7 +1892,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   flare_blitz(
     string: "フレアドライブ",
@@ -2132,7 +1900,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   flash(
     string: "フラッシュ",
@@ -2140,7 +1907,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   flash_cannon(
     string: "ラスターカノン",
@@ -2149,7 +1915,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   flatter(
     string: "おだてる",
@@ -2157,7 +1922,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   fleur_cannon(
     string: "フルールカノン",
@@ -2166,7 +1930,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   fling(
     string: "なげつける",
@@ -2174,7 +1937,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   flip_turn(
     string: "クイックターン",
@@ -2183,7 +1945,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   floaty_fall(
     string: "ふわふわフォール",
@@ -2192,21 +1953,18 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 95,
     pp: 15,
-    contact: true,
   ),
   floral_healing(
     string: "フラワーヒール",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   flower_shield(
     string: "フラワーガード",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   flower_trick(
     string: "トリックフラワー",
@@ -2215,7 +1973,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: kAccuracyMax,
     pp: 10,
-    contact: false,
   ),
   fly(
     string: "そらをとぶ",
@@ -2224,7 +1981,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 95,
     pp: 15,
-    contact: true,
   ),
   flying_press(
     string: "フライングプレス",
@@ -2233,7 +1989,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 95,
     pp: 10,
-    contact: true,
   ),
   focus_blast(
     string: "きあいだま",
@@ -2242,14 +1997,12 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 70,
     pp: 5,
-    contact: false,
   ),
   focus_energy(
     string: "きあいだめ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   focus_punch(
     string: "きあいパンチ",
@@ -2258,14 +2011,12 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   follow_me(
     string: "このゆびとまれ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   force_palm(
     string: "はっけい",
@@ -2274,14 +2025,12 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   foresight(
     string: "みやぶる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   forests_curse(
     string: "もりののろい",
@@ -2289,7 +2038,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   foul_play(
     string: "イカサマ",
@@ -2298,7 +2046,6 @@ enum Moves implements StringNamedEnum {
     power: 95,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   freeze_shock(
     string: "フリーズボルト",
@@ -2307,7 +2054,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   freeze_dry(
     string: "フリーズドライ",
@@ -2316,7 +2062,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   freezing_glare(
     string: "いてつくしせん",
@@ -2325,7 +2070,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   freezy_frost(
     string: "こちこちフロスト",
@@ -2334,7 +2078,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   frenzy_plant(
     string: "ハードプラント",
@@ -2343,7 +2086,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   frost_breath(
     string: "こおりのいぶき",
@@ -2352,7 +2094,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   frustration(
     string: "やつあたり",
@@ -2360,7 +2101,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   fury_attack(
     string: "みだれづき",
@@ -2369,7 +2109,6 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 85,
     pp: 20,
-    contact: true,
   ),
   fury_cutter(
     string: "れんぞくぎり",
@@ -2378,7 +2117,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 95,
     pp: 20,
-    contact: true,
   ),
   fury_swipes(
     string: "みだれひっかき",
@@ -2387,7 +2125,6 @@ enum Moves implements StringNamedEnum {
     power: 18,
     accuracy: 80,
     pp: 15,
-    contact: true,
   ),
   fusion_bolt(
     string: "クロスサンダー",
@@ -2396,7 +2133,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   fusion_flare(
     string: "クロスフレイム",
@@ -2405,7 +2141,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   future_sight(
     string: "みらいよち",
@@ -2414,7 +2149,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   gastro_acid(
     string: "いえき",
@@ -2422,7 +2156,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   gear_grind(
     string: "ギアソーサー",
@@ -2431,14 +2164,12 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 85,
     pp: 15,
-    contact: true,
   ),
   gear_up(
     string: "アシストギア",
     type: Types.steel,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   genesis_supernova(
     string: "オリジンズスーパーノヴァ",
@@ -2447,14 +2178,12 @@ enum Moves implements StringNamedEnum {
     power: 185,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   geomancy(
     string: "ジオコントロール",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   giga_drain(
     string: "ギガドレイン",
@@ -2463,7 +2192,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   giga_impact(
     string: "ギガインパクト",
@@ -2472,7 +2200,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: true,
   ),
   gigaton_hammer(
     string: "デカハンマー",
@@ -2481,7 +2208,6 @@ enum Moves implements StringNamedEnum {
     power: 160,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   glacial_lance(
     string: "ブリザードランス",
@@ -2490,7 +2216,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   glaciate(
     string: "こごえるせかい",
@@ -2499,7 +2224,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 95,
     pp: 10,
-    contact: false,
   ),
   glaive_rush(
     string: "きょけんとつげき",
@@ -2508,7 +2232,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   glare(
     string: "へびにらみ",
@@ -2516,7 +2239,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   glitzy_glow(
     string: "どばどばオーラ",
@@ -2525,7 +2247,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   grass_knot(
     string: "くさむすび",
@@ -2533,7 +2254,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   grass_pledge(
     string: "くさのちかい",
@@ -2542,7 +2262,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   grass_whistle(
     string: "くさぶえ",
@@ -2550,7 +2269,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 55,
     pp: 15,
-    contact: false,
   ),
   grassy_glide(
     string: "グラススライダー",
@@ -2559,14 +2277,12 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   grassy_terrain(
     string: "グラスフィールド",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   grav_apple(
     string: "Ｇのちから",
@@ -2575,14 +2291,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   gravity(
     string: "じゅうりょく",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   growl(
     string: "なきごえ",
@@ -2590,35 +2304,30 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 40,
-    contact: false,
   ),
   growth(
     string: "せいちょう",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   grudge(
     string: "おんねん",
     type: Types.ghost,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   guard_split(
     string: "ガードシェア",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   guard_swap(
     string: "ガードスワップ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   guardian_of_alola(
     string: "ガーディアン・デ・アローラ",
@@ -2626,7 +2335,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   guillotine(
     string: "ハサミギロチン",
@@ -2634,7 +2342,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 30,
     pp: 5,
-    contact: true,
   ),
   gunk_shot(
     string: "ダストシュート",
@@ -2643,7 +2350,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 80,
     pp: 5,
-    contact: false,
   ),
   gust(
     string: "かぜおこし",
@@ -2652,7 +2358,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 35,
-    contact: false,
   ),
   gyro_ball(
     string: "ジャイロボール",
@@ -2660,14 +2365,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   hail(
     string: "あられ",
     type: Types.ice,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   hammer_arm(
     string: "アームハンマー",
@@ -2676,28 +2379,24 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   happy_hour(
     string: "ハッピータイム",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   harden(
     string: "かたくなる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   haze(
     string: "くろいきり",
     type: Types.ice,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   head_charge(
     string: "アフロブレイク",
@@ -2706,7 +2405,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   head_smash(
     string: "もろはのずつき",
@@ -2715,7 +2413,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 80,
     pp: 5,
-    contact: true,
   ),
   headbutt(
     string: "ずつき",
@@ -2724,7 +2421,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   headlong_rush(
     string: "ぶちかまし",
@@ -2733,14 +2429,12 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   heal_bell(
     string: "いやしのすず",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   heal_block(
     string: "かいふくふうじ",
@@ -2748,28 +2442,24 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   heal_order(
     string: "かいふくしれい",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   heal_pulse(
     string: "いやしのはどう",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   healing_wish(
     string: "いやしのねがい",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   heart_stamp(
     string: "ハートスタンプ",
@@ -2778,14 +2468,12 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   heart_swap(
     string: "ハートスワップ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   heat_crash(
     string: "ヒートスタンプ",
@@ -2793,7 +2481,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   heat_wave(
     string: "ねっぷう",
@@ -2802,7 +2489,6 @@ enum Moves implements StringNamedEnum {
     power: 95,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   heavy_slam(
     string: "ヘビーボンバー",
@@ -2810,14 +2496,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   helping_hand(
     string: "てだすけ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   hex(
     string: "たたりめ",
@@ -2826,7 +2510,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   hidden_power(
     string: "めざめるパワー",
@@ -2835,7 +2518,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   high_horsepower(
     string: "１０まんばりき",
@@ -2844,7 +2526,6 @@ enum Moves implements StringNamedEnum {
     power: 95,
     accuracy: 95,
     pp: 10,
-    contact: true,
   ),
   high_jump_kick(
     string: "とびひざげり",
@@ -2853,7 +2534,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   hold_back(
     string: "てかげん",
@@ -2862,21 +2542,18 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 40,
-    contact: true,
   ),
   hold_hands(
     string: "てをつなぐ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   hone_claws(
     string: "つめとぎ",
     type: Types.dark,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   horn_attack(
     string: "つのでつく",
@@ -2885,7 +2562,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   horn_drill(
     string: "つのドリル",
@@ -2893,7 +2569,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 30,
     pp: 5,
-    contact: true,
   ),
   horn_leech(
     string: "ウッドホーン",
@@ -2902,14 +2577,12 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   howl(
     string: "とおぼえ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   hurricane(
     string: "ぼうふう",
@@ -2918,7 +2591,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 70,
     pp: 10,
-    contact: false,
   ),
   hydro_cannon(
     string: "ハイドロカノン",
@@ -2927,7 +2599,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   hydro_pump(
     string: "ハイドロポンプ",
@@ -2936,7 +2607,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 80,
     pp: 5,
-    contact: false,
   ),
   hydro_steam(
     string: "ハイドロスチーム",
@@ -2945,7 +2615,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   hyper_beam(
     string: "はかいこうせん",
@@ -2954,7 +2623,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   hyper_drill(
     string: "ハイパードリル",
@@ -2963,7 +2631,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   hyper_fang(
     string: "ひっさつまえば",
@@ -2972,7 +2639,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 90,
     pp: 15,
-    contact: true,
   ),
   hyper_voice(
     string: "ハイパーボイス",
@@ -2981,7 +2647,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   hyperspace_fury(
     string: "いじげんラッシュ",
@@ -2990,7 +2655,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: kAccuracyMax,
     pp: 5,
-    contact: false,
   ),
   hyperspace_hole(
     string: "いじげんホール",
@@ -2999,7 +2663,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: kAccuracyMax,
     pp: 5,
-    contact: false,
   ),
   hypnosis(
     string: "さいみんじゅつ",
@@ -3007,7 +2670,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 60,
     pp: 20,
-    contact: false,
   ),
   ice_ball(
     string: "アイスボール",
@@ -3016,7 +2678,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 90,
     pp: 20,
-    contact: true,
   ),
   ice_beam(
     string: "れいとうビーム",
@@ -3025,7 +2686,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   ice_burn(
     string: "コールドフレア",
@@ -3034,7 +2694,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   ice_fang(
     string: "こおりのキバ",
@@ -3043,7 +2702,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 95,
     pp: 15,
-    contact: true,
   ),
   ice_hammer(
     string: "アイスハンマー",
@@ -3052,7 +2710,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   ice_punch(
     string: "れいとうパンチ",
@@ -3061,7 +2718,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   ice_shard(
     string: "こおりのつぶて",
@@ -3070,7 +2726,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   ice_spinner(
     string: "アイススピナー",
@@ -3079,7 +2734,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   icicle_crash(
     string: "つららおとし",
@@ -3088,7 +2742,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   icicle_spear(
     string: "つららばり",
@@ -3097,7 +2750,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   icy_wind(
     string: "こごえるかぜ",
@@ -3106,14 +2758,12 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 95,
     pp: 15,
-    contact: false,
   ),
   imprison(
     string: "ふういん",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   incinerate(
     string: "やきつくす",
@@ -3122,7 +2772,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   infernal_parade(
     string: "ひゃっきやこう",
@@ -3131,7 +2780,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   inferno(
     string: "れんごく",
@@ -3140,7 +2788,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 50,
     pp: 5,
-    contact: false,
   ),
   infestation(
     string: "まとわりつく",
@@ -3149,35 +2796,30 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   ingrain(
     string: "ねをはる",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   instruct(
     string: "さいはい",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   ion_deluge(
     string: "プラズマシャワー",
     type: Types.electric,
     category: MoveCategory.status,
     pp: 25,
-    contact: false,
   ),
   iron_defense(
     string: "てっぺき",
     type: Types.steel,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   iron_head(
     string: "アイアンヘッド",
@@ -3186,7 +2828,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   iron_tail(
     string: "アイアンテール",
@@ -3195,7 +2836,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 75,
     pp: 15,
-    contact: true,
   ),
   jaw_lock(
     string: "くらいつく",
@@ -3204,7 +2844,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   jet_punch(
     string: "ジェットパンチ",
@@ -3213,7 +2852,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   judgment(
     string: "さばきのつぶて",
@@ -3222,7 +2860,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   jump_kick(
     string: "とびげり",
@@ -3231,14 +2868,12 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 95,
     pp: 10,
-    contact: true,
   ),
   jungle_healing(
     string: "ジャングルヒール",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   karate_chop(
     string: "からてチョップ",
@@ -3247,7 +2882,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   kinesis(
     string: "スプーンまげ",
@@ -3255,14 +2889,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 80,
     pp: 15,
-    contact: false,
   ),
   kings_shield(
     string: "キングシールド",
     type: Types.steel,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   knock_off(
     string: "はたきおとす",
@@ -3271,7 +2903,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   kowtow_cleave(
     string: "ドゲザン",
@@ -3280,7 +2911,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: kAccuracyMax,
     pp: 10,
-    contact: false,
   ),
   lands_wrath(
     string: "グランドフォース",
@@ -3289,14 +2919,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   laser_focus(
     string: "とぎすます",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   lash_out(
     string: "うっぷんばらし",
@@ -3305,7 +2933,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   last_resort(
     string: "とっておき",
@@ -3314,7 +2941,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   last_respects(
     string: "おはかまいり",
@@ -3323,7 +2949,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   lava_plume(
     string: "ふんえん",
@@ -3332,7 +2957,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   leaf_blade(
     string: "リーフブレード",
@@ -3341,7 +2965,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   leaf_storm(
     string: "リーフストーム",
@@ -3350,7 +2973,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   leaf_tornado(
     string: "グラスミキサー",
@@ -3359,7 +2981,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   leafage(
     string: "このは",
@@ -3368,7 +2989,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 40,
-    contact: false,
   ),
   leech_life(
     string: "きゅうけつ",
@@ -3377,7 +2997,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   leech_seed(
     string: "やどりぎのタネ",
@@ -3385,7 +3004,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   leer(
     string: "にらみつける",
@@ -3393,7 +3011,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   lets_snuggle_forever(
     string: "ぽかぼかフレンドタイム",
@@ -3402,7 +3019,6 @@ enum Moves implements StringNamedEnum {
     power: 190,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: true,
   ),
   lick(
     string: "したでなめる",
@@ -3411,14 +3027,12 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   life_dew(
     string: "いのちのしずく",
     type: Types.water,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   light_of_ruin(
     string: "はめつのひかり",
@@ -3427,14 +3041,12 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   light_screen(
     string: "ひかりのかべ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   light_that_burns_the_sky(
     string: "天焦がす滅亡の光",
@@ -3443,7 +3055,6 @@ enum Moves implements StringNamedEnum {
     power: 200,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   liquidation(
     string: "アクアブレイク",
@@ -3452,14 +3063,12 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   lock_on(
     string: "ロックオン",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   lovely_kiss(
     string: "あくまのキッス",
@@ -3467,7 +3076,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 75,
     pp: 10,
-    contact: false,
   ),
   low_kick(
     string: "けたぐり",
@@ -3475,7 +3083,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   low_sweep(
     string: "ローキック",
@@ -3484,14 +3091,12 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   lucky_chant(
     string: "おまじない",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   lumina_crash(
     string: "ルミナコリジョン",
@@ -3500,21 +3105,18 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   lunar_blessing(
     string: "みかづきのいのり",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   lunar_dance(
     string: "みかづきのまい",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   lunge(
     string: "とびかかる",
@@ -3523,7 +3125,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   luster_purge(
     string: "ラスターパージ",
@@ -3532,7 +3133,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   mach_punch(
     string: "マッハパンチ",
@@ -3541,14 +3141,12 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   magic_coat(
     string: "マジックコート",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   magic_powder(
     string: "まほうのこな",
@@ -3556,14 +3154,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   magic_room(
     string: "マジックルーム",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   magical_leaf(
     string: "マジカルリーフ",
@@ -3572,7 +3168,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: false,
   ),
   magical_torque(
     string: "マジカルアクセル",
@@ -3581,7 +3176,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   magma_storm(
     string: "マグマストーム",
@@ -3590,7 +3184,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 75,
     pp: 5,
-    contact: false,
   ),
   magnet_bomb(
     string: "マグネットボム",
@@ -3599,21 +3192,18 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: false,
   ),
   magnet_rise(
     string: "でんじふゆう",
     type: Types.electric,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   magnetic_flux(
     string: "じばそうさ",
     type: Types.electric,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   magnitude(
     string: "マグニチュード",
@@ -3621,7 +3211,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   make_it_rain(
     string: "ゴールドラッシュ",
@@ -3630,7 +3219,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   malicious_moonsault(
     string: "ハイパーダーククラッシャー",
@@ -3639,35 +3227,30 @@ enum Moves implements StringNamedEnum {
     power: 180,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: true,
   ),
   mat_block(
     string: "たたみがえし",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   me_first(
     string: "さきどり",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   mean_look(
     string: "くろいまなざし",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   meditate(
     string: "ヨガのポーズ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   mega_drain(
     string: "メガドレイン",
@@ -3676,7 +3259,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   mega_kick(
     string: "メガトンキック",
@@ -3685,7 +3267,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 75,
     pp: 5,
-    contact: true,
   ),
   mega_punch(
     string: "メガトンパンチ",
@@ -3694,7 +3275,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 85,
     pp: 20,
-    contact: true,
   ),
   megahorn(
     string: "メガホーン",
@@ -3703,7 +3283,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 85,
     pp: 10,
-    contact: true,
   ),
   memento(
     string: "おきみやげ",
@@ -3711,7 +3290,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   menacing_moonraze_maelstrom(
     string: "ムーンライトブラスター",
@@ -3720,7 +3298,6 @@ enum Moves implements StringNamedEnum {
     power: 200,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   metal_burst(
     string: "メタルバースト",
@@ -3728,7 +3305,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   metal_claw(
     string: "メタルクロー",
@@ -3737,7 +3313,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 95,
     pp: 35,
-    contact: true,
   ),
   metal_sound(
     string: "きんぞくおん",
@@ -3745,7 +3320,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 85,
     pp: 40,
-    contact: false,
   ),
   meteor_assault(
     string: "スターアサルト",
@@ -3754,7 +3328,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   meteor_beam(
     string: "メテオビーム",
@@ -3763,7 +3336,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   meteor_mash(
     string: "コメットパンチ",
@@ -3772,28 +3344,24 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   metronome(
     string: "ゆびをふる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   milk_drink(
     string: "ミルクのみ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   mimic(
     string: "ものまね",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   mind_blown(
     string: "ビックリヘッド",
@@ -3802,28 +3370,24 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   mind_reader(
     string: "こころのめ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   minimize(
     string: "ちいさくなる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   miracle_eye(
     string: "ミラクルアイ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   mirror_coat(
     string: "ミラーコート",
@@ -3831,14 +3395,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   mirror_move(
     string: "オウムがえし",
     type: Types.flying,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   mirror_shot(
     string: "ミラーショット",
@@ -3847,14 +3409,12 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   mist(
     string: "しろいきり",
     type: Types.ice,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   mist_ball(
     string: "ミストボール",
@@ -3863,7 +3423,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   misty_explosion(
     string: "ミストバースト",
@@ -3872,14 +3431,12 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   misty_terrain(
     string: "ミストフィールド",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   moonblast(
     string: "ムーンフォース",
@@ -3888,7 +3445,6 @@ enum Moves implements StringNamedEnum {
     power: 95,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   moongeist_beam(
     string: "シャドーレイ",
@@ -3897,21 +3453,18 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   moonlight(
     string: "つきのひかり",
     type: Types.fairy,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   morning_sun(
     string: "あさのひざし",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   mortal_spin(
     string: "キラースピン",
@@ -3920,7 +3473,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   mountain_gale(
     string: "ひょうざんおろし",
@@ -3929,7 +3481,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   mud_bomb(
     string: "どろばくだん",
@@ -3938,7 +3489,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   mud_shot(
     string: "マッドショット",
@@ -3947,14 +3497,12 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 95,
     pp: 15,
-    contact: false,
   ),
   mud_sport(
     string: "どろあそび",
     type: Types.ground,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   mud_slap(
     string: "どろかけ",
@@ -3963,7 +3511,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   muddy_water(
     string: "だくりゅう",
@@ -3972,7 +3519,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   multi_attack(
     string: "マルチアタック",
@@ -3981,7 +3527,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   mystical_fire(
     string: "マジカルフレイム",
@@ -3990,7 +3535,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   mystical_power(
     string: "しんぴのちから",
@@ -3999,14 +3543,12 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   nasty_plot(
     string: "わるだくみ",
     type: Types.dark,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   natural_gift(
     string: "しぜんのめぐみ",
@@ -4014,14 +3556,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   nature_power(
     string: "しぜんのちから",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   natures_madness(
     string: "しぜんのいかり",
@@ -4029,7 +3569,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   needle_arm(
     string: "ニードルアーム",
@@ -4038,7 +3577,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   night_daze(
     string: "ナイトバースト",
@@ -4047,7 +3585,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 95,
     pp: 10,
-    contact: false,
   ),
   night_shade(
     string: "ナイトヘッド",
@@ -4055,7 +3592,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   night_slash(
     string: "つじぎり",
@@ -4064,7 +3600,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   nightmare(
     string: "あくむ",
@@ -4072,14 +3607,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   no_retreat(
     string: "はいすいのじん",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   noble_roar(
     string: "おたけび",
@@ -4087,7 +3620,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   noxious_torque(
     string: "ポイズンアクセル",
@@ -4096,7 +3628,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   nuzzle(
     string: "ほっぺすりすり",
@@ -4105,7 +3636,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   oblivion_wing(
     string: "デスウイング",
@@ -4114,7 +3644,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   obstruct(
     string: "ブロッキング",
@@ -4122,7 +3651,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   oceanic_operetta(
     string: "わだつみのシンフォニア",
@@ -4131,7 +3659,6 @@ enum Moves implements StringNamedEnum {
     power: 195,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   octazooka(
     string: "オクタンほう",
@@ -4140,7 +3667,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   octolock(
     string: "たこがため",
@@ -4148,14 +3674,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   odor_sleuth(
     string: "かぎわける",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   ominous_wind(
     string: "あやしいかぜ",
@@ -4164,7 +3688,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   order_up(
     string: "いっちょうあがり",
@@ -4173,7 +3696,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   origin_pulse(
     string: "こんげんのはどう",
@@ -4182,7 +3704,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   outrage(
     string: "げきりん",
@@ -4191,7 +3712,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   overdrive(
     string: "オーバードライブ",
@@ -4200,7 +3720,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   overheat(
     string: "オーバーヒート",
@@ -4209,14 +3728,12 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   pain_split(
     string: "いたみわけ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   parabolic_charge(
     string: "パラボラチャージ",
@@ -4225,7 +3742,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   parting_shot(
     string: "すてゼリフ",
@@ -4233,7 +3749,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   pay_day(
     string: "ネコにこばん",
@@ -4242,7 +3757,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   payback(
     string: "しっぺがえし",
@@ -4251,7 +3765,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   peck(
     string: "つつく",
@@ -4260,14 +3773,12 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 100,
     pp: 35,
-    contact: true,
   ),
   perish_song(
     string: "ほろびのうた",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   petal_blizzard(
     string: "はなふぶき",
@@ -4276,7 +3787,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   petal_dance(
     string: "はなびらのまい",
@@ -4285,7 +3795,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   phantom_force(
     string: "ゴーストダイブ",
@@ -4294,7 +3803,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   photon_geyser(
     string: "フォトンゲイザー",
@@ -4303,7 +3811,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   pika_papow(
     string: "ピカピカサンダー",
@@ -4311,7 +3818,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: false,
   ),
   pin_missile(
     string: "ミサイルばり",
@@ -4320,7 +3826,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 95,
     pp: 20,
-    contact: false,
   ),
   plasma_fists(
     string: "プラズマフィスト",
@@ -4329,14 +3834,12 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   play_nice(
     string: "なかよくする",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   play_rough(
     string: "じゃれつく",
@@ -4345,7 +3848,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   pluck(
     string: "ついばむ",
@@ -4354,7 +3856,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   poison_fang(
     string: "どくどくのキバ",
@@ -4363,7 +3864,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   poison_gas(
     string: "どくガス",
@@ -4371,7 +3871,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 90,
     pp: 40,
-    contact: false,
   ),
   poison_jab(
     string: "どくづき",
@@ -4380,7 +3879,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   poison_powder(
     string: "どくのこな",
@@ -4388,7 +3886,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 75,
     pp: 35,
-    contact: false,
   ),
   poison_sting(
     string: "どくばり",
@@ -4397,7 +3894,6 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 100,
     pp: 35,
-    contact: false,
   ),
   poison_tail(
     string: "ポイズンテール",
@@ -4406,7 +3902,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   pollen_puff(
     string: "かふんだんご",
@@ -4415,7 +3910,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   poltergeist(
     string: "ポルターガイスト",
@@ -4424,7 +3918,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   population_bomb(
     string: "ネズミざん",
@@ -4433,7 +3926,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   pounce(
     string: "とびつく",
@@ -4442,7 +3934,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   pound(
     string: "はたく",
@@ -4451,7 +3942,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 35,
-    contact: true,
   ),
   powder(
     string: "ふんじん",
@@ -4459,7 +3949,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   powder_snow(
     string: "こなゆき",
@@ -4468,7 +3957,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 25,
-    contact: false,
   ),
   power_gem(
     string: "パワージェム",
@@ -4477,35 +3965,30 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   power_shift(
     string: "パワーシフト",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   power_split(
     string: "パワーシェア",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   power_swap(
     string: "パワースワップ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   power_trick(
     string: "パワートリック",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   power_trip(
     string: "つけあがる",
@@ -4514,7 +3997,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   power_whip(
     string: "パワーウィップ",
@@ -4523,7 +4005,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 85,
     pp: 10,
-    contact: true,
   ),
   power_up_punch(
     string: "グロウパンチ",
@@ -4532,7 +4013,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   precipice_blades(
     string: "だんがいのつるぎ",
@@ -4541,7 +4021,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 85,
     pp: 10,
-    contact: false,
   ),
   present(
     string: "プレゼント",
@@ -4549,7 +4028,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 90,
     pp: 15,
-    contact: false,
   ),
   prismatic_laser(
     string: "プリズムレーザー",
@@ -4558,14 +4036,12 @@ enum Moves implements StringNamedEnum {
     power: 160,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   protect(
     string: "まもる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   psybeam(
     string: "サイケこうせん",
@@ -4574,7 +4050,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   psyblade(
     string: "サイコブレイド",
@@ -4583,14 +4058,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   psych_up(
     string: "じこあんじ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   psychic(
     string: "サイコキネシス",
@@ -4599,7 +4072,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   psychic_fangs(
     string: "サイコファング",
@@ -4608,14 +4080,12 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   psychic_terrain(
     string: "サイコフィールド",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   psycho_boost(
     string: "サイコブースト",
@@ -4624,7 +4094,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   psycho_cut(
     string: "サイコカッター",
@@ -4633,7 +4102,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   psycho_shift(
     string: "サイコシフト",
@@ -4641,7 +4109,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   psyshield_bash(
     string: "バリアーラッシュ",
@@ -4650,7 +4117,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   psyshock(
     string: "サイコショック",
@@ -4659,7 +4125,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   psystrike(
     string: "サイコブレイク",
@@ -4668,7 +4133,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   psywave(
     string: "サイコウェーブ",
@@ -4676,7 +4140,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   pulverizing_pancake(
     string: "ほんきをだすこうげき",
@@ -4685,7 +4148,6 @@ enum Moves implements StringNamedEnum {
     power: 210,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: true,
   ),
   punishment(
     string: "おしおき",
@@ -4693,14 +4155,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   purify(
     string: "じょうか",
     type: Types.poison,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   pursuit(
     string: "おいうち",
@@ -4709,7 +4169,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   pyro_ball(
     string: "かえんボール",
@@ -4718,7 +4177,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   quash(
     string: "さきおくり",
@@ -4726,7 +4184,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   quick_attack(
     string: "でんこうせっか",
@@ -4735,21 +4192,18 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   quick_guard(
     string: "ファストガード",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   quiver_dance(
     string: "ちょうのまい",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   rage(
     string: "いかり",
@@ -4758,7 +4212,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   rage_fist(
     string: "ふんどのこぶし",
@@ -4767,14 +4220,12 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   rage_powder(
     string: "いかりのこな",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   raging_bull(
     string: "レイジングブル",
@@ -4783,7 +4234,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   raging_fury(
     string: "だいふんげき",
@@ -4792,14 +4242,12 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   rain_dance(
     string: "あまごい",
     type: Types.water,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   rapid_spin(
     string: "こうそくスピン",
@@ -4808,7 +4256,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 40,
-    contact: true,
   ),
   razor_leaf(
     string: "はっぱカッター",
@@ -4817,7 +4264,6 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 95,
     pp: 25,
-    contact: false,
   ),
   razor_shell(
     string: "シェルブレード",
@@ -4826,7 +4272,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 95,
     pp: 10,
-    contact: true,
   ),
   razor_wind(
     string: "かまいたち",
@@ -4835,42 +4280,36 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   recover(
     string: "じこさいせい",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   recycle(
     string: "リサイクル",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   reflect(
     string: "リフレクター",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   reflect_type(
     string: "ミラータイプ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   refresh(
     string: "リフレッシュ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   relic_song(
     string: "いにしえのうた",
@@ -4879,14 +4318,12 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   rest(
     string: "ねむる",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   retaliate(
     string: "かたきうち",
@@ -4895,7 +4332,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   return_(
     string: "おんがえし",
@@ -4903,7 +4339,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   revelation_dance(
     string: "めざめるダンス",
@@ -4912,7 +4347,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   revenge(
     string: "リベンジ",
@@ -4921,7 +4355,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   reversal(
     string: "きしかいせい",
@@ -4929,14 +4362,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   revival_blessing(
     string: "さいきのいのり",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 1,
-    contact: false,
   ),
   rising_voltage(
     string: "ライジングボルト",
@@ -4945,14 +4376,12 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   roar(
     string: "ほえる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   roar_of_time(
     string: "ときのほうこう",
@@ -4961,7 +4390,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   rock_blast(
     string: "ロックブラスト",
@@ -4970,7 +4398,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   rock_climb(
     string: "ロッククライム",
@@ -4979,14 +4406,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 85,
     pp: 20,
-    contact: true,
   ),
   rock_polish(
     string: "ロックカット",
     type: Types.rock,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   rock_slide(
     string: "いわなだれ",
@@ -4995,7 +4420,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   rock_smash(
     string: "いわくだき",
@@ -5004,7 +4428,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   rock_throw(
     string: "いわおとし",
@@ -5013,7 +4436,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 90,
     pp: 15,
-    contact: false,
   ),
   rock_tomb(
     string: "がんせきふうじ",
@@ -5022,7 +4444,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 95,
     pp: 15,
-    contact: false,
   ),
   rock_wrecker(
     string: "がんせきほう",
@@ -5031,14 +4452,12 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   role_play(
     string: "なりきり",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   rolling_kick(
     string: "まわしげり",
@@ -5047,7 +4466,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 85,
     pp: 15,
-    contact: true,
   ),
   rollout(
     string: "ころがる",
@@ -5056,21 +4474,18 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 90,
     pp: 20,
-    contact: true,
   ),
   roost(
     string: "はねやすめ",
     type: Types.flying,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   rototiller(
     string: "たがやす",
     type: Types.ground,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   round(
     string: "りんしょう",
@@ -5079,7 +4494,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   ruination(
     string: "カタストロフィ",
@@ -5088,7 +4502,6 @@ enum Moves implements StringNamedEnum {
     power: 1,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   sacred_fire(
     string: "せいなるほのお",
@@ -5097,7 +4510,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   sacred_sword(
     string: "せいなるつるぎ",
@@ -5106,14 +4518,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   safeguard(
     string: "しんぴのまもり",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 25,
-    contact: false,
   ),
   salt_cure(
     string: "しおづけ",
@@ -5122,7 +4532,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   sand_attack(
     string: "すなかけ",
@@ -5130,7 +4539,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   sand_tomb(
     string: "すなじごく",
@@ -5139,7 +4547,6 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 85,
     pp: 15,
-    contact: false,
   ),
   sandsear_storm(
     string: "ねっさのあらし",
@@ -5148,14 +4555,12 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 80,
     pp: 10,
-    contact: false,
   ),
   sandstorm(
     string: "すなあらし",
     type: Types.rock,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   sappy_seed(
     string: "すくすくボンバー",
@@ -5164,7 +4569,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   scald(
     string: "ねっとう",
@@ -5173,7 +4577,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   scale_shot(
     string: "スケイルショット",
@@ -5182,7 +4585,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 90,
     pp: 20,
-    contact: false,
   ),
   scary_face(
     string: "こわいかお",
@@ -5190,7 +4592,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   scorching_sands(
     string: "ねっさのだいち",
@@ -5199,7 +4600,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   scratch(
     string: "ひっかく",
@@ -5208,7 +4608,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 35,
-    contact: true,
   ),
   screech(
     string: "いやなおと",
@@ -5216,7 +4615,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 85,
     pp: 40,
-    contact: false,
   ),
   searing_shot(
     string: "かえんだん",
@@ -5225,7 +4623,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   searing_sunraze_smash(
     string: "サンシャインスマッシャー",
@@ -5234,7 +4631,6 @@ enum Moves implements StringNamedEnum {
     power: 200,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: true,
   ),
   secret_power(
     string: "ひみつのちから",
@@ -5243,7 +4639,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   secret_sword(
     string: "しんぴのつるぎ",
@@ -5252,7 +4647,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   seed_bomb(
     string: "タネばくだん",
@@ -5261,7 +4655,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   seed_flare(
     string: "シードフレア",
@@ -5270,7 +4663,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 85,
     pp: 5,
-    contact: false,
   ),
   seismic_toss(
     string: "ちきゅうなげ",
@@ -5278,7 +4670,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   self_destruct(
     string: "じばく",
@@ -5287,7 +4678,6 @@ enum Moves implements StringNamedEnum {
     power: 200,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   shadow_ball(
     string: "シャドーボール",
@@ -5296,7 +4686,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   shadow_bone(
     string: "シャドーボーン",
@@ -5305,7 +4694,6 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   shadow_claw(
     string: "シャドークロー",
@@ -5314,7 +4702,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   shadow_force(
     string: "シャドーダイブ",
@@ -5323,7 +4710,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   shadow_punch(
     string: "シャドーパンチ",
@@ -5332,7 +4718,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: true,
   ),
   shadow_sneak(
     string: "かげうち",
@@ -5341,21 +4726,18 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   sharpen(
     string: "かくばる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   shed_tail(
     string: "しっぽきり",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   sheer_cold(
     string: "ぜったいれいど",
@@ -5363,7 +4745,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 30,
     pp: 5,
-    contact: false,
   ),
   shell_side_arm(
     string: "シェルアームズ",
@@ -5372,14 +4753,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   shell_smash(
     string: "からをやぶる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   shell_trap(
     string: "トラップシェル",
@@ -5388,21 +4767,18 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   shelter(
     string: "たてこもる",
     type: Types.steel,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   shift_gear(
     string: "ギアチェンジ",
     type: Types.steel,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   shock_wave(
     string: "でんげきは",
@@ -5411,14 +4787,12 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: false,
   ),
   shore_up(
     string: "すなあつめ",
     type: Types.ground,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   signal_beam(
     string: "シグナルビーム",
@@ -5427,14 +4801,12 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   silk_trap(
     string: "スレッドトラップ",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   silver_wind(
     string: "ぎんいろのかぜ",
@@ -5443,7 +4815,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   simple_beam(
     string: "シンプルビーム",
@@ -5451,7 +4822,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   sing(
     string: "うたう",
@@ -5459,7 +4829,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 55,
     pp: 15,
-    contact: false,
   ),
   sinister_arrow_raid(
     string: "シャドーアローズストライク",
@@ -5468,7 +4837,6 @@ enum Moves implements StringNamedEnum {
     power: 180,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   sizzly_slide(
     string: "めらめらバーン",
@@ -5477,21 +4845,18 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   sketch(
     string: "スケッチ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 1,
-    contact: false,
   ),
   skill_swap(
     string: "スキルスワップ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   skitter_smack(
     string: "はいよるいちげき",
@@ -5500,7 +4865,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   skull_bash(
     string: "ロケットずつき",
@@ -5509,7 +4873,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   sky_attack(
     string: "ゴッドバード",
@@ -5518,7 +4881,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 90,
     pp: 5,
-    contact: false,
   ),
   sky_drop(
     string: "フリーフォール",
@@ -5527,7 +4889,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   sky_uppercut(
     string: "スカイアッパー",
@@ -5536,14 +4897,12 @@ enum Moves implements StringNamedEnum {
     power: 85,
     accuracy: 90,
     pp: 15,
-    contact: true,
   ),
   slack_off(
     string: "なまける",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   slam(
     string: "たたきつける",
@@ -5552,7 +4911,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 75,
     pp: 20,
-    contact: true,
   ),
   slash(
     string: "きりさく",
@@ -5561,7 +4919,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   sleep_powder(
     string: "ねむりごな",
@@ -5569,14 +4926,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 75,
     pp: 15,
-    contact: false,
   ),
   sleep_talk(
     string: "ねごと",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   sludge(
     string: "ヘドロこうげき",
@@ -5585,7 +4940,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   sludge_bomb(
     string: "ヘドロばくだん",
@@ -5594,7 +4948,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   sludge_wave(
     string: "ヘドロウェーブ",
@@ -5603,7 +4956,6 @@ enum Moves implements StringNamedEnum {
     power: 95,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   smack_down(
     string: "うちおとす",
@@ -5612,7 +4964,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   smart_strike(
     string: "スマートホーン",
@@ -5621,7 +4972,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: kAccuracyMax,
     pp: 10,
-    contact: true,
   ),
   smelling_salts(
     string: "きつけ",
@@ -5630,7 +4980,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   smog(
     string: "スモッグ",
@@ -5639,7 +4988,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 70,
     pp: 20,
-    contact: false,
   ),
   smokescreen(
     string: "えんまく",
@@ -5647,7 +4995,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   snap_trap(
     string: "トラバサミ",
@@ -5656,7 +5003,6 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   snarl(
     string: "バークアウト",
@@ -5665,14 +5011,12 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 95,
     pp: 15,
-    contact: false,
   ),
   snatch(
     string: "よこどり",
     type: Types.dark,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   snipe_shot(
     string: "ねらいうち",
@@ -5681,7 +5025,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   snore(
     string: "いびき",
@@ -5690,14 +5033,12 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   snowscape(
     string: "ゆきげしき",
     type: Types.ice,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   soak(
     string: "みずびたし",
@@ -5705,14 +5046,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   soft_boiled(
     string: "タマゴうみ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   solar_beam(
     string: "ソーラービーム",
@@ -5721,7 +5060,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   solar_blade(
     string: "ソーラーブレード",
@@ -5730,7 +5068,6 @@ enum Moves implements StringNamedEnum {
     power: 125,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   sonic_boom(
     string: "ソニックブーム",
@@ -5738,7 +5075,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 90,
     pp: 20,
-    contact: false,
   ),
   soul_stealing_7_star_strike(
     string: "七星奪魂腿",
@@ -5747,7 +5083,6 @@ enum Moves implements StringNamedEnum {
     power: 195,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: true,
   ),
   spacial_rend(
     string: "あくうせつだん",
@@ -5756,7 +5091,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   spark(
     string: "スパーク",
@@ -5765,7 +5099,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   sparkling_aria(
     string: "うたかたのアリア",
@@ -5774,7 +5107,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   sparkly_swirl(
     string: "きらきらストーム",
@@ -5783,7 +5115,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   spectral_thief(
     string: "シャドースチール",
@@ -5792,14 +5123,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   speed_swap(
     string: "スピードスワップ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   spicy_extract(
     string: "ハバネロエキス",
@@ -5807,14 +5136,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: kAccuracyMax,
     pp: 15,
-    contact: false,
   ),
   spider_web(
     string: "クモのす",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   spike_cannon(
     string: "とげキャノン",
@@ -5823,21 +5150,18 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   spikes(
     string: "まきびし",
     type: Types.ground,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   spiky_shield(
     string: "ニードルガード",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   spin_out(
     string: "ホイールスピン",
@@ -5846,7 +5170,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   spirit_break(
     string: "ソウルクラッシュ",
@@ -5855,7 +5178,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   spirit_shackle(
     string: "かげぬい",
@@ -5864,7 +5186,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   spit_up(
     string: "はきだす",
@@ -5872,7 +5193,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   spite(
     string: "うらみ",
@@ -5880,14 +5200,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   splash(
     string: "はねる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   splintered_stormshards(
     string: "ラジアルエッジストーム",
@@ -5896,7 +5214,6 @@ enum Moves implements StringNamedEnum {
     power: 190,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   splishy_splash(
     string: "ざぶざぶサーフ",
@@ -5905,7 +5222,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   spore(
     string: "キノコのほうし",
@@ -5913,14 +5229,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   spotlight(
     string: "スポットライト",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   springtide_storm(
     string: "はるのあらし",
@@ -5929,14 +5243,12 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 80,
     pp: 5,
-    contact: false,
   ),
   stealth_rock(
     string: "ステルスロック",
     type: Types.rock,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   steam_eruption(
     string: "スチームバースト",
@@ -5945,7 +5257,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   steamroller(
     string: "ハードローラー",
@@ -5954,7 +5265,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   steel_beam(
     string: "てっていこうせん",
@@ -5963,7 +5273,6 @@ enum Moves implements StringNamedEnum {
     power: 140,
     accuracy: 95,
     pp: 5,
-    contact: false,
   ),
   steel_roller(
     string: "アイアンローラー",
@@ -5972,7 +5281,6 @@ enum Moves implements StringNamedEnum {
     power: 130,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   steel_wing(
     string: "はがねのつばさ",
@@ -5981,21 +5289,18 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 90,
     pp: 25,
-    contact: true,
   ),
   sticky_web(
     string: "ねばねばネット",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   stockpile(
     string: "たくわえる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   stoked_sparksurfer(
     string: "ライトニングサーフライド",
@@ -6004,7 +5309,6 @@ enum Moves implements StringNamedEnum {
     power: 175,
     accuracy: kAccuracyMax,
     pp: 1,
-    contact: false,
   ),
   stomp(
     string: "ふみつけ",
@@ -6013,7 +5317,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   stomping_tantrum(
     string: "じたんだ",
@@ -6022,7 +5325,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   stone_axe(
     string: "がんせきアックス",
@@ -6031,7 +5333,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 90,
     pp: 15,
-    contact: false,
   ),
   stone_edge(
     string: "ストーンエッジ",
@@ -6040,7 +5341,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 80,
     pp: 5,
-    contact: false,
   ),
   stored_power(
     string: "アシストパワー",
@@ -6049,7 +5349,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   storm_throw(
     string: "やまあらし",
@@ -6058,7 +5357,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   strange_steam(
     string: "ワンダースチーム",
@@ -6067,7 +5365,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 95,
     pp: 10,
-    contact: false,
   ),
   strength(
     string: "かいりき",
@@ -6076,7 +5373,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   strength_sap(
     string: "ちからをすいとる",
@@ -6084,7 +5380,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   string_shot(
     string: "いとをはく",
@@ -6092,7 +5387,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 95,
     pp: 40,
-    contact: false,
   ),
   struggle(
     string: "わるあがき",
@@ -6101,7 +5395,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: kAccuracyMax,
     pp: -1,
-    contact: true,
   ),
   struggle_bug(
     string: "むしのていこう",
@@ -6110,14 +5403,12 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   stuff_cheeks(
     string: "ほおばる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   stun_spore(
     string: "しびれごな",
@@ -6125,7 +5416,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 75,
     pp: 30,
-    contact: false,
   ),
   submission(
     string: "じごくぐるま",
@@ -6134,14 +5424,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 80,
     pp: 20,
-    contact: true,
   ),
   substitute(
     string: "みがわり",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   sucker_punch(
     string: "ふいうち",
@@ -6150,14 +5438,12 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   sunny_day(
     string: "にほんばれ",
     type: Types.fire,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   sunsteel_strike(
     string: "メテオドライブ",
@@ -6166,7 +5452,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   super_fang(
     string: "いかりのまえば",
@@ -6174,7 +5459,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   superpower(
     string: "ばかぢから",
@@ -6183,7 +5467,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   supersonic(
     string: "ちょうおんぱ",
@@ -6191,7 +5474,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 55,
     pp: 20,
-    contact: false,
   ),
   surf(
     string: "なみのり",
@@ -6200,7 +5482,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   surging_strikes(
     string: "すいりゅうれんだ",
@@ -6209,7 +5490,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   swagger(
     string: "いばる",
@@ -6217,14 +5497,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 85,
     pp: 15,
-    contact: false,
   ),
   swallow(
     string: "のみこむ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   sweet_kiss(
     string: "てんしのキッス",
@@ -6232,7 +5510,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 75,
     pp: 10,
-    contact: false,
   ),
   sweet_scent(
     string: "あまいかおり",
@@ -6240,7 +5517,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   swift(
     string: "スピードスター",
@@ -6249,7 +5525,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: false,
   ),
   switcheroo(
     string: "すりかえ",
@@ -6257,14 +5532,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   swords_dance(
     string: "つるぎのまい",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   synchronoise(
     string: "シンクロノイズ",
@@ -6273,14 +5546,12 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   synthesis(
     string: "こうごうせい",
     type: Types.grass,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   tackle(
     string: "たいあたり",
@@ -6289,14 +5560,12 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 35,
-    contact: true,
   ),
   tail_glow(
     string: "ほたるび",
     type: Types.bug,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   tail_slap(
     string: "スイープビンタ",
@@ -6305,7 +5574,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 85,
     pp: 10,
-    contact: true,
   ),
   tail_whip(
     string: "しっぽをふる",
@@ -6313,14 +5581,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   tailwind(
     string: "おいかぜ",
     type: Types.flying,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   take_down(
     string: "とっしん",
@@ -6329,14 +5595,12 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 85,
     pp: 20,
-    contact: true,
   ),
   take_heart(
     string: "ブレイブチャージ",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   tar_shot(
     string: "タールショット",
@@ -6344,7 +5608,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   taunt(
     string: "ちょうはつ",
@@ -6352,21 +5615,18 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   tearful_look(
     string: "なみだめ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   teatime(
     string: "おちゃかい",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   techno_blast(
     string: "テクノバスター",
@@ -6375,7 +5635,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   teeter_dance(
     string: "フラフラダンス",
@@ -6383,21 +5642,18 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   telekinesis(
     string: "テレキネシス",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   teleport(
     string: "テレポート",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   tera_blast(
     string: "テラバースト",
@@ -6406,7 +5662,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   terrain_pulse(
     string: "だいちのはどう",
@@ -6415,7 +5670,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   thief(
     string: "どろぼう",
@@ -6424,7 +5678,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   thousand_arrows(
     string: "サウザンアロー",
@@ -6433,7 +5686,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   thousand_waves(
     string: "サウザンウェーブ",
@@ -6442,7 +5694,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   thrash(
     string: "あばれる",
@@ -6451,7 +5702,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   throat_chop(
     string: "じごくづき",
@@ -6460,7 +5710,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   thunder(
     string: "かみなり",
@@ -6469,7 +5718,6 @@ enum Moves implements StringNamedEnum {
     power: 110,
     accuracy: 70,
     pp: 10,
-    contact: false,
   ),
   thunder_cage(
     string: "サンダープリズン",
@@ -6478,7 +5726,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 90,
     pp: 15,
-    contact: false,
   ),
   thunder_fang(
     string: "かみなりのキバ",
@@ -6487,7 +5734,6 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 95,
     pp: 15,
-    contact: true,
   ),
   thunder_punch(
     string: "かみなりパンチ",
@@ -6496,7 +5742,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   thunder_shock(
     string: "でんきショック",
@@ -6505,7 +5750,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   thunder_wave(
     string: "でんじは",
@@ -6513,7 +5757,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 90,
     pp: 20,
-    contact: false,
   ),
   thunderbolt(
     string: "１０まんボルト",
@@ -6522,7 +5765,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   thunderous_kick(
     string: "らいめいげり",
@@ -6531,7 +5773,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   tickle(
     string: "くすぐる",
@@ -6539,21 +5780,18 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   tidy_up(
     string: "おかたづけ",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   topsy_turvy(
     string: "ひっくりかえす",
     type: Types.dark,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   torch_song(
     string: "フレアソング",
@@ -6562,7 +5800,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   torment(
     string: "いちゃもん",
@@ -6570,7 +5807,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 15,
-    contact: false,
   ),
   toxic(
     string: "どくどく",
@@ -6578,14 +5814,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 90,
     pp: 10,
-    contact: false,
   ),
   toxic_spikes(
     string: "どくびし",
     type: Types.poison,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   toxic_thread(
     string: "どくのいと",
@@ -6593,7 +5827,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   trailblaze(
     string: "くさわけ",
@@ -6602,14 +5835,12 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   transform(
     string: "へんしん",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   tri_attack(
     string: "トライアタック",
@@ -6618,7 +5849,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   trick(
     string: "トリック",
@@ -6626,14 +5856,12 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   trick_room(
     string: "トリックルーム",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 5,
-    contact: false,
   ),
   trick_or_treat(
     string: "ハロウィン",
@@ -6641,7 +5869,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   triple_arrows(
     string: "３ぼんのや",
@@ -6650,7 +5877,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   triple_axel(
     string: "トリプルアクセル",
@@ -6659,7 +5885,6 @@ enum Moves implements StringNamedEnum {
     power: 20,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   triple_dive(
     string: "トリプルダイブ",
@@ -6668,7 +5893,6 @@ enum Moves implements StringNamedEnum {
     power: 30,
     accuracy: 95,
     pp: 10,
-    contact: false,
   ),
   triple_kick(
     string: "トリプルキック",
@@ -6677,7 +5901,6 @@ enum Moves implements StringNamedEnum {
     power: 10,
     accuracy: 90,
     pp: 10,
-    contact: true,
   ),
   trop_kick(
     string: "トロピカルキック",
@@ -6686,7 +5909,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   trump_card(
     string: "きりふだ",
@@ -6694,7 +5916,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: kAccuracyMax,
     pp: 5,
-    contact: true,
   ),
   twin_beam(
     string: "ツインビーム",
@@ -6703,7 +5924,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   twineedle(
     string: "ダブルニードル",
@@ -6712,7 +5932,6 @@ enum Moves implements StringNamedEnum {
     power: 25,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   twister(
     string: "たつまき",
@@ -6721,7 +5940,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   u_turn(
     string: "とんぼがえり",
@@ -6730,7 +5948,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: true,
   ),
   uproar(
     string: "さわぐ",
@@ -6739,7 +5956,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   v_create(
     string: "Ｖジェネレート",
@@ -6748,7 +5964,6 @@ enum Moves implements StringNamedEnum {
     power: 180,
     accuracy: 95,
     pp: 5,
-    contact: true,
   ),
   vacuum_wave(
     string: "しんくうは",
@@ -6757,7 +5972,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 30,
-    contact: false,
   ),
   veevee_volley(
     string: "ブイブイブレイク",
@@ -6765,7 +5979,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.physical,
     accuracy: kAccuracyMax,
     pp: 20,
-    contact: true,
   ),
   venom_drench(
     string: "ベノムトラップ",
@@ -6773,7 +5986,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   venoshock(
     string: "ベノムショック",
@@ -6782,14 +5994,12 @@ enum Moves implements StringNamedEnum {
     power: 65,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   victory_dance(
     string: "しょうりのまい",
     type: Types.fighting,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   vine_whip(
     string: "つるのムチ",
@@ -6798,7 +6008,6 @@ enum Moves implements StringNamedEnum {
     power: 45,
     accuracy: 100,
     pp: 25,
-    contact: true,
   ),
   vise_grip(
     string: "はさむ",
@@ -6807,7 +6016,6 @@ enum Moves implements StringNamedEnum {
     power: 55,
     accuracy: 100,
     pp: 30,
-    contact: true,
   ),
   vital_throw(
     string: "あてみなげ",
@@ -6816,7 +6024,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: kAccuracyMax,
     pp: 10,
-    contact: true,
   ),
   volt_switch(
     string: "ボルトチェンジ",
@@ -6825,7 +6032,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   volt_tackle(
     string: "ボルテッカー",
@@ -6834,7 +6040,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   wake_up_slap(
     string: "めざましビンタ",
@@ -6843,7 +6048,6 @@ enum Moves implements StringNamedEnum {
     power: 70,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   water_gun(
     string: "みずでっぽう",
@@ -6852,7 +6056,6 @@ enum Moves implements StringNamedEnum {
     power: 40,
     accuracy: 100,
     pp: 25,
-    contact: false,
   ),
   water_pledge(
     string: "みずのちかい",
@@ -6861,7 +6064,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   water_pulse(
     string: "みずのはどう",
@@ -6870,7 +6072,6 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   water_shuriken(
     string: "みずしゅりけん",
@@ -6879,14 +6080,12 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 100,
     pp: 20,
-    contact: false,
   ),
   water_sport(
     string: "みずあそび",
     type: Types.water,
     category: MoveCategory.status,
     pp: 15,
-    contact: false,
   ),
   water_spout(
     string: "しおふき",
@@ -6895,7 +6094,6 @@ enum Moves implements StringNamedEnum {
     power: 150,
     accuracy: 100,
     pp: 5,
-    contact: false,
   ),
   waterfall(
     string: "たきのぼり",
@@ -6904,7 +6102,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   wave_crash(
     string: "ウェーブタックル",
@@ -6913,7 +6110,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   weather_ball(
     string: "ウェザーボール",
@@ -6922,7 +6118,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   whirlpool(
     string: "うずしお",
@@ -6931,14 +6126,12 @@ enum Moves implements StringNamedEnum {
     power: 35,
     accuracy: 85,
     pp: 15,
-    contact: false,
   ),
   whirlwind(
     string: "ふきとばし",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 20,
-    contact: false,
   ),
   wicked_blow(
     string: "あんこくきょうだ",
@@ -6947,7 +6140,6 @@ enum Moves implements StringNamedEnum {
     power: 75,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   wicked_torque(
     string: "ダークアクセル",
@@ -6956,14 +6148,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   wide_guard(
     string: "ワイドガード",
     type: Types.rock,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   wild_charge(
     string: "ワイルドボルト",
@@ -6972,7 +6162,6 @@ enum Moves implements StringNamedEnum {
     power: 90,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   wildbolt_storm(
     string: "かみなりあらし",
@@ -6981,7 +6170,6 @@ enum Moves implements StringNamedEnum {
     power: 100,
     accuracy: 80,
     pp: 10,
-    contact: false,
   ),
   will_o_wisp(
     string: "おにび",
@@ -6989,7 +6177,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 85,
     pp: 15,
-    contact: false,
   ),
   wing_attack(
     string: "つばさでうつ",
@@ -6998,28 +6185,24 @@ enum Moves implements StringNamedEnum {
     power: 60,
     accuracy: 100,
     pp: 35,
-    contact: true,
   ),
   wish(
     string: "ねがいごと",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   withdraw(
     string: "からにこもる",
     type: Types.water,
     category: MoveCategory.status,
     pp: 40,
-    contact: false,
   ),
   wonder_room(
     string: "ワンダールーム",
     type: Types.psychic,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   wood_hammer(
     string: "ウッドハンマー",
@@ -7028,14 +6211,12 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   work_up(
     string: "ふるいたてる",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 30,
-    contact: false,
   ),
   worry_seed(
     string: "なやみのタネ",
@@ -7043,7 +6224,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.status,
     accuracy: 100,
     pp: 10,
-    contact: false,
   ),
   wrap(
     string: "まきつく",
@@ -7052,7 +6232,6 @@ enum Moves implements StringNamedEnum {
     power: 15,
     accuracy: 90,
     pp: 20,
-    contact: true,
   ),
   wring_out(
     string: "しぼりとる",
@@ -7060,7 +6239,6 @@ enum Moves implements StringNamedEnum {
     category: MoveCategory.special,
     accuracy: 100,
     pp: 5,
-    contact: true,
   ),
   x_scissor(
     string: "シザークロス",
@@ -7069,14 +6247,12 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 15,
-    contact: true,
   ),
   yawn(
     string: "あくび",
     type: Types.normal,
     category: MoveCategory.status,
     pp: 10,
-    contact: false,
   ),
   zap_cannon(
     string: "でんじほう",
@@ -7085,7 +6261,6 @@ enum Moves implements StringNamedEnum {
     power: 120,
     accuracy: 50,
     pp: 5,
-    contact: false,
   ),
   zen_headbutt(
     string: "しねんのずつき",
@@ -7094,7 +6269,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 90,
     pp: 15,
-    contact: true,
   ),
   zing_zap(
     string: "びりびりちくちく",
@@ -7103,7 +6277,6 @@ enum Moves implements StringNamedEnum {
     power: 80,
     accuracy: 100,
     pp: 10,
-    contact: true,
   ),
   zippy_zap(
     string: "ばちばちアクセル",
@@ -7112,7 +6285,6 @@ enum Moves implements StringNamedEnum {
     power: 50,
     accuracy: 100,
     pp: 15,
-    contact: true,
   );
 
   const Moves({
@@ -7122,8 +6294,7 @@ enum Moves implements StringNamedEnum {
     this.power,
     this.accuracy,
     required this.pp,
-    required bool contact,
-  }) : isContact = contact;
+  });
 
   static const kAccuracyMax = 0xffffffff;
 
@@ -7154,113 +6325,63 @@ enum Moves implements StringNamedEnum {
     return str;
   }
 
-  // 接触技
-  final bool isContact;
-
-  // 拳技
-  bool get isPunch =>
-      (this == ice_hammer) ||
-      (this == hammer_arm) ||
-      (this == thunder_punch) ||
-      (this == focus_punch) ||
-      (this == power_up_punch) ||
-      (this == meteor_mash) ||
-      (this == shadow_punch) ||
-      (this == sky_uppercut) ||
-      (this == drain_punch) ||
-      (this == dynamic_punch) ||
-      (this == bullet_punch) ||
-      (this == dizzy_punch) ||
-      (this == plasma_fists) ||
-      (this == fire_punch) ||
-      (this == mach_punch) ||
-      (this == mega_punch) ||
-      (this == ice_punch) ||
-      (this == comet_punch) ||
-      (this == double_iron_bash) ||
-      (this == wicked_blow) ||
-      (this == surging_strikes) ||
-      (this == headlong_rush) ||
-      (this == jet_punch) ||
-      (this == rage_fist);
-
-  // 牙技
-  bool get isBite =>
-      (this == bite) ||
-      (this == crunch) ||
-      (this == jaw_lock) ||
-      (this == poison_fang) ||
-      (this == fire_fang) ||
-      (this == thunder_fang) ||
-      (this == ice_fang) ||
-      (this == psychic_fangs) ||
-      (this == fishious_rend);
-
-  // 切技
-  bool get isCut =>
-      (this == aqua_cutter) ||
-      (this == cut) ||
-      (this == air_cutter) ||
-      (this == air_slash) ||
-      (this == stone_axe) ||
-      (this == behemoth_blade) ||
-      (this == slash) ||
-      (this == cross_poison) ||
-      (this == psyblade) ||
-      (this == psycho_cut) ||
-      (this == razor_shell) ||
-      (this == x_scissor) ||
-      (this == secret_sword) ||
-      (this == sacred_sword) ||
-      (this == solar_blade) ||
-      (this == night_slash) ||
-      (this == aerial_ace) ||
-      (this == kowtow_cleave) ||
-      (this == population_bomb) ||
-      (this == razor_leaf) ||
-      (this == ceaseless_edge) ||
-      (this == bitter_blade) ||
-      (this == leaf_blade) ||
-      (this == fury_cutter);
-
-  // 音技
-  bool get isSound =>
-      (this == snore) ||
-      (this == sparkling_aria) ||
-      (this == echoed_voice) ||
-      (this == uproar) ||
-      (this == clanging_scales) ||
-      (this == disarming_voice) ||
-      (this == snarl) ||
-      (this == hyper_voice) ||
-      (this == boomburst) ||
-      (this == bug_buzz) ||
-      (this == round) ||
-      (this == overdrive) ||
-      (this == eerie_spell) ||
-      (this == torch_song);
-
-  // 波動技
-  bool get isWave =>
-      (this == dark_pulse) ||
-      (this == heal_pulse) ||
-      (this == origin_pulse) ||
-      (this == terrain_pulse) ||
-      (this == aura_sphere) ||
-      (this == water_pulse) ||
-      (this == dragon_pulse);
-
-  bool get isRecoil =>
-      (this == head_charge) ||
-      (this == wave_crash) ||
-      (this == wood_hammer) ||
-      (this == submission) ||
-      (this == double_edge) ||
-      (this == take_down) ||
-      (this == flare_blitz) ||
-      (this == brave_bird) ||
-      (this == volt_tackle) ||
-      (this == head_smash) ||
-      (this == wild_charge) ||
-      (this == light_of_ruin);
+  // 追加設定メタ
+  MoveMetaClass get metaclass {
+    switch (this) {
+      case bonemerang:
+      case dragon_darts:
+      case dual_chop:
+      case dual_wingbeat:
+      case double_hit:
+      case double_kick:
+      case double_iron_bash:
+      case gear_grind:
+      case twin_beam:
+      case twineedle:
+        return MoveMetaClass.hits_x2;
+      case triple_axel:
+      case triple_dive:
+      case triple_kick:
+        return MoveMetaClass.hits_x3;
+      case arm_thrust:
+      case barrage:
+      case bone_rush:
+      case bullet_seed:
+      case comet_punch:
+      case double_slap:
+      case fury_attack:
+      case fury_swipes:
+      case icicle_spear:
+      case pin_missile:
+      case rock_blast:
+      case spike_cannon:
+      case tail_slap:
+      case water_shuriken:
+        return MoveMetaClass.hits_x2_x5;
+      case population_bomb:
+        return MoveMetaClass.hits_x1_x10;
+      case acrobatics:
+      case avalanche:
+      case bolt_beak:
+      case brine:
+      case fishious_rend:
+      case hex:
+      case pursuit:
+      case retaliate:
+        return MoveMetaClass.damage_x2;
+      case knock_off:
+        return MoveMetaClass.damage_x1_5;
+      case dragon_energy:
+      case eruption:
+      case flail:
+      case gyro_ball:
+      case power_trip:
+      case rage_fist:
+      case reversal:
+      case stored_power:
+        return MoveMetaClass.input_power;
+      default:
+        return MoveMetaClass.none;
+    }
+  }
 }

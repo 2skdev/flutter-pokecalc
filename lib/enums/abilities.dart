@@ -2,6 +2,17 @@
 
 import 'base.dart';
 
+enum AbilityMetaClass {
+  none(null), // 追加効果なし
+  boolean(false), // 2値
+  count_5(2), // 最大5
+  ;
+
+  const AbilityMetaClass(this.defaultValue);
+
+  final dynamic defaultValue;
+}
+
 enum Abilities implements StringNamedEnum {
   adaptability("てきおうりょく"),
   aerilate("スカイスキン"),
@@ -306,12 +317,12 @@ enum Abilities implements StringNamedEnum {
   @override
   final String string;
 
-  int get meta {
+  AbilityMetaClass get metaclass {
     switch (this) {
       // そうだいしょう
       case supreme_overlord:
         // 最大数
-        return 5;
+        return AbilityMetaClass.count_5;
 
       // スロースタート
       case slow_start:
@@ -342,10 +353,10 @@ enum Abilities implements StringNamedEnum {
       // アナライズ
       case analytic:
         // 有効/無効
-        return 1;
+        return AbilityMetaClass.boolean;
 
       default:
-        return 0;
+        return AbilityMetaClass.none;
     }
   }
 }

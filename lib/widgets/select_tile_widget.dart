@@ -6,13 +6,55 @@ import '../../enums/enums.dart';
 import '../../extensions/string.dart';
 import '../../models/stats_model.dart';
 import '../constants/dimens.dart';
+import '../models/ability_model.dart';
+import '../models/move_model.dart';
 import 'align_list_tile_widget.dart';
-import 'hook_textfield_widget.dart';
 import 'modal_widget.dart';
 import 'search_list_scaffold_widget.dart';
 import 'space_widget.dart';
 import 'tile_widget.dart';
 import 'type_chip_widget.dart';
+
+class DropdownCountsWidget extends StatelessWidget {
+  const DropdownCountsWidget({
+    super.key,
+    required this.value,
+    this.min = 0,
+    required this.max,
+    this.onChanged,
+    this.buildLabel,
+  });
+
+  final int value;
+  final int min;
+  final int max;
+  final Function(int value)? onChanged;
+  final String Function(int index)? buildLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      value: value,
+      underline: const SizedBox(),
+      onChanged: (value) {
+        if (value != null) {
+          onChanged?.call(value);
+        }
+      },
+      items: List.generate(
+        max - min + 1,
+        (index) => DropdownMenuItem(
+          value: min + index,
+          child: Text(
+            buildLabel != null
+                ? buildLabel!.call(min + index)
+                : (min + index).toString(),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 /// ListTileで選択肢を一覧表示し、検索して選択可能なウィジェット
 ///
@@ -147,57 +189,46 @@ class AbilitySelectWidget extends StatelessWidget {
   const AbilitySelectWidget({
     super.key,
     required this.ability,
-    required this.meta,
     this.abilities = Abilities.values,
     this.onChanged,
-    this.onMetaChanged,
   });
 
-  final Abilities ability;
-  final int meta;
+  final AbilityModel ability;
   final List<Abilities> abilities;
-  final ValueChanged<Abilities>? onChanged;
-  final ValueChanged<int>? onMetaChanged;
+  final ValueChanged<AbilityModel>? onChanged;
 
   @override
   Widget build(BuildContext context) {
     Widget? append;
 
     // abilityの効果の有無を選択するウィジェットを追加する
-    if (ability.meta == 1) {
+    if (ability.state.metaclass == AbilityMetaClass.boolean) {
       // 2値で選択するものはSwitchで選択する
       append = Switch(
-        value: meta > 0,
-        onChanged: (value) => onMetaChanged?.call(value ? 1 : 0),
+        value: ability.metadata,
+        onChanged: (value) =>
+            onChanged?.call(ability.copyWith(metadata: value)),
       );
-    } else if (ability.meta > 1) {
+    } else if (ability.state.metaclass == AbilityMetaClass.count_5) {
       // 1以上を選択するものはDropdownで選択する
-      append = DropdownButton(
-        value: meta,
-        underline: const SizedBox(),
-        items: List.generate(
-          ability.meta + 1,
-          (index) => DropdownMenuItem(
-            value: index,
-            child: Text(index.toString()),
-          ),
-        ),
-        onChanged: (value) {
-          if (value != null) onMetaChanged?.call(value);
-        },
+      append = DropdownCountsWidget(
+        value: ability.metadata,
+        max: 5,
+        onChanged: (value) =>
+            onChanged?.call(ability.copyWith(metadata: value)),
       );
     }
 
     return SelectTileWidget<Abilities>(
-      value: ability,
+      value: ability.state,
       list: abilities,
-      onChanged: (value) => onChanged?.call(value),
+      onChanged: (value) => onChanged?.call(ability.copyWith(state: value)),
       leading: const Text('特性'),
       itemBuilder: (context, item) => Text(item.string),
       childBuilder: (context) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(ability.string),
+          Text(ability.state.string),
           if (append != null) append,
         ],
       ),
@@ -291,6 +322,59 @@ class PokedexSelectWidget extends StatelessWidget {
   }
 }
 
+class MoveMetaWidget extends StatelessWidget {
+  const MoveMetaWidget({
+    super.key,
+    required this.move,
+    this.onChanged,
+  });
+
+  final MoveModel move;
+  final Function(dynamic value)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget child = const SizedBox();
+
+    switch (move.state!.metaclass) {
+      case MoveMetaClass.hits_x2_x5:
+        child = DropdownCountsWidget(
+          value: move.metadata,
+          min: 2,
+          max: 5,
+          buildLabel: (index) => '$index回',
+          onChanged: (value) => onChanged?.call(value),
+        );
+        break;
+      case MoveMetaClass.hits_x1_x10:
+        child = DropdownCountsWidget(
+          value: move.metadata,
+          min: 1,
+          max: 10,
+          buildLabel: (index) => '$index回',
+          onChanged: (value) => onChanged?.call(value),
+        );
+        break;
+      case MoveMetaClass.damage_x2:
+      case MoveMetaClass.damage_x1_5:
+        child = Switch(
+          value: move.metadata,
+          onChanged: (value) => onChanged?.call(value),
+        );
+        break;
+      case MoveMetaClass.input_power:
+        child = const TextField(
+          decoration: InputDecoration(labelText: '威力'),
+        );
+        break;
+      default:
+        break;
+    }
+
+    return child;
+  }
+}
+
 class MoveSelectWidget extends StatelessWidget {
   const MoveSelectWidget({
     super.key,
@@ -300,61 +384,35 @@ class MoveSelectWidget extends StatelessWidget {
   });
 
   final Widget leading;
-  final Moves? move;
-  final ValueChanged<Moves>? onChanged;
+  final MoveModel move;
+  final ValueChanged<MoveModel>? onChanged;
 
   @override
   Widget build(BuildContext context) {
+    // const List<MoveCategory> categoryOptions = [
+    //   MoveCategory.physical,
+    //   MoveCategory.special,
+    // ];
+
     return SelectTileWidget<Moves?>(
       key: key,
-      value: move,
+      value: move.state,
       list: Moves.values,
-      onChanged: (value) => onChanged?.call(value!),
+      onChanged: (value) => onChanged?.call(move.copyWith(state: value)),
       leading: leading,
       itemBuilder: (context, item) =>
           item == null ? const SizedBox() : MoveTileWidget(move: item),
-      childBuilder: (context) => move == null
+      childBuilder: (context) => move.state == null
           ? const SizedBox()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          : Row(
               children: [
-                TypeChipWidget(
-                  type: move!.type,
-                  text: move!.string,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 48,
-                      height: 28,
-                      child: HookTextFieldWidget(
-                        initialValue: move!.power.toString(),
-                        textAlignVertical: TextAlignVertical.center,
-                        style: const TextStyle(fontSize: 14),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(8),
-                          isCollapsed: true,
-                        ),
-                      ),
-                    ),
-                    const SpaceWidget(),
-                    ToggleButtons(
-                      constraints: BoxConstraints.tight(
-                        const Size(Dimens.kSmallIconSize * 2, 26),
-                      ),
-                      isSelected: const [true, false],
-                      children: [
-                        Image.asset(
-                          MoveCategory.physical.icon,
-                          width: Dimens.kSmallIconSize,
-                        ),
-                        Image.asset(
-                          MoveCategory.special.icon,
-                          width: Dimens.kSmallIconSize,
-                        ),
-                      ],
-                    ),
-                  ],
+                MoveTileWidget(move: move.state!),
+                const Spacer(),
+                MoveMetaWidget(
+                  move: move,
+                  onChanged: (value) => onChanged?.call(
+                    move.copyWith(metadata: value),
+                  ),
                 ),
               ],
             ),

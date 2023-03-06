@@ -9,12 +9,15 @@ part 'move_model.g.dart';
 
 @freezed
 abstract class MoveModel implements _$MoveModel {
+  const MoveModel._();
+
   const factory MoveModel({
     @Default(null) Moves? state,
-    @Default(null) @JsonKey(ignore: true) int? power,
-    @Default(null) @JsonKey(ignore: true) MoveCategory? category,
+    @Default(null) dynamic metadata,
   }) = _MoveModel;
 
   factory MoveModel.fromJson(Map<String, dynamic> json) =>
       _$MoveModelFromJson(json);
+
+  MoveModel initMetadata() => copyWith(metadata: state?.metaclass.defaultValue);
 }

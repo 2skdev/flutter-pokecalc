@@ -21,8 +21,7 @@ AbilityModel _$AbilityModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AbilityModel {
   Abilities get state => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  int get meta => throw _privateConstructorUsedError;
+  dynamic get metadata => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +35,7 @@ abstract class $AbilityModelCopyWith<$Res> {
           AbilityModel value, $Res Function(AbilityModel) then) =
       _$AbilityModelCopyWithImpl<$Res, AbilityModel>;
   @useResult
-  $Res call({Abilities state, @JsonKey(ignore: true) int meta});
+  $Res call({Abilities state, dynamic metadata});
 }
 
 /// @nodoc
@@ -53,17 +52,17 @@ class _$AbilityModelCopyWithImpl<$Res, $Val extends AbilityModel>
   @override
   $Res call({
     Object? state = null,
-    Object? meta = null,
+    Object? metadata = freezed,
   }) {
     return _then(_value.copyWith(
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as Abilities,
-      meta: null == meta
-          ? _value.meta
-          : meta // ignore: cast_nullable_to_non_nullable
-              as int,
+      metadata: freezed == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -76,7 +75,7 @@ abstract class _$$_AbilityModelCopyWith<$Res>
       __$$_AbilityModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Abilities state, @JsonKey(ignore: true) int meta});
+  $Res call({Abilities state, dynamic metadata});
 }
 
 /// @nodoc
@@ -91,26 +90,26 @@ class __$$_AbilityModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? state = null,
-    Object? meta = null,
+    Object? metadata = freezed,
   }) {
     return _then(_$_AbilityModel(
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as Abilities,
-      meta: null == meta
-          ? _value.meta
-          : meta // ignore: cast_nullable_to_non_nullable
-              as int,
+      metadata: freezed == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_AbilityModel implements _AbilityModel {
-  const _$_AbilityModel(
-      {this.state = Abilities.overgrow, @JsonKey(ignore: true) this.meta = 0});
+class _$_AbilityModel extends _AbilityModel {
+  const _$_AbilityModel({this.state = Abilities.overgrow, this.metadata = null})
+      : super._();
 
   factory _$_AbilityModel.fromJson(Map<String, dynamic> json) =>
       _$$_AbilityModelFromJson(json);
@@ -119,12 +118,12 @@ class _$_AbilityModel implements _AbilityModel {
   @JsonKey()
   final Abilities state;
   @override
-  @JsonKey(ignore: true)
-  final int meta;
+  @JsonKey()
+  final dynamic metadata;
 
   @override
   String toString() {
-    return 'AbilityModel(state: $state, meta: $meta)';
+    return 'AbilityModel(state: $state, metadata: $metadata)';
   }
 
   @override
@@ -133,12 +132,13 @@ class _$_AbilityModel implements _AbilityModel {
         (other.runtimeType == runtimeType &&
             other is _$_AbilityModel &&
             (identical(other.state, state) || other.state == state) &&
-            (identical(other.meta, meta) || other.meta == meta));
+            const DeepCollectionEquality().equals(other.metadata, metadata));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, state, meta);
+  int get hashCode => Object.hash(
+      runtimeType, state, const DeepCollectionEquality().hash(metadata));
 
   @JsonKey(ignore: true)
   @override
@@ -154,10 +154,10 @@ class _$_AbilityModel implements _AbilityModel {
   }
 }
 
-abstract class _AbilityModel implements AbilityModel {
-  const factory _AbilityModel(
-      {final Abilities state,
-      @JsonKey(ignore: true) final int meta}) = _$_AbilityModel;
+abstract class _AbilityModel extends AbilityModel {
+  const factory _AbilityModel({final Abilities state, final dynamic metadata}) =
+      _$_AbilityModel;
+  const _AbilityModel._() : super._();
 
   factory _AbilityModel.fromJson(Map<String, dynamic> json) =
       _$_AbilityModel.fromJson;
@@ -165,8 +165,7 @@ abstract class _AbilityModel implements AbilityModel {
   @override
   Abilities get state;
   @override
-  @JsonKey(ignore: true)
-  int get meta;
+  dynamic get metadata;
   @override
   @JsonKey(ignore: true)
   _$$_AbilityModelCopyWith<_$_AbilityModel> get copyWith =>

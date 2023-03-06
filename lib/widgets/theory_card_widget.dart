@@ -79,7 +79,7 @@ class TheoryCardWidget extends StatelessWidget {
                         nature: theory.nature,
                       ),
                       Text(theory.ability.state.string),
-                      ItemTileWidget(item: theory.item.state),
+                      ItemTileWidget(item: theory.item),
                     ],
                   ),
                 ],

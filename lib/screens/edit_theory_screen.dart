@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/theory_model.dart';
+import '../extensions/iterable.dart';
 import '../widgets/hook_textfield_widget.dart';
 import '../widgets/input_stats_widget.dart';
 import '../widgets/select_tile_widget.dart';
@@ -46,20 +47,16 @@ class EditTheoryScreen extends StatelessWidget {
             ),
           ),
           AbilitySelectWidget(
-            ability: theory.ability.state,
-            meta: theory.ability.meta,
+            ability: theory.ability,
             abilities: theory.pokemon.abilities,
             onChanged: (value) => onChanged?.call(
-              theory.copyWith(ability: theory.ability.copyWith(state: value)),
-            ),
-            onMetaChanged: (value) => onChanged?.call(
-              theory.copyWith(ability: theory.ability.copyWith(meta: value)),
+              theory.copyWith(ability: value),
             ),
           ),
           ItemSelectWidget(
-            item: theory.item.state,
+            item: theory.item,
             onChanged: (value) => onChanged?.call(
-              theory.copyWith(item: theory.item.copyWith(state: value)),
+              theory.copyWith(item: value),
             ),
           ),
           NatureSelectWidget(
@@ -78,12 +75,11 @@ class EditTheoryScreen extends StatelessWidget {
           for (var i = 0; i < 4; i++)
             MoveSelectWidget(
               leading: Text('技${i + 1}'),
-              move: theory.moves[i].state,
+              move: theory.moves[i],
               onChanged: (value) {
-                var moves = [...theory.moves];
-                moves[i] = moves[i].copyWith(state: value);
                 onChanged?.call(
-                  theory.copyWith(moves: moves),
+                  theory.copyWith(
+                      moves: theory.moves.update(i, value).toList()),
                 );
               },
             ),

@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/enums.dart';
 import 'ability_model.dart';
-import 'item_model.dart';
 import 'move_model.dart';
 import 'stats_model.dart';
 
@@ -20,7 +19,7 @@ abstract class Theory implements _$Theory {
     @Default(Types.grass) Types teratype,
     @Default(false) bool terastal,
     @Default(AbilityModel()) AbilityModel ability,
-    @Default(ItemModel()) ItemModel item,
+    @Default(Items.sitrusberry) Items item,
     @Default(Natures.jolly) Natures nature,
     @Default([MoveModel(), MoveModel(), MoveModel(), MoveModel()])
         List<MoveModel> moves,
@@ -30,4 +29,13 @@ abstract class Theory implements _$Theory {
   }) = _Theory;
 
   factory Theory.fromJson(Map<String, dynamic> json) => _$TheoryFromJson(json);
+
+  Theory initMetadata() {
+    return copyWith(ability: ability.initMetadata(), moves: [
+      moves[0].initMetadata(),
+      moves[1].initMetadata(),
+      moves[2].initMetadata(),
+      moves[3].initMetadata(),
+    ]);
+  }
 }

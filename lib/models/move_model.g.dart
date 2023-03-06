@@ -8,11 +8,13 @@ part of 'move_model.dart';
 
 _$_MoveModel _$$_MoveModelFromJson(Map<String, dynamic> json) => _$_MoveModel(
       state: $enumDecodeNullable(_$MovesEnumMap, json['state']) ?? null,
+      metadata: json['metadata'] ?? null,
     );
 
 Map<String, dynamic> _$$_MoveModelToJson(_$_MoveModel instance) =>
     <String, dynamic>{
       'state': _$MovesEnumMap[instance.state],
+      'metadata': instance.metadata,
     };
 
 const _$MovesEnumMap = {

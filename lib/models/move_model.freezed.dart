@@ -21,10 +21,7 @@ MoveModel _$MoveModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MoveModel {
   Moves? get state => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  int? get power => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  MoveCategory? get category => throw _privateConstructorUsedError;
+  dynamic get metadata => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,10 +34,7 @@ abstract class $MoveModelCopyWith<$Res> {
   factory $MoveModelCopyWith(MoveModel value, $Res Function(MoveModel) then) =
       _$MoveModelCopyWithImpl<$Res, MoveModel>;
   @useResult
-  $Res call(
-      {Moves? state,
-      @JsonKey(ignore: true) int? power,
-      @JsonKey(ignore: true) MoveCategory? category});
+  $Res call({Moves? state, dynamic metadata});
 }
 
 /// @nodoc
@@ -57,22 +51,17 @@ class _$MoveModelCopyWithImpl<$Res, $Val extends MoveModel>
   @override
   $Res call({
     Object? state = freezed,
-    Object? power = freezed,
-    Object? category = freezed,
+    Object? metadata = freezed,
   }) {
     return _then(_value.copyWith(
       state: freezed == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as Moves?,
-      power: freezed == power
-          ? _value.power
-          : power // ignore: cast_nullable_to_non_nullable
-              as int?,
-      category: freezed == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as MoveCategory?,
+      metadata: freezed == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -84,10 +73,7 @@ abstract class _$$_MoveModelCopyWith<$Res> implements $MoveModelCopyWith<$Res> {
       __$$_MoveModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Moves? state,
-      @JsonKey(ignore: true) int? power,
-      @JsonKey(ignore: true) MoveCategory? category});
+  $Res call({Moves? state, dynamic metadata});
 }
 
 /// @nodoc
@@ -102,33 +88,25 @@ class __$$_MoveModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? state = freezed,
-    Object? power = freezed,
-    Object? category = freezed,
+    Object? metadata = freezed,
   }) {
     return _then(_$_MoveModel(
       state: freezed == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as Moves?,
-      power: freezed == power
-          ? _value.power
-          : power // ignore: cast_nullable_to_non_nullable
-              as int?,
-      category: freezed == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as MoveCategory?,
+      metadata: freezed == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_MoveModel implements _MoveModel {
-  const _$_MoveModel(
-      {this.state = null,
-      @JsonKey(ignore: true) this.power = null,
-      @JsonKey(ignore: true) this.category = null});
+class _$_MoveModel extends _MoveModel {
+  const _$_MoveModel({this.state = null, this.metadata = null}) : super._();
 
   factory _$_MoveModel.fromJson(Map<String, dynamic> json) =>
       _$$_MoveModelFromJson(json);
@@ -137,15 +115,12 @@ class _$_MoveModel implements _MoveModel {
   @JsonKey()
   final Moves? state;
   @override
-  @JsonKey(ignore: true)
-  final int? power;
-  @override
-  @JsonKey(ignore: true)
-  final MoveCategory? category;
+  @JsonKey()
+  final dynamic metadata;
 
   @override
   String toString() {
-    return 'MoveModel(state: $state, power: $power, category: $category)';
+    return 'MoveModel(state: $state, metadata: $metadata)';
   }
 
   @override
@@ -154,14 +129,13 @@ class _$_MoveModel implements _MoveModel {
         (other.runtimeType == runtimeType &&
             other is _$_MoveModel &&
             (identical(other.state, state) || other.state == state) &&
-            (identical(other.power, power) || other.power == power) &&
-            (identical(other.category, category) ||
-                other.category == category));
+            const DeepCollectionEquality().equals(other.metadata, metadata));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, state, power, category);
+  int get hashCode => Object.hash(
+      runtimeType, state, const DeepCollectionEquality().hash(metadata));
 
   @JsonKey(ignore: true)
   @override
@@ -177,11 +151,10 @@ class _$_MoveModel implements _MoveModel {
   }
 }
 
-abstract class _MoveModel implements MoveModel {
-  const factory _MoveModel(
-      {final Moves? state,
-      @JsonKey(ignore: true) final int? power,
-      @JsonKey(ignore: true) final MoveCategory? category}) = _$_MoveModel;
+abstract class _MoveModel extends MoveModel {
+  const factory _MoveModel({final Moves? state, final dynamic metadata}) =
+      _$_MoveModel;
+  const _MoveModel._() : super._();
 
   factory _MoveModel.fromJson(Map<String, dynamic> json) =
       _$_MoveModel.fromJson;
@@ -189,11 +162,7 @@ abstract class _MoveModel implements MoveModel {
   @override
   Moves? get state;
   @override
-  @JsonKey(ignore: true)
-  int? get power;
-  @override
-  @JsonKey(ignore: true)
-  MoveCategory? get category;
+  dynamic get metadata;
   @override
   @JsonKey(ignore: true)
   _$$_MoveModelCopyWith<_$_MoveModel> get copyWith =>

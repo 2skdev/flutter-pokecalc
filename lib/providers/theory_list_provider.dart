@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../extensions/iterable.dart';
 import '../misc/preferences.dart';
 import '../models/theory_model.dart';
 
@@ -18,7 +19,8 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
     if (list != null) {
       final initState = <Theory>[];
       for (var e in list) {
-        initState.add(e);
+        // メタデータはdynamicのため、アサート防止として起動時に初期化する
+        initState.add(e.initMetadata());
       }
       state = initState;
     }
@@ -53,6 +55,9 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
 
     // 追加時にタイプの初期値を設定する
     theory = theory.copyWith(types: theory.pokemon.types);
+
+    // 追加時にメタを初期化する
+    theory = theory.initMetadata();
 
     // 先頭に追加する
     state = [theory, ...state];
@@ -93,28 +98,23 @@ class TheoryListProvider extends StateNotifier<List<Theory>> {
       // 見つからなかった場合は追加する
       add(theory);
     } else {
-      // 特性が変わった時、メタを初期化する
-      if (current.ability != theory.ability) {
-        theory = theory.copyWith(ability: theory.ability.copyWith(meta: 0));
-      }
       // ポケモンが変わった時、タイプを初期化する
       if (current.pokemon != theory.pokemon) {
         theory = theory.copyWith(types: theory.pokemon.types);
       }
-      // 技が変わった時、威力を設定する
+      // 特性が変わった時、メタを初期化する
+      if (current.ability.state != theory.ability.state) {
+        theory = theory.copyWith(
+          ability: theory.ability.initMetadata(),
+        );
+      }
+      // 技が変わった時、メタを初期化する
       for (var i = 0; i < theory.moves.length; i++) {
-        if (current.moves[i] != theory.moves[i]) {
-          if (current.moves[i].state != null) {
-            current.moves[i] = current.moves[i].copyWith(
-              power: current.moves[i].state!.power,
-              category: current.moves[i].state!.category,
-            );
-          } else {
-            current.moves[i] = current.moves[i].copyWith(
-              power: null,
-              category: null,
-            );
-          }
+        if (current.moves[i].state != theory.moves[i].state) {
+          theory = theory.copyWith(
+            moves:
+                theory.moves.update(i, theory.moves[i].initMetadata()).toList(),
+          );
         }
       }
 

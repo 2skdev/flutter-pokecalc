@@ -10,11 +10,13 @@ _$_AbilityModel _$$_AbilityModelFromJson(Map<String, dynamic> json) =>
     _$_AbilityModel(
       state: $enumDecodeNullable(_$AbilitiesEnumMap, json['state']) ??
           Abilities.overgrow,
+      metadata: json['metadata'] ?? null,
     );
 
 Map<String, dynamic> _$$_AbilityModelToJson(_$_AbilityModel instance) =>
     <String, dynamic>{
       'state': _$AbilitiesEnumMap[instance.state]!,
+      'metadata': instance.metadata,
     };
 
 const _$AbilitiesEnumMap = {

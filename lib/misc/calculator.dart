@@ -1,59 +1,120 @@
 import 'dart:math';
 
+import 'package:pokecalc/models/ability_model.dart';
+
 import '../enums/enums.dart';
 import '../extensions/double.dart';
 import '../extensions/theory.dart';
 import '../models/condition_model.dart';
 import '../models/environment_model.dart';
+import '../models/move_model.dart';
 import '../models/stats_model.dart';
 import '../models/theory_model.dart';
 
-class TheoryCondition {
-  TheoryCondition({
-    required this.theory,
-    required this.condition,
-  });
+/// 計算用のCondition
+///
+/// [Condition]クラスと同等の振る舞いをするために、必要な情報のgetterを追加する
+class ConditionForCalc {
+  late final Conditions _conditions;
 
-  final Theory theory;
-  Condition condition;
+  Condition get self => _conditions.self;
+  Condition get enemy => _conditions.enemy;
 
-  /// 現在のタイプを取得する
-  ///
-  /// テラスタルしている場合、テラスタルのタイプを返す
-  /// それ以外では、ユーザーが選択したタイプを返す
-  List<Types> get currentTypes {
-    if (theory.terastal) {
-      return [theory.teratype];
-    } else {
-      return theory.types;
+  ConditionForCalc(Conditions conditions) : _conditions = conditions;
+
+  ConditionForCalc get swap => ConditionForCalc(_conditions.swap);
+
+  static ConditionForCalc initialize({
+    required Conditions conditions,
+    required Abilities enemyAbility,
+  }) {
+    // シェルアーマーは急所に当たらない
+    if (enemyAbility == Abilities.shell_armor) {
+      conditions = conditions.copyWith(
+        self: conditions.self.copyWith(
+          critical: false,
+        ),
+      );
     }
+
+    // 急所の時は壁無効
+    if (conditions.self.critical) {
+      conditions = conditions.copyWith(
+        enemy: conditions.enemy.copyWith(
+          shield: Shields.none,
+        ),
+      );
+    }
+
+    // 急所の時はランク変化を有利なように変化
+    if (conditions.self.critical) {
+      conditions = conditions.copyWith(
+        // 自分の攻撃、特攻の下降補正を0にする
+        self: conditions.self.copyWith(
+          rank: conditions.self.copyWith(
+            a: max<int>(conditions.self.rank.a, 0),
+            c: max<int>(conditions.self.rank.c, 0),
+          ),
+        ),
+        // 相手の防御、特防の上昇補正を0にする
+        enemy: conditions.enemy.copyWith(
+          rank: conditions.enemy.copyWith(
+            b: min<int>(conditions.enemy.rank.b, 0),
+            d: min<int>(conditions.enemy.rank.d, 0),
+          ),
+        ),
+      );
+    }
+
+    return ConditionForCalc(conditions);
   }
+}
+
+/// 計算用のTheory
+///
+/// [Theory]クラスと同等の振る舞いをするために、必要な情報のgetterを追加する
+class TheoryForCalc {
+  final Theory _theory;
+  late Stats actual;
+
+  AbilityModel get ability => _theory.ability;
+  Items get item => _theory.item;
+  Pokedex get pokemon => _theory.pokemon;
+  bool get terastal => _theory.terastal;
+  Types get teratype => _theory.teratype;
+  List<Types> get types =>
+      _theory.terastal ? [_theory.teratype] : _theory.types;
 
   /// 飛んでいるかを判定する
   ///
   /// タイプ: 飛行、特性: 浮遊、持ち物: 風船 が該当
   bool get isFlying {
     // タイプ: 飛行
-    if (currentTypes.contains(Types.flying)) {
+    if (types.contains(Types.flying)) {
       return true;
     }
     // 特性: 浮遊
-    else if (theory.ability.state == Abilities.levitate) {
+    else if (ability.state == Abilities.levitate) {
       return true;
     }
     // 持ち物: 風船
-    else if (theory.item.state == Items.airballoon) {
+    else if (item == Items.airballoon) {
       return true;
     }
 
     return false;
   }
 
-  /// ランク補正されたステータスを取得する
-  ///
-  /// HPはランク補正なしのため、計算しない
-  Stats get ranked {
-    int calc(int stats, int rank) {
+  TheoryForCalc({
+    required Theory theory,
+    required Theory enemy,
+    required Moves move,
+    required ConditionForCalc conditions,
+    required Environment environment,
+  })  : _theory = theory,
+        actual = theory.actual {
+    // ランク補正されたステータスを計算する
+    int calcRankStats(int stats, int rank) {
       if (rank >= 0) {
         return ((stats * (2 + rank)) / 2).floor();
       } else {
@@ -61,24 +122,15 @@ class TheoryCondition {
       }
     }
 
-    return Stats(
-      h: theory.actual.h,
-      a: calc(theory.actual.a, condition.rank.a),
-      b: calc(theory.actual.b, condition.rank.b),
-      c: calc(theory.actual.c, condition.rank.c),
-      d: calc(theory.actual.d, condition.rank.d),
-      s: calc(theory.actual.s, condition.rank.s),
+    actual = Stats(
+      h: actual.h,
+      a: calcRankStats(actual.a, conditions.self.rank.a),
+      b: calcRankStats(actual.b, conditions.self.rank.b),
+      c: calcRankStats(actual.c, conditions.self.rank.c),
+      d: calcRankStats(actual.d, conditions.self.rank.d),
+      s: calcRankStats(actual.s, conditions.self.rank.s),
     );
-  }
 
-  /// ダメージ計算に使用するステータスを取得する
-  ///
-  /// 相手の特性やアイテム、技、天候などを考慮する
-  Stats effective({
-    required TheoryCondition enemy,
-    required Moves move,
-    required Environment environment,
-  }) {
     // 補正値を1.0で初期化
     Stats correct = Stats(
       h: 1.0.to12bit(),
@@ -112,14 +164,14 @@ class TheoryCondition {
       case Weathers.sandstorm:
         // すなあらし+いわタイプ
         // 特防が1.5倍
-        if (currentTypes.contains(Types.rock)) {
+        if (types.contains(Types.rock)) {
           setCorrect(d: 1.5);
         }
         break;
       case Weathers.hail:
         // あられ+こおりタイプ
         // 防御が1.5倍
-        if (currentTypes.contains(Types.ice)) {
+        if (types.contains(Types.ice)) {
           setCorrect(b: 1.5);
         }
         break;
@@ -131,7 +183,7 @@ class TheoryCondition {
       // スロースタート
       case Abilities.slow_start:
         // 5ターンの間、攻撃が0.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           setCorrect(a: 0.5);
         }
         break;
@@ -139,7 +191,7 @@ class TheoryCondition {
       // よわき
       case Abilities.defeatist:
         // HPが半分になると、攻撃が0.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           setCorrect(a: 0.5);
         }
         break;
@@ -148,18 +200,18 @@ class TheoryCondition {
       case Abilities.quark_drive:
         // エレキフィールド状態か、ブーストエナジーを持っている時、最も高い能力(ランク補正込み)が1.3倍
         if (environment.field == Fields.electric ||
-            theory.item.state == Items.boosterenergy) {
-          final highest = ranked.toArray().sublist(1).reduce(max);
+            theory.item == Items.boosterenergy) {
+          final highest = actual.toArray().sublist(1).reduce(max);
 
-          if (highest == ranked.a) {
+          if (highest == actual.a) {
             setCorrect(a: 1.3);
-          } else if (highest == ranked.b) {
+          } else if (highest == actual.b) {
             setCorrect(b: 1.3);
-          } else if (highest == ranked.c) {
+          } else if (highest == actual.c) {
             setCorrect(c: 1.3);
-          } else if (highest == ranked.d) {
+          } else if (highest == actual.d) {
             setCorrect(d: 1.3);
-          } else if (highest == ranked.s) {
+          } else if (highest == actual.s) {
             setCorrect(s: 1.5);
           }
         }
@@ -169,18 +221,18 @@ class TheoryCondition {
       case Abilities.protosynthesis:
         // にほんばれ状態か、ブーストエナジーを持っている時、最も高い能力(ランク補正込み)が1.3倍
         if (environment.weather == Weathers.sunshine ||
-            theory.item.state == Items.boosterenergy) {
-          final highest = ranked.toArray().sublist(1).reduce(max);
+            theory.item == Items.boosterenergy) {
+          final highest = actual.toArray().sublist(1).reduce(max);
 
-          if (highest == ranked.a) {
+          if (highest == actual.a) {
             setCorrect(a: 1.3);
-          } else if (highest == ranked.b) {
+          } else if (highest == actual.b) {
             setCorrect(b: 1.3);
-          } else if (highest == ranked.c) {
+          } else if (highest == actual.c) {
             setCorrect(c: 1.3);
-          } else if (highest == ranked.d) {
+          } else if (highest == actual.d) {
             setCorrect(d: 1.3);
-          } else if (highest == ranked.s) {
+          } else if (highest == actual.s) {
             setCorrect(s: 1.5);
           }
         }
@@ -213,7 +265,7 @@ class TheoryCondition {
       // こんじょう
       case Abilities.guts:
         // 状態異常の時、攻撃が1.5倍
-        if (condition.ailment != Ailments.none) {
+        if (conditions.self.ailment != Ailments.none) {
           setCorrect(a: 1.5);
         }
         break;
@@ -221,7 +273,7 @@ class TheoryCondition {
       // ふしぎなうろこ
       case Abilities.marvel_scale:
         // 状態異常の時、防御が1.5倍
-        if (condition.ailment != Ailments.none) {
+        if (conditions.self.ailment != Ailments.none) {
           setCorrect(b: 1.5);
         }
         break;
@@ -229,7 +281,7 @@ class TheoryCondition {
       // しんりょく
       case Abilities.overgrow:
         // HPが1/3以下でくさタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           if (move.type == Types.grass) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -239,7 +291,7 @@ class TheoryCondition {
       // もうか
       case Abilities.blaze:
         // HPが1/3以下でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           if (move.type == Types.fire) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -249,7 +301,7 @@ class TheoryCondition {
       // げきりゅう
       case Abilities.torrent:
         // HPが1/3以下でみずタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           if (move.type == Types.water) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -259,7 +311,7 @@ class TheoryCondition {
       // むしのしらせ
       case Abilities.swarm:
         // HPが1/3以下でむしタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           if (move.type == Types.bug) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -269,7 +321,7 @@ class TheoryCondition {
       // もらいび
       case Abilities.flash_fire:
         // ほのお技を受けた状態でほのおタイプで攻撃する時、攻撃と特攻が1.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           if (move.type == Types.fire) {
             setCorrect(a: 1.5, c: 1.5);
           }
@@ -289,7 +341,7 @@ class TheoryCondition {
       case Abilities.plus:
       case Abilities.minus:
         // もう一方が戦闘に出ると、特攻が1.5倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           setCorrect(c: 1.5);
         }
         break;
@@ -356,7 +408,7 @@ class TheoryCondition {
       // はりこみ
       case Abilities.stakeout:
         // 交代で出てきた相手に攻撃する時、攻撃と特攻が2倍
-        if (theory.ability.meta != 0) {
+        if (theory.ability.metadata) {
           setCorrect(a: 2.0, c: 2.0);
         }
         break;
@@ -379,7 +431,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.ability.state) {
+    switch (enemy.ability.state) {
       // わざわいのおふだ
       case Abilities.tablets_of_ruin:
         // 自分以外の攻撃が3/4倍
@@ -424,7 +476,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.item.state) {
+    switch (theory.item) {
       // こだわりハチマキ
       case Items.choiceband:
         // 攻撃が1.5倍
@@ -454,7 +506,6 @@ class TheoryCondition {
       // しんかのきせき
       case Items.eviolite:
         // 進化前のポケモンに持たせると、防御と特防が1.5倍
-        // TODO: 進化前判定
         setCorrect(b: 1.5, d: 1.5);
         break;
 
@@ -469,39 +520,362 @@ class TheoryCondition {
     }
 
     // ステータス補正を計算、五捨五超入
-    return ranked.copyWith(
-      h: ((ranked.h * correct.h) / 1.0.to12bit()).round6().clamp(0, 0xffffffff),
-      a: ((ranked.a * correct.a) / 1.0.to12bit()).round6().clamp(0, 0xffffffff),
-      b: ((ranked.b * correct.b) / 1.0.to12bit()).round6().clamp(0, 0xffffffff),
-      c: ((ranked.c * correct.c) / 1.0.to12bit()).round6().clamp(0, 0xffffffff),
-      d: ((ranked.d * correct.d) / 1.0.to12bit()).round6().clamp(0, 0xffffffff),
-      s: ((ranked.s * correct.s) / 1.0.to12bit()).round6().clamp(0, 0xffffffff),
+    actual = Stats(
+      h: min(((actual.h * correct.h) / 1.0.to12bit()).round6(), 0xffffffff),
+      a: min(((actual.a * correct.a) / 1.0.to12bit()).round6(), 0xffffffff),
+      b: min(((actual.b * correct.b) / 1.0.to12bit()).round6(), 0xffffffff),
+      c: min(((actual.c * correct.c) / 1.0.to12bit()).round6(), 0xffffffff),
+      d: min(((actual.d * correct.d) / 1.0.to12bit()).round6(), 0xffffffff),
+      s: min(((actual.s * correct.s) / 1.0.to12bit()).round6(), 0xffffffff),
     );
   }
+}
 
-  /// ダメージ計算に使用する技の威力を取得する
-  ///
-  /// 相手の特性やアイテム、技、天候などを考慮する
-  int movePower({
-    required TheoryCondition enemy,
-    required Moves move,
+/// 計算用のMoves
+///
+/// [Moves]クラスと同等の振る舞いをするために、必要な情報のgetterを追加する
+class MoveForCalc {
+  final Moves _move;
+  final dynamic meta;
+  int power;
+  MoveCategory category;
+  Types type;
+
+  /// 接触技
+  bool get isContact {
+    if (category == MoveCategory.physical) {
+      // 物理技は非接触技を列挙
+      switch (_move) {
+        case Moves.aqua_cutter:
+        case Moves.aqua_step:
+        case Moves.attack_order:
+        case Moves.aura_wheel:
+        case Moves.axe_kick:
+        case Moves.barb_barrage:
+        case Moves.barrage:
+        case Moves.beak_blast:
+        case Moves.beat_up:
+        case Moves.bitter_blade:
+        case Moves.blazing_torque:
+        case Moves.bone_club:
+        case Moves.bone_rush:
+        case Moves.bonemerang:
+        case Moves.bulldoze:
+        case Moves.bullet_seed:
+        case Moves.ceaseless_edge:
+        case Moves.collision_course:
+        case Moves.combat_torque:
+        case Moves.comeuppance:
+        case Moves.diamond_storm:
+        case Moves.dire_claw:
+        case Moves.double_shock:
+        case Moves.dragon_darts:
+        case Moves.drum_beating:
+        case Moves.dual_wingbeat:
+        case Moves.earthquake:
+        case Moves.egg_bomb:
+        case Moves.explosion:
+        case Moves.feint:
+        case Moves.fissure:
+        case Moves.fling:
+        case Moves.flower_trick:
+        case Moves.freeze_shock:
+        case Moves.fusion_bolt:
+        case Moves.gigaton_hammer:
+        case Moves.glacial_lance:
+        case Moves.glaive_rush:
+        case Moves.grav_apple:
+        case Moves.gunk_shot:
+        case Moves.headlong_rush:
+        case Moves.hyper_drill:
+        case Moves.hyperspace_fury:
+        case Moves.ice_shard:
+        case Moves.ice_spinner:
+        case Moves.icicle_crash:
+        case Moves.icicle_spear:
+        case Moves.jet_punch:
+        case Moves.kowtow_cleave:
+        case Moves.lands_wrath:
+        case Moves.last_respects:
+        case Moves.leafage:
+        case Moves.magical_torque:
+        case Moves.magnet_bomb:
+        case Moves.magnitude:
+        case Moves.metal_burst:
+        case Moves.meteor_assault:
+        case Moves.mortal_spin:
+        case Moves.mountain_gale:
+        case Moves.natural_gift:
+        case Moves.noxious_torque:
+        case Moves.order_up:
+        case Moves.pay_day:
+        case Moves.petal_blizzard:
+        case Moves.pin_missile:
+        case Moves.poison_sting:
+        case Moves.poltergeist:
+        case Moves.population_bomb:
+        case Moves.pounce:
+        case Moves.precipice_blades:
+        case Moves.present:
+        case Moves.psycho_cut:
+        case Moves.psyshield_bash:
+        case Moves.pyro_ball:
+        case Moves.rage_fist:
+        case Moves.raging_bull:
+        case Moves.raging_fury:
+        case Moves.razor_leaf:
+        case Moves.rock_blast:
+        case Moves.rock_slide:
+        case Moves.rock_throw:
+        case Moves.rock_tomb:
+        case Moves.rock_wrecker:
+        case Moves.sacred_fire:
+        case Moves.salt_cure:
+        case Moves.sand_tomb:
+        case Moves.sappy_seed:
+        case Moves.scale_shot:
+        case Moves.secret_power:
+        case Moves.seed_bomb:
+        case Moves.self_destruct:
+        case Moves.shadow_bone:
+        case Moves.sinister_arrow_raid:
+        case Moves.sky_attack:
+        case Moves.smack_down:
+        case Moves.spike_cannon:
+        case Moves.spin_out:
+        case Moves.spirit_shackle:
+        case Moves.splintered_stormshards:
+        case Moves.stone_axe:
+        case Moves.stone_edge:
+        case Moves.thousand_arrows:
+        case Moves.thousand_waves:
+        case Moves.trailblaze:
+        case Moves.triple_arrows:
+        case Moves.triple_dive:
+        case Moves.twineedle:
+        case Moves.wave_crash:
+        case Moves.wicked_torque:
+          return false;
+        default:
+          return true;
+      }
+    } else {
+      // 物理技は接触技を列挙
+      switch (_move) {
+        case Moves.draining_kiss:
+        case Moves.electro_drift:
+        case Moves.grass_knot:
+        case Moves.infestation:
+        case Moves.petal_dance:
+        case Moves.trump_card:
+        case Moves.wring_out:
+          return true;
+        default:
+          return false;
+      }
+    }
+  }
+
+  /// 拳技
+  bool get isPunch {
+    switch (_move) {
+      case Moves.ice_hammer:
+      case Moves.hammer_arm:
+      case Moves.thunder_punch:
+      case Moves.focus_punch:
+      case Moves.power_up_punch:
+      case Moves.meteor_mash:
+      case Moves.shadow_punch:
+      case Moves.sky_uppercut:
+      case Moves.drain_punch:
+      case Moves.dynamic_punch:
+      case Moves.bullet_punch:
+      case Moves.dizzy_punch:
+      case Moves.plasma_fists:
+      case Moves.fire_punch:
+      case Moves.mach_punch:
+      case Moves.mega_punch:
+      case Moves.ice_punch:
+      case Moves.comet_punch:
+      case Moves.double_iron_bash:
+      case Moves.wicked_blow:
+      case Moves.surging_strikes:
+      case Moves.headlong_rush:
+      case Moves.jet_punch:
+      case Moves.rage_fist:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// 牙技
+  bool get isBite {
+    switch (_move) {
+      case Moves.bite:
+      case Moves.crunch:
+      case Moves.jaw_lock:
+      case Moves.poison_fang:
+      case Moves.fire_fang:
+      case Moves.thunder_fang:
+      case Moves.ice_fang:
+      case Moves.psychic_fangs:
+      case Moves.fishious_rend:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// 切技
+  bool get isCut {
+    switch (_move) {
+      case Moves.aqua_cutter:
+      case Moves.cut:
+      case Moves.air_cutter:
+      case Moves.air_slash:
+      case Moves.stone_axe:
+      case Moves.behemoth_blade:
+      case Moves.slash:
+      case Moves.cross_poison:
+      case Moves.psyblade:
+      case Moves.psycho_cut:
+      case Moves.razor_shell:
+      case Moves.x_scissor:
+      case Moves.secret_sword:
+      case Moves.sacred_sword:
+      case Moves.solar_blade:
+      case Moves.night_slash:
+      case Moves.aerial_ace:
+      case Moves.kowtow_cleave:
+      case Moves.population_bomb:
+      case Moves.razor_leaf:
+      case Moves.ceaseless_edge:
+      case Moves.bitter_blade:
+      case Moves.leaf_blade:
+      case Moves.fury_cutter:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// 音技
+  bool get isSound {
+    switch (_move) {
+      case Moves.snore:
+      case Moves.sparkling_aria:
+      case Moves.echoed_voice:
+      case Moves.uproar:
+      case Moves.clanging_scales:
+      case Moves.disarming_voice:
+      case Moves.snarl:
+      case Moves.hyper_voice:
+      case Moves.boomburst:
+      case Moves.bug_buzz:
+      case Moves.round:
+      case Moves.overdrive:
+      case Moves.eerie_spell:
+      case Moves.torch_song:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// 波動技
+  bool get isWave {
+    switch (_move) {
+      case Moves.dark_pulse:
+      case Moves.heal_pulse:
+      case Moves.origin_pulse:
+      case Moves.terrain_pulse:
+      case Moves.aura_sphere:
+      case Moves.water_pulse:
+      case Moves.dragon_pulse:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// 反動技
+  bool get isRecoil {
+    switch (_move) {
+      case Moves.head_charge:
+      case Moves.wave_crash:
+      case Moves.wood_hammer:
+      case Moves.submission:
+      case Moves.double_edge:
+      case Moves.take_down:
+      case Moves.flare_blitz:
+      case Moves.brave_bird:
+      case Moves.volt_tackle:
+      case Moves.head_smash:
+      case Moves.wild_charge:
+      case Moves.light_of_ruin:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  MoveForCalc({
+    required MoveModel move,
+    required TheoryForCalc attacker,
+    required TheoryForCalc defence,
+    required ConditionForCalc conditions,
     required Environment environment,
-  }) {
+  })  : _move = move.state!,
+        meta = move.metadata,
+        power = move.state!.power ?? 0,
+        category = move.state!.category,
+        type = move.state!.type {
+    // 威力
+    if (_move.metaclass == MoveMetaClass.input_power) {
+      // 威力入力
+      power = move.metadata;
+    }
+
+    // 技種別
+    if (_move == Moves.tera_blast) {
+      if (attacker.actual.a > attacker.actual.c) {
+        category = MoveCategory.physical;
+      } else {
+        category = MoveCategory.special;
+      }
+    }
+
+    // タイプ
+    if (_move == Moves.tera_blast) {
+      type = attacker.teratype;
+    }
+
+    // 補正値を1.0で初期化
     int correct = 1.0.to12bit();
+
+    // 補正値設定関数
     setCorrect(double mag) =>
         correct = (correct * mag.to12bit() / 1.0.to12bit()).round();
 
-    // 技の威力が未定義の時は0にする
-    if (move.power == null || move.power == 0) {
-      return 0;
+    if (move.state!.metaclass == MoveMetaClass.damage_x2) {
+      // 威力2倍
+      if (move.metadata) {
+        setCorrect(2.0);
+      }
+    } else if (move.state!.metaclass == MoveMetaClass.damage_x1_5) {
+      // 威力1.5倍
+      if (move.metadata) {
+        setCorrect(1.5);
+      }
     }
 
-    switch (theory.ability.state) {
+    switch (attacker.ability.state) {
       // とうそうしん
       case Abilities.rivalry:
         // 同じ性別の相手の時、技の威力が1.25倍
         // 違う性別の相手の時、技の威力が0.75倍
-        if (theory.ability.meta != 0) {
+        if (attacker.ability.metadata) {
           setCorrect(1.25);
         } else {
           setCorrect(0.75);
@@ -517,7 +891,7 @@ class TheoryCondition {
       // そうだいしょう
       case Abilities.supreme_overlord:
         // 1体につき+10%
-        setCorrect(1.0 + theory.ability.meta * 0.1);
+        setCorrect(1.0 + attacker.ability.metadata * 0.1);
         break;
 
       // エレキスキン
@@ -531,7 +905,7 @@ class TheoryCondition {
       case Abilities.pixilate:
       case Abilities.refrigerate:
         // ノーマルタイプの技の威力が1.2倍
-        if (move.type == Types.normal) {
+        if (type == Types.normal) {
           setCorrect(1.2);
         }
         break;
@@ -539,7 +913,7 @@ class TheoryCondition {
       // てつのこぶし
       case Abilities.iron_fist:
         // 拳技の威力が1.2倍
-        if (move.isPunch) {
+        if (isPunch) {
           setCorrect(1.2);
         }
         break;
@@ -547,7 +921,7 @@ class TheoryCondition {
       // すてみ
       case Abilities.reckless:
         // 反動技の威力が1.2倍
-        if (move.isRecoil) {
+        if (isRecoil) {
           setCorrect(1.2);
         }
         break;
@@ -561,7 +935,7 @@ class TheoryCondition {
       // ちからずく
       case Abilities.sheer_force:
         // 追加効果がなくなるが、威力が1.3倍
-        if (theory.ability.meta != 0) {
+        if (attacker.ability.metadata) {
           setCorrect(1.3);
         }
         break;
@@ -570,9 +944,9 @@ class TheoryCondition {
       case Abilities.sand_force:
         // すなあらしのとき、いわ・じめん・ハガネタイプの技の威力が1.3倍
         if (environment.weather == Weathers.sandstorm) {
-          if (move.type == Types.rock ||
-              move.type == Types.ground ||
-              move.type == Types.steel) {
+          if (type == Types.rock ||
+              type == Types.ground ||
+              type == Types.steel) {
             setCorrect(1.3);
           }
         }
@@ -581,21 +955,21 @@ class TheoryCondition {
       // アナライズ
       case Abilities.analytic:
         // 一番最後に技を出すと威力が1.3倍
-        if (theory.ability.meta != 0) {
+        if (attacker.ability.metadata) {
           setCorrect(1.3);
         }
         break;
 
       case Abilities.tough_claws:
         // 接触技の威力が1.3倍
-        if (move.isContact) {
+        if (isContact) {
           setCorrect(1.3);
         }
         break;
 
       case Abilities.punk_rock:
         // 音技の威力が1.3倍
-        if (move.isSound) {
+        if (isSound) {
           setCorrect(1.3);
         }
         break;
@@ -609,7 +983,7 @@ class TheoryCondition {
       // フェアリーオーラ
       case Abilities.fairy_aura:
         // 戦闘に出ている全員のフェアリータイプの技の威力が1.33倍
-        if (move.type == Types.fairy) {
+        if (type == Types.fairy) {
           setCorrect(1.33);
         }
         break;
@@ -617,7 +991,7 @@ class TheoryCondition {
       // ダークオーラ
       case Abilities.dark_aura:
         // 戦闘に出ている全員のあくタイプの技の威力が1.33倍
-        if (move.type == Types.dark) {
+        if (type == Types.dark) {
           setCorrect(1.33);
         }
         break;
@@ -625,7 +999,7 @@ class TheoryCondition {
       // はがねのせいしん
       case Abilities.steely_spirit:
         // 戦闘に出ている全員のはがねタイプの技の威力が1.5倍
-        if (move.type == Types.steel) {
+        if (type == Types.steel) {
           setCorrect(1.5);
         }
         break;
@@ -633,7 +1007,7 @@ class TheoryCondition {
       // テクニシャン
       case Abilities.technician:
         // 威力60以下の技の威力が1.5倍
-        if (move.power! <= 60) {
+        if (power <= 60) {
           setCorrect(1.5);
         }
         break;
@@ -641,7 +1015,7 @@ class TheoryCondition {
       // ねつぼうそう
       case Abilities.flare_boost:
         // やけど状態の時、特殊技の威力が1.5倍
-        if (condition.ailment == Ailments.burn) {
+        if (conditions.self.ailment == Ailments.burn) {
           setCorrect(1.5);
         }
         break;
@@ -649,7 +1023,7 @@ class TheoryCondition {
       // どくぼうそう
       case Abilities.toxic_boost:
         // どく状態の時、特殊技の威力が1.5倍
-        if (condition.ailment == Ailments.poison) {
+        if (conditions.self.ailment == Ailments.poison) {
           setCorrect(1.5);
         }
         break;
@@ -657,7 +1031,7 @@ class TheoryCondition {
       // きれあじ
       case Abilities.sharpness:
         // 切技の威力が1.5倍
-        if (move.isCut) {
+        if (isCut) {
           setCorrect(1.5);
         }
         break;
@@ -665,7 +1039,7 @@ class TheoryCondition {
       // がんじょうあご
       case Abilities.strong_jaw:
         // 牙技の威力が1.5倍
-        if (move.isBite) {
+        if (isBite) {
           setCorrect(1.5);
         }
         break;
@@ -673,7 +1047,7 @@ class TheoryCondition {
       // メガランチャー
       case Abilities.mega_launcher:
         // 波動技の威力が1.5倍
-        if (move.isWave) {
+        if (isWave) {
           setCorrect(1.5);
         }
         break;
@@ -682,7 +1056,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (move) {
+    switch (_move) {
       // ソーラービーム
       // ソーラーブレード
       case Moves.solar_beam:
@@ -695,16 +1069,9 @@ class TheoryCondition {
         }
         break;
 
-      // はたきおとす
-      case Moves.knock_off:
-        // 相手が持ち物を持っていた場合、威力が1.5倍
-        // TODO: 追加効果技の対応
-        break;
-
       // てだすけ
       case Moves.helping_hand:
         // 使用したターンの味方の技の威力が1.5倍
-        // TODO: てだすけ対応
         break;
 
       // Ｇのちから
@@ -717,7 +1084,7 @@ class TheoryCondition {
       case Moves.expanding_force:
         // サイコフィールドで、ひこうタイプ・ふゆう・ふうせんでない時、技の威力が1.5倍
         if (environment.field == Fields.psychic) {
-          if (enemy.isFlying == false) {
+          if (defence.isFlying == false) {
             setCorrect(1.5);
           }
         }
@@ -727,7 +1094,7 @@ class TheoryCondition {
       case Moves.rising_voltage:
         // エレキフィールドで、ひこうタイプ・ふゆう・ふうせんでない時、技の威力が2倍
         if (environment.field == Fields.electric) {
-          if (enemy.isFlying == false) {
+          if (defence.isFlying == false) {
             setCorrect(2.0);
           }
         }
@@ -736,46 +1103,33 @@ class TheoryCondition {
       // じゅうでん
       case Moves.charge:
         // 次に使うでんきタイプの技の威力が2倍
-        // TODO: じゅうでん対応
         break;
 
       // からげんき
       case Moves.facade:
         // 状態異常の時、技の威力が2倍
-        if (condition.ailment != Ailments.none) {
+        if (conditions.self.ailment != Ailments.none) {
           setCorrect(2.0);
         }
-        break;
-
-      // しおみず
-      case Moves.brine:
-        // 相手の残りHPが半分以下の時、技の威力が2倍
-        // TODO: 効果の有無の対応
         break;
 
       // ベノムショック
       case Moves.venoshock:
         // 相手がどく状態の時、威力が2倍
-        if (enemy.condition.ailment == Ailments.poison) {
+        if (conditions.enemy.ailment == Ailments.poison) {
           setCorrect(2.0);
         }
-        break;
-
-      // かたきうち
-      case Moves.retaliate:
-        // 前のターンに味方が倒されている時、威力が2倍
-        // TODO: 効果の有無の対応
         break;
 
       default:
         break;
     }
 
-    switch (enemy.theory.ability.state) {
+    switch (attacker.ability.state) {
       // たいねつ
       case Abilities.heatproof:
         // 相手のほのおタイプの技の威力が0.5倍
-        if (move.type == Types.fire) {
+        if (type == Types.fire) {
           setCorrect(0.5);
         }
         break;
@@ -783,7 +1137,7 @@ class TheoryCondition {
       // かんそうはだ
       case Abilities.dry_skin:
         // 相手のほのおタイプの技の威力が1.25倍
-        if (move.type == Types.fire) {
+        if (type == Types.fire) {
           setCorrect(1.25);
         }
         break;
@@ -792,11 +1146,11 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.item.state) {
+    switch (attacker.item) {
       // ちからのハチマキ
       case Items.muscleband:
         // 物理技の威力が1.1倍
-        if (move.category == MoveCategory.physical) {
+        if (category == MoveCategory.physical) {
           setCorrect(1.1);
         }
         break;
@@ -804,7 +1158,7 @@ class TheoryCondition {
       // ものしりメガネ
       case Items.wiseglasses:
         // 特殊技の威力が1.1倍
-        if (move.category == MoveCategory.special) {
+        if (category == MoveCategory.special) {
           setCorrect(1.1);
         }
         break;
@@ -812,7 +1166,7 @@ class TheoryCondition {
       // パンチグローブ
       case Items.punchingglove:
         // パンチ技の威力が1.1倍
-        if (move.isPunch) {
+        if (isPunch) {
           setCorrect(1.1);
         }
         break;
@@ -820,7 +1174,7 @@ class TheoryCondition {
       // シルクのスカーフ
       case Items.silkscarf:
         // ノーマルタイプの技の威力が1.2倍
-        if (move.type == Types.normal) {
+        if (type == Types.normal) {
           setCorrect(1.2);
         }
         break;
@@ -830,7 +1184,7 @@ class TheoryCondition {
       case Items.fistplate:
       case Items.blackbelt:
         // かくとうタイプの技の威力が1.2倍
-        if (move.type == Types.fighting) {
+        if (type == Types.fighting) {
           setCorrect(1.2);
         }
         break;
@@ -840,7 +1194,7 @@ class TheoryCondition {
       case Items.stoneplate:
       case Items.hardstone:
         // いわタイプの技の威力が1.2倍
-        if (move.type == Types.rock) {
+        if (type == Types.rock) {
           setCorrect(1.2);
         }
         break;
@@ -850,7 +1204,7 @@ class TheoryCondition {
       case Items.splashplate:
       case Items.mysticwater:
         // みずタイプの技の威力が1.2倍
-        if (move.type == Types.water) {
+        if (type == Types.water) {
           setCorrect(1.2);
         }
         break;
@@ -860,7 +1214,7 @@ class TheoryCondition {
       case Items.dreadplate:
       case Items.blackglasses:
         // あくタイプの技の威力が1.2倍
-        if (move.type == Types.dark) {
+        if (type == Types.dark) {
           setCorrect(1.2);
         }
         break;
@@ -870,7 +1224,7 @@ class TheoryCondition {
       case Items.insectplate:
       case Items.silverpowder:
         // むしタイプの技の威力が1.2倍
-        if (move.type == Types.bug) {
+        if (type == Types.bug) {
           setCorrect(1.2);
         }
         break;
@@ -880,7 +1234,7 @@ class TheoryCondition {
       case Items.meadowplate:
       case Items.miracleseed:
         // くさタイプの技の威力が1.2倍
-        if (move.type == Types.grass) {
+        if (type == Types.grass) {
           setCorrect(1.2);
         }
         break;
@@ -890,7 +1244,7 @@ class TheoryCondition {
       case Items.toxicplate:
       case Items.poisonbarb:
         // どくタイプの技の威力が1.2倍
-        if (move.type == Types.poison) {
+        if (type == Types.poison) {
           setCorrect(1.2);
         }
         break;
@@ -900,7 +1254,7 @@ class TheoryCondition {
       case Items.spookyplate:
       case Items.spelltag:
         // ゴーストタイプの技の威力が1.2倍
-        if (move.type == Types.ghost) {
+        if (type == Types.ghost) {
           setCorrect(1.2);
         }
         break;
@@ -910,7 +1264,7 @@ class TheoryCondition {
       case Items.flameplate:
       case Items.charcoal:
         // ほのおタイプの技の威力が1.2倍
-        if (move.type == Types.fire) {
+        if (type == Types.fire) {
           setCorrect(1.2);
         }
         break;
@@ -920,7 +1274,7 @@ class TheoryCondition {
       case Items.earthplate:
       case Items.softsand:
         // じめんタイプの技の威力が1.2倍
-        if (move.type == Types.ground) {
+        if (type == Types.ground) {
           setCorrect(1.2);
         }
         break;
@@ -930,7 +1284,7 @@ class TheoryCondition {
       case Items.dracoplate:
       case Items.dragonfang:
         // ドラゴンタイプの技の威力が1.2倍
-        if (move.type == Types.dragon) {
+        if (type == Types.dragon) {
           setCorrect(1.2);
         }
         break;
@@ -940,7 +1294,7 @@ class TheoryCondition {
       case Items.zapplate:
       case Items.magnet:
         // でんきタイプの技の威力が1.2倍
-        if (move.type == Types.electric) {
+        if (type == Types.electric) {
           setCorrect(1.2);
         }
         break;
@@ -950,7 +1304,7 @@ class TheoryCondition {
       case Items.skyplate:
       case Items.sharpbeak:
         // ひこうタイプの技の威力が1.2倍
-        if (move.type == Types.flying) {
+        if (type == Types.flying) {
           setCorrect(1.2);
         }
         break;
@@ -960,7 +1314,7 @@ class TheoryCondition {
       case Items.ironplate:
       case Items.metalcoat:
         // はがねタイプの技の威力が1.2倍
-        if (move.type == Types.steel) {
+        if (type == Types.steel) {
           setCorrect(1.2);
         }
         break;
@@ -970,7 +1324,7 @@ class TheoryCondition {
       case Items.icicleplate:
       case Items.never_meltice:
         // こおりタイプの技の威力が1.2倍
-        if (move.type == Types.ice) {
+        if (type == Types.ice) {
           setCorrect(1.2);
         }
         break;
@@ -980,7 +1334,7 @@ class TheoryCondition {
       case Items.mindplate:
       case Items.twistedspoon:
         // エスパータイプの技の威力が1.2倍
-        if (move.type == Types.psychic) {
+        if (type == Types.psychic) {
           setCorrect(1.2);
         }
         break;
@@ -988,7 +1342,7 @@ class TheoryCondition {
       // せいれいプレート
       case Items.pixieplate:
         // フェアリータイプの技の威力が1.2倍
-        if (move.type == Types.fairy) {
+        if (type == Types.fairy) {
           setCorrect(1.2);
         }
         break;
@@ -1000,8 +1354,8 @@ class TheoryCondition {
     switch (environment.field) {
       case Fields.electric:
         // エレキフィールドの時、地面にいるポケモンのでんきタイプの技の威力が1.3倍
-        if (isFlying == false) {
-          if (move.type == Types.electric) {
+        if (attacker.isFlying == false) {
+          if (type == Types.electric) {
             setCorrect(1.3);
           }
         }
@@ -1009,16 +1363,16 @@ class TheoryCondition {
 
       case Fields.grassy:
         // グラスフィールドの時、地面にいるポケモンのくさタイプの技の威力が1.3倍
-        if (isFlying == false) {
-          if (move.type == Types.grass) {
+        if (attacker.isFlying == false) {
+          if (type == Types.grass) {
             setCorrect(1.3);
           }
         }
         // グラスフィールドの時、地面にいるポケモンが受けるじしん・じならし・マグニチュードの技の威力が0.5倍
-        if (enemy.isFlying == false) {
-          if (move == Moves.earthquake ||
-              move == Moves.bulldoze ||
-              move == Moves.magnitude) {
+        if (defence.isFlying == false) {
+          if (_move == Moves.earthquake ||
+              _move == Moves.bulldoze ||
+              _move == Moves.magnitude) {
             setCorrect(0.5);
           }
         }
@@ -1026,8 +1380,8 @@ class TheoryCondition {
 
       case Fields.misty:
         // ミストフィールドの時、地面にいるポケモンが受けるドラゴンタイプの技の威力が0.5倍
-        if (enemy.isFlying == false) {
-          if (move.type == Types.dragon) {
+        if (defence.isFlying == false) {
+          if (type == Types.dragon) {
             setCorrect(0.5);
           }
         }
@@ -1035,8 +1389,8 @@ class TheoryCondition {
 
       case Fields.psychic:
         // サイコフィールドの時、面にいるポケモンのエスパータイプの技の威力が1.3倍
-        if (isFlying == false) {
-          if (move.type == Types.psychic) {
+        if (attacker.isFlying == false) {
+          if (type == Types.psychic) {
             setCorrect(1.3);
           }
         }
@@ -1051,43 +1405,82 @@ class TheoryCondition {
     // TODO: 対応
 
     // 技の威力の補正を計算、五捨五超入
-    var power =
-        (move.power! * correct / 1.0.to12bit()).round6().clamp(0, 0xffffffff);
+    power = (power * correct / 1.0.to12bit()).round6().clamp(0, 0xffffffff);
 
     // テラスタイプと技のタイプが同じで威力が60未満の時は60にする
-    if (theory.terastal) {
-      if (currentTypes.contains(move.type)) {
-        if (power < 60) {
-          power = 60;
-        }
+    if (attacker.terastal) {
+      if (attacker.teratype == type) {
+        power = power.clamp(60, power);
       }
     }
+  }
+}
 
-    return power;
+class Damage {
+  late ConditionForCalc conditionsForCalc;
+  late TheoryForCalc attackerForCalc;
+  late TheoryForCalc defenceForCalc;
+  late MoveForCalc moveForCalc;
+  final Environment environment;
+
+  Damage({
+    required Theory attacker,
+    required Theory defence,
+    required Conditions conditions,
+    required MoveModel move,
+    required this.environment,
+  }) {
+    assert(move.state != null);
+
+    conditionsForCalc = ConditionForCalc.initialize(
+      conditions: conditions,
+      enemyAbility: defence.ability.state,
+    );
+
+    attackerForCalc = TheoryForCalc(
+      theory: attacker,
+      enemy: defence,
+      conditions: conditionsForCalc,
+      move: move.state!,
+      environment: environment,
+    );
+    defenceForCalc = TheoryForCalc(
+      theory: defence,
+      enemy: attacker,
+      conditions: conditionsForCalc.swap,
+      move: move.state!,
+      environment: environment,
+    );
+
+    moveForCalc = MoveForCalc(
+      move: move,
+      attacker: attackerForCalc,
+      defence: defenceForCalc,
+      conditions: conditionsForCalc,
+      environment: environment,
+    );
   }
 
   /// ダメージ計算に使用する技の威力の補正値を取得する
   ///
   /// 相手の特性やアイテム、技などを考慮する
-  int damageCorrect({
-    required TheoryCondition enemy,
-    required Moves move,
-    required double typeEfficacy,
-  }) {
+  int _damageCorrect(
+    double typeEfficacy,
+  ) {
     var correct = 1.0.to12bit();
     setCorrect(double mag) =>
         correct = (correct * mag.to12bit() / 1.0.to12bit()).round();
 
     // リフレクターの時、物理技のダメージを0.5倍
-    if (enemy.condition.shield.isPhysical) {
+    if (conditionsForCalc.enemy.shield.isPhysical) {
       setCorrect(0.5);
     }
     // ひかりのかべの時、特殊技のダメージを0.5倍
-    if (enemy.condition.shield.isSpecial) {
+    if (conditionsForCalc.enemy.shield.isSpecial) {
       setCorrect(0.5);
     }
 
-    switch (theory.ability.state) {
+    switch (attackerForCalc.ability.state) {
       // ブレインフォース
       case Abilities.neuroforce:
         // 効果抜群の技のダメージを1.25倍
@@ -1099,7 +1492,7 @@ class TheoryCondition {
       // スナイパー
       case Abilities.sniper:
         // 急所に当てた時のダメージを1.5倍(計2.25倍)
-        if (condition.critical) {
+        if (conditionsForCalc.self.critical) {
           setCorrect(1.25);
         }
         break;
@@ -1116,15 +1509,15 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.ability.state) {
+    switch (defenceForCalc.ability.state) {
       // もふもふ
       case Abilities.fluffy:
         // ほのおタイプの技のダメージを2倍
-        if (move.type == Types.fire) {
+        if (moveForCalc.type == Types.fire) {
           setCorrect(2.0);
         }
         // 接触技のダメージを0.5倍
-        if (move.isContact) {
+        if (moveForCalc.isContact) {
           setCorrect(0.5);
         }
         break;
@@ -1132,7 +1525,7 @@ class TheoryCondition {
       // マルチスケイル
       case Abilities.multiscale:
         // HP満タンの時に受けるダメージを0.5倍
-        if (enemy.theory.ability.meta != 0) {
+        if (defenceForCalc.ability.metadata) {
           setCorrect(0.5);
         }
         break;
@@ -1140,7 +1533,7 @@ class TheoryCondition {
       // パンクロック
       case Abilities.punk_rock:
         // 受ける音技のダメージを0.5倍
-        if (move.isSound) {
+        if (moveForCalc.isSound) {
           setCorrect(0.5);
         }
         break;
@@ -1148,7 +1541,7 @@ class TheoryCondition {
       // こおりのりんぷん
       case Abilities.ice_scales:
         // こおりタイプの技のダメージを0.5倍
-        if (move.type == Types.ice) {
+        if (moveForCalc.type == Types.ice) {
           setCorrect(0.5);
         }
         break;
@@ -1169,7 +1562,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (move) {
+    switch (moveForCalc._move) {
       // アクセルブレイク
       // イナズマドライブ
       case Moves.electro_drift:
@@ -1184,7 +1577,7 @@ class TheoryCondition {
         break;
     }
 
-    switch (theory.item.state) {
+    switch (attackerForCalc.item) {
       // メトロノーム
       case Items.metronome:
         // 2回目 4915
@@ -1213,122 +1606,122 @@ class TheoryCondition {
         break;
     }
 
-    switch (enemy.theory.item.state) {
+    switch (defenceForCalc.item) {
       case Items.roseliberry:
         // フェアリータイプの技のダメージを0.5倍
-        if (move.type == Types.fairy) {
+        if (moveForCalc.type == Types.fairy) {
           setCorrect(0.5);
         }
         break;
 
       case Items.chilanberry:
         // ノーマルタイプの技のダメージを0.5倍
-        if (move.type == Types.normal) {
+        if (moveForCalc.type == Types.normal) {
           setCorrect(0.5);
         }
         break;
 
       case Items.babiriberry:
         // はがねタイプの技のダメージを0.5倍
-        if (move.type == Types.steel) {
+        if (moveForCalc.type == Types.steel) {
           setCorrect(0.5);
         }
         break;
 
       case Items.colburberry:
         // あくタイプの技のダメージを0.5倍
-        if (move.type == Types.dark) {
+        if (moveForCalc.type == Types.dark) {
           setCorrect(0.5);
         }
         break;
 
       case Items.habanberry:
         // ドラゴンタイプの技のダメージを0.5倍
-        if (move.type == Types.dragon) {
+        if (moveForCalc.type == Types.dragon) {
           setCorrect(0.5);
         }
         break;
 
       case Items.kasibberry:
         // ゴーストタイプの技のダメージを0.5倍
-        if (move.type == Types.ghost) {
+        if (moveForCalc.type == Types.ghost) {
           setCorrect(0.5);
         }
         break;
 
       case Items.chartiberry:
         // いわタイプの技のダメージを0.5倍
-        if (move.type == Types.rock) {
+        if (moveForCalc.type == Types.rock) {
           setCorrect(0.5);
         }
         break;
 
       case Items.tangaberry:
         // むしタイプの技のダメージを0.5倍
-        if (move.type == Types.rock) {
+        if (moveForCalc.type == Types.rock) {
           setCorrect(0.5);
         }
         break;
 
       case Items.payapaberry:
         // エスパータイプの技のダメージを0.5倍
-        if (move.type == Types.psychic) {
+        if (moveForCalc.type == Types.psychic) {
           setCorrect(0.5);
         }
         break;
 
       case Items.cobaberry:
         // ひこうタイプの技のダメージを0.5倍
-        if (move.type == Types.flying) {
+        if (moveForCalc.type == Types.flying) {
           setCorrect(0.5);
         }
         break;
 
       case Items.shucaberry:
         // じめんタイプの技のダメージを0.5倍
-        if (move.type == Types.ground) {
+        if (moveForCalc.type == Types.ground) {
           setCorrect(0.5);
         }
         break;
 
       case Items.kebiaberry:
         // どくタイプの技のダメージを0.5倍
-        if (move.type == Types.poison) {
+        if (moveForCalc.type == Types.poison) {
           setCorrect(0.5);
         }
         break;
 
       case Items.chopleberry:
         // かくとうタイプの技のダメージを0.5倍
-        if (move.type == Types.fighting) {
+        if (moveForCalc.type == Types.fighting) {
           setCorrect(0.5);
         }
         break;
 
       case Items.yacheberry:
         // こおりタイプの技のダメージを0.5倍
-        if (move.type == Types.ice) {
+        if (moveForCalc.type == Types.ice) {
           setCorrect(0.5);
         }
         break;
 
       case Items.rindoberry:
         // くさタイプの技のダメージを0.5倍
-        if (move.type == Types.grass) {
+        if (moveForCalc.type == Types.grass) {
           setCorrect(0.5);
         }
         break;
 
       case Items.passhoberry:
         // みずタイプの技のダメージを0.5倍
-        if (move.type == Types.water) {
+        if (moveForCalc.type == Types.water) {
           setCorrect(0.5);
         }
         break;
 
       case Items.occaberry:
         // ほのおタイプの技のダメージを0.5倍
-        if (move.type == Types.fire) {
+        if (moveForCalc.type == Types.fire) {
           setCorrect(0.5);
         }
         break;
@@ -1352,108 +1745,51 @@ class TheoryCondition {
     return correct;
   }
 
-  int calcDamage({
-    required TheoryCondition enemy,
-    required Moves move,
-    required Environment environment,
-    double rand = 1.0,
-  }) {
+  int calc(double rand) {
     int damage;
-
-    // 変化技、ダメージなしは0を返す
-    if (move.power == null) {
-      return 0;
-    }
-
-    // シェルアーマーは急所に当たらない
-    if (condition.critical) {
-      if (enemy.theory.ability.state == Abilities.shell_armor) {
-        condition = condition.copyWith(critical: false);
-      }
-    }
-
-    // 急所による壁、ランクの変化
-    if (condition.critical) {
-      // 急所の時は壁無効
-      enemy.condition = enemy.condition.copyWith(shield: Shields.none);
-
-      // ランク
-      // 自分の攻撃の下降補正を0にする
-      if (condition.rank.a < 0) {
-        condition = condition.copyWith(
-          rank: condition.rank.copyWith(a: 0),
-        );
-      }
-      // 自分の特攻の下降補正を0にする
-      if (condition.rank.c < 0) {
-        condition = condition.copyWith(
-          rank: condition.rank.copyWith(a: 0),
-        );
-      }
-      // 相手の防御の上昇補正を0にする
-      if (enemy.condition.rank.b > 0) {
-        enemy.condition = enemy.condition.copyWith(
-          rank: enemy.condition.rank.copyWith(b: 0),
-        );
-      }
-      // 相手の特防の上昇補正を0にする
-      if (enemy.condition.rank.d > 0) {
-        enemy.condition = enemy.condition.copyWith(
-          rank: enemy.condition.rank.copyWith(b: 0),
-        );
-      }
-    }
 
     // 基本ダメージを計算
     // レベル * 2 / 5 + 2
     damage = (100 / 5 + 2).floor();
 
-    // 最終威力
-    final power = movePower(
-      move: move,
-      enemy: enemy,
-      environment: environment,
-    );
-
-    // 最終ステータス
-    final attackerStats = effective(
-      move: move,
-      enemy: enemy,
-      environment: environment,
-    );
-
-    // 最終防御力
-    final defenceStats = enemy.effective(
-      move: move,
-      enemy: this,
-      environment: environment,
-    );
-
     // 技のダメージを計算
-    if (move.category == MoveCategory.physical) {
-      damage = (damage * power * attackerStats.a / defenceStats.b).floor();
+    if (moveForCalc.category == MoveCategory.physical) {
+      damage = (damage *
+              moveForCalc.power *
+              attackerForCalc.actual.a /
+              defenceForCalc.actual.b)
+          .floor();
     } else {
-      damage = (damage * power * attackerStats.c / defenceStats.d).floor();
+      damage = (damage *
+              moveForCalc.power *
+              attackerForCalc.actual.c /
+              defenceForCalc.actual.d)
+          .floor();
     }
     damage = (damage / 50 + 2).floor();
 
     // 天候強化
     switch (environment.weather) {
       case Weathers.sunshine:
-        if (move.type == Types.fire) {
+        if (moveForCalc.type == Types.fire) {
           // ほのおタイプの技のダメージが1.5倍
           damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
-        } else if (move.type == Types.water) {
-          // みずタイプの技のダメージが0.5倍
-          damage = (damage * 0.5.to12bit() / 1.0.to12bit()).round6();
+        } else if (moveForCalc.type == Types.water) {
+          if (moveForCalc._move == Moves.hydro_steam) {
+            // ハイドロスチームは雨の時に威力が1.5倍
+            damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
+          } else {
+            // みずタイプの技のダメージが0.5倍
+            damage = (damage * 0.5.to12bit() / 1.0.to12bit()).round6();
+          }
         }
         break;
 
       case Weathers.rain:
-        if (move.type == Types.water) {
+        if (moveForCalc.type == Types.water) {
           // みずタイプの技のダメージが1.5倍
           damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
-        } else if (move.type == Types.fire) {
+        } else if (moveForCalc.type == Types.fire) {
           // ほのおタイプの技のダメージが0.5倍
           damage = (damage * 0.5.to12bit() / 1.0.to12bit()).round6();
         }
@@ -1463,8 +1799,15 @@ class TheoryCondition {
         break;
     }
 
+    // サイコブレイドはエレキフィールドの時、威力が1.5倍
+    // TODO: 計算場所は要確認
+    if (moveForCalc._move == Moves.psyblade &&
+        environment.field == Fields.electric) {
+      damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
+    }
+
     // 急所はダメージが1.5倍
-    if (condition.critical) {
+    if (conditionsForCalc.self.critical) {
       damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
     }
 
@@ -1473,12 +1816,13 @@ class TheoryCondition {
 
     // タイプ一致
     // テラスタイプ一致
-    if (theory.terastal && theory.teratype == move.type) {
-      if (theory.ability.state == Abilities.adaptability) {
+    if (attackerForCalc.terastal &&
+        attackerForCalc.teratype == moveForCalc.type) {
+      if (attackerForCalc.ability.state == Abilities.adaptability) {
         // テラスタイプ一致+適応力は2.25倍
         damage = (damage * 2.25.to12bit() / 1.0.to12bit()).round6();
       } else {
-        if (theory.types.contains(theory.teratype)) {
+        if (attackerForCalc.pokemon.types.contains(attackerForCalc.teratype)) {
           // 元のタイプと同じテラスタイプの場合は2倍
           damage = (damage * 2.0.to12bit() / 1.0.to12bit()).round6();
         } else {
@@ -1486,8 +1830,8 @@ class TheoryCondition {
           damage = (damage * 1.5.to12bit() / 1.0.to12bit()).round6();
         }
       }
-    } else if (theory.types.contains(move.type)) {
-      if (theory.ability.state == Abilities.adaptability) {
+    } else if (attackerForCalc.types.contains(moveForCalc.type)) {
+      if (attackerForCalc.ability.state == Abilities.adaptability) {
         // タイプ一致+適応力は2倍
         damage = (damage * 2.0.to12bit() / 1.0.to12bit()).round6();
       } else {
@@ -1498,29 +1842,32 @@ class TheoryCondition {
 
     // タイプ相性
     var efficacy = 1.0;
-    for (final type in enemy.currentTypes) {
-      efficacy = efficacy * move.type.efficacy(type);
+    for (final type in defenceForCalc.types) {
+      efficacy = efficacy * moveForCalc.type.efficacy(type);
     }
     // ふゆうはじめんタイプの技を受けない
-    if (enemy.theory.ability.state == Abilities.levitate) {
+    if (defenceForCalc.ability.state == Abilities.levitate) {
       efficacy = 0.0;
     }
     damage = (damage * efficacy).floor();
 
     // やけどはダメージが0.5倍
-    if (condition.ailment == Ailments.burn) {
+    if (conditionsForCalc.self.ailment == Ailments.burn) {
       damage = (damage * 0.5.to12bit() / 1.0.to12bit()).round6();
     }
 
     // ダメージ補正値
-    damage = (damage *
-            damageCorrect(
-              move: move,
-              enemy: enemy,
-              typeEfficacy: efficacy,
-            ) /
-            1.0.to12bit())
-        .round6();
+    damage = (damage * _damageCorrect(efficacy) / 1.0.to12bit()).round6();
+
+    // 連続攻撃
+    if (moveForCalc._move.metaclass == MoveMetaClass.hits_x1_x10 ||
+        moveForCalc._move.metaclass == MoveMetaClass.hits_x2_x5) {
+      damage = damage * moveForCalc.meta as int;
+    } else if (moveForCalc._move.metaclass == MoveMetaClass.hits_x2) {
+      damage = damage * 2;
+    } else if (moveForCalc._move.metaclass == MoveMetaClass.hits_x3) {
+      damage = damage * 3;
+    }
 
     return damage;
   }

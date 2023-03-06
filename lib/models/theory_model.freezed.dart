@@ -26,7 +26,7 @@ mixin _$Theory {
   Types get teratype => throw _privateConstructorUsedError;
   bool get terastal => throw _privateConstructorUsedError;
   AbilityModel get ability => throw _privateConstructorUsedError;
-  ItemModel get item => throw _privateConstructorUsedError;
+  Items get item => throw _privateConstructorUsedError;
   Natures get nature => throw _privateConstructorUsedError;
   List<MoveModel> get moves => throw _privateConstructorUsedError;
   Stats get effort => throw _privateConstructorUsedError;
@@ -50,7 +50,7 @@ abstract class $TheoryCopyWith<$Res> {
       Types teratype,
       bool terastal,
       AbilityModel ability,
-      ItemModel item,
+      Items item,
       Natures nature,
       List<MoveModel> moves,
       Stats effort,
@@ -58,7 +58,6 @@ abstract class $TheoryCopyWith<$Res> {
       String memo});
 
   $AbilityModelCopyWith<$Res> get ability;
-  $ItemModelCopyWith<$Res> get item;
 }
 
 /// @nodoc
@@ -115,7 +114,7 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
       item: null == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
-              as ItemModel,
+              as Items,
       nature: null == nature
           ? _value.nature
           : nature // ignore: cast_nullable_to_non_nullable
@@ -146,14 +145,6 @@ class _$TheoryCopyWithImpl<$Res, $Val extends Theory>
       return _then(_value.copyWith(ability: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $ItemModelCopyWith<$Res> get item {
-    return $ItemModelCopyWith<$Res>(_value.item, (value) {
-      return _then(_value.copyWith(item: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -169,7 +160,7 @@ abstract class _$$_TheoryCopyWith<$Res> implements $TheoryCopyWith<$Res> {
       Types teratype,
       bool terastal,
       AbilityModel ability,
-      ItemModel item,
+      Items item,
       Natures nature,
       List<MoveModel> moves,
       Stats effort,
@@ -178,8 +169,6 @@ abstract class _$$_TheoryCopyWith<$Res> implements $TheoryCopyWith<$Res> {
 
   @override
   $AbilityModelCopyWith<$Res> get ability;
-  @override
-  $ItemModelCopyWith<$Res> get item;
 }
 
 /// @nodoc
@@ -233,7 +222,7 @@ class __$$_TheoryCopyWithImpl<$Res>
       item: null == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
-              as ItemModel,
+              as Items,
       nature: null == nature
           ? _value.nature
           : nature // ignore: cast_nullable_to_non_nullable
@@ -268,7 +257,7 @@ class _$_Theory extends _Theory {
       this.teratype = Types.grass,
       this.terastal = false,
       this.ability = const AbilityModel(),
-      this.item = const ItemModel(),
+      this.item = Items.sitrusberry,
       this.nature = Natures.jolly,
       final List<MoveModel> moves = const [
         MoveModel(),
@@ -311,7 +300,7 @@ class _$_Theory extends _Theory {
   final AbilityModel ability;
   @override
   @JsonKey()
-  final ItemModel item;
+  final Items item;
   @override
   @JsonKey()
   final Natures nature;
@@ -400,7 +389,7 @@ abstract class _Theory extends Theory {
       final Types teratype,
       final bool terastal,
       final AbilityModel ability,
-      final ItemModel item,
+      final Items item,
       final Natures nature,
       final List<MoveModel> moves,
       final Stats effort,
@@ -423,7 +412,7 @@ abstract class _Theory extends Theory {
   @override
   AbilityModel get ability;
   @override
-  ItemModel get item;
+  Items get item;
   @override
   Natures get nature;
   @override
