@@ -1,11 +1,10 @@
 import 'dart:math';
 
-import 'package:pokecalc/extensions/double.dart';
-import 'package:pokecalc/models/environment_model.dart';
-
 import '../enums/enums.dart';
+import '../extensions/double.dart';
 import '../extensions/theory.dart';
 import '../models/condition_model.dart';
+import '../models/environment_model.dart';
 import '../models/stats_model.dart';
 import '../models/theory_model.dart';
 

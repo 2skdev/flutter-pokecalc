@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pokecalc/constants/dimens.dart';
 
+import '../constants/dimens.dart';
 import '../enums/types.dart';
 import '../extensions/iterable.dart';
 import '../models/theory_model.dart';

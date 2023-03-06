@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pokecalc/misc/preferences.dart';
 import 'package:uuid/uuid.dart';
 
+import '../misc/preferences.dart';
 import '../models/party_model.dart';
 
 const _uuid = Uuid();

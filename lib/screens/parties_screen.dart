@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pokecalc/models/theory_model.dart';
-import 'package:pokecalc/screens/edit_party_screen.dart';
-import 'package:pokecalc/screens/theory_screen.dart';
 
 import '../../providers/providers.dart';
 import '../models/party_model.dart';
+import '../models/theory_model.dart';
+import '../screens/edit_party_screen.dart';
+import '../screens/theory_screen.dart';
 import '../widgets/delete_dismiss_widget.dart';
 import '../widgets/party_member_widget.dart';
 import '../widgets/space_widget.dart';
