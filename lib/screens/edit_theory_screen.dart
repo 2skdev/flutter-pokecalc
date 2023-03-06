@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/theory_model.dart';
+import '../widgets/hook_textfield_widget.dart';
 import '../widgets/input_stats_widget.dart';
 import '../widgets/select_tile_widget.dart';
 
@@ -86,12 +87,15 @@ class EditTheoryScreen extends StatelessWidget {
                 );
               },
             ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: TextField(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: HookTextFieldWidget(
+              initialValue: theory.memo,
+              onChanged: (value) =>
+                  onChanged?.call(theory.copyWith(memo: value)),
               minLines: 4,
               maxLines: 4,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'メモ',
                 filled: true,
                 border: InputBorder.none,

@@ -9,6 +9,8 @@ class HookTextFieldWidget extends HookWidget {
     this.decoration,
     this.style,
     this.textAlignVertical,
+    this.maxLines,
+    this.minLines,
   });
 
   final String? initialValue;
@@ -16,6 +18,8 @@ class HookTextFieldWidget extends HookWidget {
   final InputDecoration? decoration;
   final TextAlignVertical? textAlignVertical;
   final TextStyle? style;
+  final int? maxLines;
+  final int? minLines;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,8 @@ class HookTextFieldWidget extends HookWidget {
       decoration: decoration,
       style: style,
       textAlignVertical: textAlignVertical,
+      maxLines: maxLines,
+      minLines: minLines,
     );
   }
 }
