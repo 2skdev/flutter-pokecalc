@@ -1832,6 +1832,12 @@ enum Pokedex implements StringNamedEnum {
     abilities: [Abilities.illusion],
     stats: Stats(h: 60, a: 105, b: 60, c: 120, d: 60, s: 105),
   ),
+  zoroark_hisuian(
+    string: "ゾロアーク(ヒスイのすがた)",
+    types: [Types.normal, Types.ghost],
+    abilities: [Abilities.illusion],
+    stats: Stats(h: 60, a: 105, b: 60, c: 120, d: 60, s: 105),
+  ),
   sneasel(
     string: "ニューラ",
     types: [Types.dark, Types.ice],
@@ -3134,6 +3140,18 @@ enum Pokedex implements StringNamedEnum {
     types: [Types.fire],
     abilities: [Abilities.blaze, Abilities.libero],
     stats: Stats(h: 80, a: 116, b: 75, c: 65, d: 75, s: 119),
+  ),
+  walking_wake(
+    string: "ウネルミナモ",
+    types: [Types.water, Types.dragon],
+    abilities: [Abilities.protosynthesis],
+    stats: Stats(h: 99, a: 83, b: 91, c: 125, d: 83, s: 109),
+  ),
+  iron_leaves(
+    string: "テツノイサハ",
+    types: [Types.grass, Types.psychic],
+    abilities: [Abilities.quark_drive],
+    stats: Stats(h: 90, a: 130, b: 88, c: 70, d: 108, s: 104),
   ),
   ;
 

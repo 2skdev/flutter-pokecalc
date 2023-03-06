@@ -2938,6 +2938,15 @@ enum Moves implements StringNamedEnum {
     pp: 5,
     contact: false,
   ),
+  hydro_steam(
+    string: "ハイドロスチーム",
+    type: Types.water,
+    category: MoveCategory.special,
+    power: 80,
+    accuracy: 100,
+    pp: 15,
+    contact: false,
+  ),
   hyper_beam(
     string: "はかいこうせん",
     type: Types.normal,
@@ -4566,6 +4575,15 @@ enum Moves implements StringNamedEnum {
     accuracy: 100,
     pp: 20,
     contact: false,
+  ),
+  psyblade(
+    string: "サイコブレイド",
+    type: Types.psychic,
+    category: MoveCategory.physical,
+    power: 80,
+    accuracy: 100,
+    pp: 15,
+    contact: true,
   ),
   psych_up(
     string: "じこあんじ",
@@ -7188,6 +7206,7 @@ enum Moves implements StringNamedEnum {
       (this == behemoth_blade) ||
       (this == slash) ||
       (this == cross_poison) ||
+      (this == psyblade) ||
       (this == psycho_cut) ||
       (this == razor_shell) ||
       (this == x_scissor) ||

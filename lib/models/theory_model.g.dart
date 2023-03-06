@@ -305,6 +305,7 @@ const _$PokedexEnumMap = {
   Pokedex.skuntank: 'skuntank',
   Pokedex.zorua: 'zorua',
   Pokedex.zoroark: 'zoroark',
+  Pokedex.zoroark_hisuian: 'zoroark_hisuian',
   Pokedex.sneasel: 'sneasel',
   Pokedex.weavile: 'weavile',
   Pokedex.murkrow: 'murkrow',
@@ -497,6 +498,8 @@ const _$PokedexEnumMap = {
   Pokedex.scorbunny: 'scorbunny',
   Pokedex.raboot: 'raboot',
   Pokedex.cinderace: 'cinderace',
+  Pokedex.walking_wake: 'walking_wake',
+  Pokedex.iron_leaves: 'iron_leaves',
 };
 
 const _$TypesEnumMap = {
@@ -1374,6 +1377,7 @@ const _$MovesEnumMap = {
   Moves.hurricane: 'hurricane',
   Moves.hydro_cannon: 'hydro_cannon',
   Moves.hydro_pump: 'hydro_pump',
+  Moves.hydro_steam: 'hydro_steam',
   Moves.hyper_beam: 'hyper_beam',
   Moves.hyper_drill: 'hyper_drill',
   Moves.hyper_fang: 'hyper_fang',
@@ -1568,6 +1572,7 @@ const _$MovesEnumMap = {
   Moves.prismatic_laser: 'prismatic_laser',
   Moves.protect: 'protect',
   Moves.psybeam: 'psybeam',
+  Moves.psyblade: 'psyblade',
   Moves.psych_up: 'psych_up',
   Moves.psychic: 'psychic',
   Moves.psychic_fangs: 'psychic_fangs',
